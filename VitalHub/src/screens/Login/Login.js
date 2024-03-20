@@ -9,7 +9,7 @@ import { Logo } from "../../components/Logo/Styles";
 import { useState } from "react";
 
 export const Login = ({ navigation }) => {
-    const [userEmail, setUserEmail] = useState('paciente@email.com')
+    const [userEmail, setUserEmail] = useState('patient@email.com')
 
     function Login() {
         if (userEmail === 'doctor@email.com') {
