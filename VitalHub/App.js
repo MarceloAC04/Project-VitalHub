@@ -19,6 +19,8 @@ import { StatusBar } from 'expo-status-bar';
 //Instancia do stack navigator
 const Stack = createNativeStackNavigator();
 
+//TESTENADO TESTANDO TESTANDO
+
 import {
   useFonts, MontserratAlternates_600SemiBold,
   MontserratAlternates_500Medium,
