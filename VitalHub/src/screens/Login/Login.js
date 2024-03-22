@@ -8,16 +8,28 @@ import { global } from "../../services/Global";
 import { Logo } from "../../components/Logo/Styles";
 import { useState } from "react";
 
-export const Login = ({ navigation }) => {
-    const [userEmail, setUserEmail] = useState('patient@email.com')
+import api from "../../services/service"
 
-    function Login() {
-        if (userEmail === 'doctor@email.com') {
-            global.role = 'doctor'
-        } else {
-            global.role = 'patient'
+export const Login = ({ navigation }) => {
+    const [email, setEmail] = useState('')
+    const [senha, setSenha] = useState('')
+
+    async function Login() {
+
+        try {
+            //Chamar a api de login
+            const response = await api.post('https://172.16.39.87:4466/api/Login', {
+                email: email,
+                senha: senha
+            })
+
+            console.log(response)
+        } catch (error) {
+            console.warn(error)
         }
-        navigation.replace("Main")
+
+
+        // navigation.replace("Main")
     }
     return (
         <Container>
@@ -27,11 +39,12 @@ export const Login = ({ navigation }) => {
             <Title >Entrar ou criar conta</Title>
 
             <Input placeholder={'Usuário ou E-mail'}
-                value={userEmail}
-                onChangeText={(txt) => setUserEmail(txt)}
+                value={email}
+                onChangeText={(txt) => setEmail(txt)}
             />
             <Input placeholder={'Senha'}
-                value={'1234'}
+                value={senha}
+                onChangeText={(txt) => setSenha(txt)}
                 secureTextEntry
             />
 
@@ -40,6 +53,7 @@ export const Login = ({ navigation }) => {
             <ButtonEnter
                 onPress={() => Login()}
                 placeholder={'Entrar'}
+
             />
 
             <ButtonGoogle
