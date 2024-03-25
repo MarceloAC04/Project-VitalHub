@@ -5,6 +5,8 @@ import { UserProfilePhoto } from "../../components/UserProfilePhoto/Styles";
 import { ButtonEnter, ButtonGrey } from "../../components/Button/Button";
 import { SubTitle } from "../../components/SubTitle/Styles";
 import { Title } from "../../components/Title/Styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { user } from "../../Utils/User";
 
 
 export const UserProfile = ({ navigation }) => {
@@ -15,7 +17,7 @@ export const UserProfile = ({ navigation }) => {
 
                 <Title>Richard Kosta</Title>
 
-                <SubTitle>richard.kosta@gmail.com</SubTitle>
+                <SubTitle>{user.email}</SubTitle>
 
                 <GenericInput
                     textLabel={'Data de Nascimento: '}
@@ -50,7 +52,10 @@ export const UserProfile = ({ navigation }) => {
                 />
 
                 <ButtonGrey
-                    onPress={() => navigation.replace('Login')}
+                    onPress={() =>{
+                        AsyncStorage.removeItem('token')
+                        navigation.replace('Login')
+                    }}
                     placeholder={'Sair do app'}
                 />
             </Container>

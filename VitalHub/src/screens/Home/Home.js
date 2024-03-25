@@ -5,10 +5,10 @@ import { CardList, CardMedicList } from "../../components/CardList/CardList";
 import { Container } from "../../components/Container/Styles"
 import { Calendar } from "../../components/Calendar/Calendar";
 import { Header } from "../../components/Header/Header";
-import { global } from "../../services/Global";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import * as Notifications from 'expo-notifications'
+import { userDecodeToken} from '../../Utils/Auth'
 
 
 const cardsPatient = [
@@ -73,13 +73,23 @@ export const Home = ({ navigation}) => {
     const [statusLista, setStatusLista] = useState("pendente");
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [role, setRole] = useState('')
+
+    async function roleLoad(){
+        const token = await userDecodeToken();
+        setRole(token.role)
+    }
+
+    useEffect(() => {
+        roleLoad()
+    }, [])
+
     return (
         <>
-            {global.role === "doctor" ? (
+            {role === "Medico" ? (
                 <Container>
                      <StatusBar />
                     <Header
-                        userName={'Dr.Claudio'}
                         userPhoto={require('../../assets/foto-de-perfil-medico.png')}
                         navi={() => navigation.navigate('UserProfile')}
                     />
