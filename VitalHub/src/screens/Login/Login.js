@@ -10,26 +10,34 @@ import { useState } from "react";
 
 import api from "../../services/service"
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 export const Login = ({ navigation }) => {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
+    
+    //Medico = email: gabs@gmail.com; senha: 4321
+    //Paciente = emaail: AndreG@gmail.com; senha: 1234
 
     async function Login() {
 
         try {
             //Chamar a api de login
-            const response = await api.post('https://172.16.39.87:4466/api/Login', {
+            const response = await api.post('/Login', {
                 email: email,
                 senha: senha
             })
 
-            console.log(response)
+            //Guardou no AsyncStorage
+            await AsyncStorage.setItem('token', JSON.stringify(response.data))
+
+            // console.log(response.data)
+            navigation.replace("Main")
         } catch (error) {
             console.warn(error)
         }
 
 
-        // navigation.replace("Main")
     }
     return (
         <Container>

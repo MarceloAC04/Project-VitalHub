@@ -6,9 +6,11 @@ import { Container } from "../../components/Container/Styles"
 import { Calendar } from "../../components/Calendar/Calendar";
 import { Header } from "../../components/Header/Header";
 import { global } from "../../services/Global";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import * as Notifications from 'expo-notifications'
+import { user } from "../../utlis/User";
+import { userDecodeToken } from "../../utlis/Auth";
 
 
 const cardsPatient = [
@@ -72,14 +74,24 @@ const cardsMedic = [{
 export const Home = ({ navigation}) => {
     const [statusLista, setStatusLista] = useState("pendente");
     const [modalVisible, setModalVisible] = useState(false);
+  
+
+    async function profileLoad(){
+        const token = await userDecodeToken();
+
+        user.role = token.role
+    }
+
+    useEffect(() =>{
+        profileLoad()
+    }, [])
 
     return (
         <>
-            {global.role === "doctor" ? (
+            {user.role === "Medico" ? (
                 <Container>
                      <StatusBar />
                     <Header
-                        userName={'Dr.Claudio'}
                         userPhoto={require('../../assets/foto-de-perfil-medico.png')}
                         navi={() => navigation.navigate('UserProfile')}
                     />
@@ -115,7 +127,6 @@ export const Home = ({ navigation}) => {
                      <StatusBar />
                     <Header
                         navi={() => navigation.navigate('UserProfile')}
-                        userName={'Richard Kosta'}
                         userPhoto={require('../../assets/foto-de-perfil.png')}
                     />
                     <Calendar />

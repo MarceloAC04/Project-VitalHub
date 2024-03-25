@@ -5,17 +5,35 @@ import { UserProfilePhoto } from "../../components/UserProfilePhoto/Styles";
 import { ButtonEnter, ButtonGrey } from "../../components/Button/Button";
 import { SubTitle } from "../../components/SubTitle/Styles";
 import { Title } from "../../components/Title/Styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
+import { userDecodeToken } from "../../utlis/Auth";
+import { user } from "../../utlis/User";
 
 
 export const UserProfile = ({ navigation }) => {
+
+    const [userName, setUserName] = useState('')
+    const [userEmail, setUserEmail] = useState('')
+
+    async function profileLoad(){
+        const token = await userDecodeToken();
+
+        setUserName(token.name)
+        setUserEmail(token.email)
+    }
+
+    useEffect(() =>{
+        profileLoad()
+    }, [])
     return (
         <ContainerScrollView>
             <Container>
                 <UserProfilePhoto source={require('../../assets/foto-de-perfil.png')} />
 
-                <Title>Richard Kosta</Title>
+                <Title>{userName}</Title>
 
-                <SubTitle>richard.kosta@gmail.com</SubTitle>
+                <SubTitle>{userEmail}</SubTitle>
 
                 <GenericInput
                     textLabel={'Data de Nascimento: '}
@@ -50,7 +68,12 @@ export const UserProfile = ({ navigation }) => {
                 />
 
                 <ButtonGrey
-                    onPress={() => navigation.replace('Login')}
+                    onPress={() => {
+                        AsyncStorage.removeItem('token')
+                        
+                        // user.role=''
+                        navigation.replace('Login')
+                    }}
                     placeholder={'Sair do app'}
                 />
             </Container>

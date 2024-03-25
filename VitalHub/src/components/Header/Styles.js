@@ -2,6 +2,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import styled from "styled-components";
 
 
+
+
 export const HeaderContainer = styled(LinearGradient).attrs({
     colors: ['#60BFC5', '#496BBA'],
     start: {x: -0.05, y: 1.08},
