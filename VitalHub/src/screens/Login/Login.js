@@ -15,13 +15,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 export const Login = ({ navigation }) => {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
-    
+
     //Medico = email: gabs@gmail.com; senha: 4321
     //Paciente = emaail: AndreG@gmail.com; senha: 1234
 
     async function Login() {
 
         try {
+
             //Chamar a api de login
             const response = await api.post('/Login', {
                 email: email,
@@ -31,8 +32,12 @@ export const Login = ({ navigation }) => {
             //Guardou no AsyncStorage
             await AsyncStorage.setItem('token', JSON.stringify(response.data))
 
+            //Coloquei um TimeOut aqui no Login. Para daqui 5 segundos ele entrar na main... Dessa forma ele acompanha o Time Out do Loading
             // console.log(response.data)
-            navigation.replace("Main")
+            setTimeout(() => {
+                navigation.replace("Main")
+            }, 5000)
+
         } catch (error) {
             console.warn(error)
         }
