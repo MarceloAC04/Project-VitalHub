@@ -16,7 +16,7 @@ export const GreyButton = styled(Button)`
     background-color: #ACABB7;
 `
 
-export const ButtonTitle = styled.Text`
+export const  ButtonTitle = styled.Text`
     font-size: 16px;
     color: #FFFFFF;
     font-family: 'MontserratAlternates_700Bold';
