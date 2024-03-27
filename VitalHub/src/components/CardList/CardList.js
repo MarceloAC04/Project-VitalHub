@@ -83,9 +83,9 @@ export const MedicSelectCardList = ({ cardsData }) => {
                     id={item.id}
                     onPress={() => setIdMedic(item.id)}
                     isSelect={idMedic == item.id}
-                    img={item.img}
-                    medicName={item.medicName}
-                    speciality={item.speciality}
+                    img={item.idNavigation.foto}
+                    medicName={item.idNavigation.nome}
+                    speciality={item.especialidade.especialidade1}
                 />
             }
         />

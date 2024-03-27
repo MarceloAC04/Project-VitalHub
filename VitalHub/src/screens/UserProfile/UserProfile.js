@@ -6,18 +6,32 @@ import { ButtonEnter, ButtonGrey } from "../../components/Button/Button";
 import { SubTitle } from "../../components/SubTitle/Styles";
 import { Title } from "../../components/Title/Styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { user } from "../../Utils/User";
+import {userDecodeToken} from '../../Utils/Auth'
+import { useEffect, useState } from "react";
 
 
 export const UserProfile = ({ navigation }) => {
+    const [userName, setUserName] = useState('')
+    const [userEmail, setUserEmail] = useState('')
+
+    async function profileLoad(){
+        const token = await userDecodeToken();
+
+        setUserName(token.name)
+        setUserEmail(token.email)
+    }
+
+    useEffect(() =>{
+        profileLoad()
+    }, [])
     return (
         <ContainerScrollView>
             <Container>
                 <UserProfilePhoto source={require('../../assets/foto-de-perfil.png')} />
 
-                <Title>Richard Kosta</Title>
+                <Title>{userName}</Title>
 
-                <SubTitle>{user.email}</SubTitle>
+                <SubTitle>{userEmail}</SubTitle>
 
                 <GenericInput
                     textLabel={'Data de Nascimento: '}
@@ -45,10 +59,12 @@ export const UserProfile = ({ navigation }) => {
 
                 <ButtonEnter
                     placeholder={'salvar'}
+                    onPress={() => {null}}
                 />
 
                 <ButtonEnter
                     placeholder={'editar'}
+                    onPress={() => {null}}
                 />
 
                 <ButtonGrey

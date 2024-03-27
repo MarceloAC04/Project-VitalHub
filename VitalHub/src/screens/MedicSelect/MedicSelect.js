@@ -3,6 +3,8 @@ import { MedicSelectCardList } from "../../components/CardList/CardList";
 import { Container } from "../../components/Container/Styles";
 import { ButtonEnter } from "../../components/Button/Button";
 import {TitleSelectScreen } from "../../components/Title/Styles";
+import { useEffect, useState } from "react";
+import api from '../../services/Service'
 
 const medicCards = [
     {
@@ -27,12 +29,27 @@ const medicCards = [
 
 
 export const MedicSelect = ({ navigation }) => {
+    const [medicList, setMedicList] = useState([]);
+
+    async function ListarMedicos() {
+        // Instancia a chamada da api
+      await api.get('/Medicos')
+       .then(response => {
+        setMedicList(response.data)
+       }).catch( error => {
+        console.log(error)
+       })
+    }
+
+    useEffect(() => {
+        ListarMedicos()
+    }, [])
     return (
         <Container>
             <TitleSelectScreen>Selecionar Médico</TitleSelectScreen>
 
             <MedicSelectCardList
-                cardsData={medicCards}
+                cardsData={medicList}
             />
 
             <ButtonEnter

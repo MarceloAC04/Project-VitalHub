@@ -1,7 +1,7 @@
-CREATE DATABASE [VitalHub_G5M-V2]
+CREATE DATABASE [VitalHub]
 GO
 
-USE [VitalHub_G5M-V2]
+USE [VitalHub]
 GO
 
 /****** Object:  Table [dbo].[Clinicas]    Script Date: 26/03/2024 09:53:50 ******/

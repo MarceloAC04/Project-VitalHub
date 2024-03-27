@@ -1,4 +1,4 @@
-USE VitalHub_G5M-V2;
+USE VitalHub;
 
 -- Selecionando todos os endereços
 SELECT * FROM dbo.Enderecos;
@@ -23,10 +23,10 @@ SELECT * FROM dbo.Usuarios;
 INSERT INTO
 	dbo.Usuarios
 VALUES
-	(NEWID(), '3E24F6C2-33D4-4DB4-8DB4-E4CB5642226E', 'Lucas Silveira Portal', 'lucas.portal@gmail.com', 'medico123', 'string'),
-	(NEWID(), '3E24F6C2-33D4-4DB4-8DB4-E4CB5642226E', 'Carlos Roque', 'carlos.roque@gmail.com', 'medico123', 'string'),
-	(NEWID(), '54D9155B-AC81-4FC0-AF9C-74BF484FA874', 'Martin Lorenzo', 'martin_ferreira@gmail.com', 'paciente123', 'string'),
-	(NEWID(), '54D9155B-AC81-4FC0-AF9C-74BF484FA874', 'Heitor Paulo Campos', 'heitor-campos80@gmail.com', 'paciente123', 'string');
+	(NEWID(), 'ADA71C00-9A15-4C9F-BA63-FAA88B62CA72', 'Lucas Silveira Portal', 'lucas.portal@gmail.com', 'medico123', 'string'),
+	(NEWID(), 'ADA71C00-9A15-4C9F-BA63-FAA88B62CA72', 'Carlos Roque', 'carlos.roque@gmail.com', 'medico123', 'string'),
+	(NEWID(), '41375149-6A84-4690-ACE8-196700FFB1D1', 'Martin Lorenzo', 'martin_ferreira@gmail.com', 'paciente123', 'string'),
+	(NEWID(), '41375149-6A84-4690-ACE8-196700FFB1D1', 'Heitor Paulo Campos', 'heitor-campos80@gmail.com', 'paciente123', 'string');
 
 UPDATE dbo.Usuarios SET senha = '$2y$10$kZROpWHidaGEbQdfvq3SpeVPGiNcpLQHAOcENJbblYV0aAqXoHnYO' WHERE id = 'F63A83C9-35C7-4BDE-940D-5B07303D8F02';
 
@@ -47,8 +47,8 @@ SELECT * FROM dbo.Medicos;
 INSERT INTO
 	dbo.Medicos
 VALUES
-	('F63A83C9-35C7-4BDE-940D-5B07303D8F02', '51B59443-4109-4C7A-AB91-1D62F0BA6AC2', '123456789'),
-	('04030137-BA59-42CA-9320-1CD586278B7B', '117231C8-CAFB-487C-A082-9C781EB47A02', '987654321');
+	('F63A83C9-35C7-4BDE-940D-5B07303D8F02', '910D82CF-404A-4A7A-9B39-E343823842F9', '123456789'),
+	('04030137-BA59-42CA-9320-1CD586278B7B', '3FA85F64-5717-4562-B3FC-2C963F66AFA6', '987654321');
 
 
 
