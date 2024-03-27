@@ -230,7 +230,7 @@ export const ClinicSelectCard = ({ id, clinicName, onPress, isSelect = false, sc
     )
 }
 
-export const MedicSelectCard = ({ id, img, medicName, onPress, isSelect = false, speciality }) => {
+export const MedicSelectCard = ({ id, img, medicName, onPress, isSelect = false, speciality, medic }) => {
     return (
         <CardMedicSelectContainer isSelect={isSelect} onPress={onPress}>
             <>

@@ -11,6 +11,7 @@ import { StatusBar } from "react-native";
 import * as Notifications from 'expo-notifications'
 import { user } from "../../utlis/User";
 import { userDecodeToken } from "../../utlis/Auth";
+import api from "../../services/service";
 
 
 const cardsPatient = [
@@ -74,6 +75,11 @@ const cardsMedic = [{
 export const Home = ({ navigation}) => {
     const [statusLista, setStatusLista] = useState("pendente");
     const [modalVisible, setModalVisible] = useState(false);
+    const [pacienteListar, setPacienteListar] = useState([])
+
+    async function ListarPaciente(){
+        await api.get('./get') 
+    }
   
 
     async function profileLoad(){

@@ -60,9 +60,9 @@ export const ClinicCardList = ({ cardsData }) => {
                     id={item.id}
                     onPress={() => setIdClinic(item.id)}
                     isSelect={idClinic == item.id}
-                    clinicName={item.clinicName}
+                    clinicName={item.nomeFantasia}
                     score={item.score}
-                    city={item.city}
+                    city={item.endereco.logradouro}
                     uf={item.uf}
                     days={item.days}
                     select={item.select}
@@ -80,12 +80,13 @@ export const MedicSelectCardList = ({ cardsData }) => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) =>
                 <MedicSelectCard
+                    madic ={cardsData}
                     id={item.id}
                     onPress={() => setIdMedic(item.id)}
                     isSelect={idMedic == item.id}
                     img={item.img}
-                    medicName={item.medicName}
-                    speciality={item.speciality}
+                    medicName={item.idNavigation.nome}
+                    speciality={item.especialidade.especialidade1}
                 />
             }
         />
