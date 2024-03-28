@@ -70,7 +70,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
             <CardContainerText>
                 <TitleCard>{name}</TitleCard>
                 <SubTitleCardAge>{age}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
-                {situation == 'pendente' ? (
+                {situation == 'Pendentes' ? (
                     <ScheduleContainer>
                         <ScheduleTime> <AntDesign name="clockcircle" size={14} color="#49B3BA" />  {schedule}</ScheduleTime>
                     </ScheduleContainer>
@@ -80,7 +80,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                     </RealizedTimeContainer>
                 )}
             </CardContainerText>
-            {situation == 'pendente' ? (
+            {situation == 'Pendentes' ? (
                 <>
                     <CardLinkText onPress={() => setModalVisible(true)}> Cancelar </CardLinkText>
                     <ModalAppointment
@@ -99,7 +99,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                     />
                 </>
             ) : (null)}
-            {situation == 'realizada' ? (
+            {situation == 'Realizados' ? (
                 <>
                     <RealizedCardLinkText onPress={() => setModalVisible(true)}>Ver Prontuário</RealizedCardLinkText>
                     <ModalAppointment
@@ -155,7 +155,7 @@ export const AppointmentMedicCard = ({ id, img, name, age, navi, query, crm, spe
 
     
     return (
-        <CardMedicContainer onPress={() => { situation === 'pendente' ? setModalLocalVisible(true) : null }}>
+        <CardMedicContainer onPress={() => { situation === 'Pendentes' ? setModalLocalVisible(true) : null }}>
             <>
                 <UserProfilePhotoCard source={img} />
                 <CardContainerText>
@@ -173,7 +173,7 @@ export const AppointmentMedicCard = ({ id, img, name, age, navi, query, crm, spe
                         crm={crm}
                         specialty={specialty}
                     />
-                    {situation == 'pendente' ? (
+                    {situation == 'Pendentes' ? (
                         <ScheduleContainer>
                             <ScheduleTime> <AntDesign name="clockcircle" size={14} color="#49B3BA" />  {schedule}</ScheduleTime>
                         </ScheduleContainer>
@@ -183,7 +183,7 @@ export const AppointmentMedicCard = ({ id, img, name, age, navi, query, crm, spe
                         </RealizedTimeContainer>
                     )}
                 </CardContainerText>
-                {situation == 'pendente' ? (
+                {situation == 'Pendentes' ? (
                     <>
                         <CardLinkText onPress={() => setModalVisible(true)}> Cancelar </CardLinkText>
                         <ModalAppointment
@@ -202,7 +202,7 @@ export const AppointmentMedicCard = ({ id, img, name, age, navi, query, crm, spe
                         />
                     </>
                 ) : (null)}
-                {situation == 'realizada' ? (
+                {situation == 'Realizados' ? (
                     <RealizedCardLinkText onPress={() => navi.replace('MedicRecord')}>Ver Prontuário</RealizedCardLinkText>
                 ) : (<CardLinkText>           </CardLinkText>)}
             </>

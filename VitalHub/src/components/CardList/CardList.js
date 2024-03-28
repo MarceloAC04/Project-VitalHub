@@ -10,10 +10,10 @@ export const CardList = ({ status, navi, cardsData }) => {
             renderItem={({ item }) => status == item.situation && (
                 <AppointmentCard
                     id={item.id}
-                    situation={item.situation}
+                    situation={item.situacao.situacao}
                     navi={navi}
                     img={item.img}
-                    name={item.name}
+                    name={item.rg}
                     age={item.age}
                     query={item.query}
                     schedule={item.schedule}
@@ -32,13 +32,13 @@ export const CardMedicList = ({ status, navi, cardsData }) => {
             renderItem={({ item }) => status == item.situation && (
                 <AppointmentMedicCard
                     id={item.id}
-                    situation={item.situation}
+                    situation={item.situacao.situacao}
                     navi={navi}
                     img={item.img}
-                    name={item.name}
+                    name={item.consulta.paciente.rg}
                     age={item.age}
                     query={item.query}
-                    schedule={item.schedule}
+                    schedule={item.dataConsulta}
                     email={item.email}
                     crm={item.crm}
                     specialty={item.specialty}

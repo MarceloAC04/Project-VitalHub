@@ -8,6 +8,7 @@ import { Header } from "../../components/Header/Header";
 import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import * as Notifications from 'expo-notifications'
+import api from "../../services/Service";
 import { userDecodeToken} from '../../Utils/Auth'
 
 
@@ -70,18 +71,34 @@ const cardsMedic = [{
 }
 ]
 export const Home = ({ navigation}) => {
-    const [statusLista, setStatusLista] = useState("pendente");
+    const [statusLista, setStatusLista] = useState("Pendentes");
     const [modalVisible, setModalVisible] = useState(false);
-
     const [role, setRole] = useState('')
+
+    const data = '2024-04-02T11:22:24.46'
+    const id = 'A48387F7-4659-4DC1-B2FA-7D7B93577785'
+
+    const [appointmentList, setAppointmentList] = useState([])
 
     async function roleLoad(){
         const token = await userDecodeToken();
         setRole(token.role)
     }
 
+    async function ListAppointment() {
+        // Instancia a chamada da api
+      await api.get(`/Consultas/ConsultasMedico?id=${id}`)
+       .then(response => {
+        setAppointmentList(response.data)
+        console.log(response.data)
+       }).catch( error => {
+        console.log(error)
+       })
+    }
+
     useEffect(() => {
         roleLoad()
+        ListAppointment()
     }, [])
 
     return (
@@ -98,25 +115,25 @@ export const Home = ({ navigation}) => {
                     <StatusButtonContainer>
                         <FilterStatusButton
                             textButton={"Agendadas"}
-                            clickButton={statusLista === "pendente"}
-                            onPress={() => setStatusLista("pendente")}
+                            clickButton={statusLista === "Pendentes"}
+                            onPress={() => setStatusLista("Pendentes")}
                         />
 
                         <FilterStatusButton
                             textButton={"Realizadas"}
-                            clickButton={statusLista === "realizada"}
-                            onPress={() => setStatusLista("realizada")}
+                            clickButton={statusLista === "Realizados"}
+                            onPress={() => setStatusLista("Realizados")}
                         />
                         <FilterStatusButton
                             textButton={"Canceladas"}
-                            clickButton={statusLista === "cancelada"}
-                            onPress={() => setStatusLista("cancelada")}
+                            clickButton={statusLista === "Cancelados"}
+                            onPress={() => setStatusLista("Cancelados")}
                         />
                     </StatusButtonContainer>
 
                     <CardList
                         status={statusLista}
-                        cardsData={cardsPatient}
+                        cardsData={appointmentList}
                         navi={navigation}
                     />
                 </Container>
@@ -125,7 +142,6 @@ export const Home = ({ navigation}) => {
                      <StatusBar />
                     <Header
                         navi={() => navigation.navigate('UserProfile')}
-                        userName={'Richard Kosta'}
                         userPhoto={require('../../assets/foto-de-perfil.png')}
                     />
                     <Calendar />
@@ -133,25 +149,25 @@ export const Home = ({ navigation}) => {
                     <StatusButtonContainer>
                         <FilterStatusButton
                             textButton={"Agendadas"}
-                            clickButton={statusLista === "pendente"}
-                            onPress={() => setStatusLista("pendente")}
+                            clickButton={statusLista === "Pendentes"}
+                            onPress={() => setStatusLista("Pendentes")}
                         />
 
                         <FilterStatusButton
                             textButton={"Realizadas"}
-                            clickButton={statusLista === "realizada"}
-                            onPress={() => setStatusLista("realizada")}
+                            clickButton={statusLista === "Realizados"}
+                            onPress={() => setStatusLista("Realizados")}
                         />
                         <FilterStatusButton
                             textButton={"Canceladas"}
-                            clickButton={statusLista === "cancelada"}
-                            onPress={() => setStatusLista("cancelada")}
+                            clickButton={statusLista === "Cancelados"}
+                            onPress={() => setStatusLista("Cancelados")}
                         />
                     </StatusButtonContainer>
 
                     <CardMedicList
                         status={statusLista}
-                        cardsData={cardsMedic}
+                        cardsData={appointmentList}
                         navi={navigation}
                     />
 
