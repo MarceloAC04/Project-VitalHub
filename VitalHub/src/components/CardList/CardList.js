@@ -7,17 +7,17 @@ export const CardList = ({ status, navi, cardsData }) => {
         <ListCard
             data={cardsData}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => status == item.situation && (
+            renderItem={({ item }) => status == item.situacao.situacao && (
                 <AppointmentCard
                     id={item.id}
                     situation={item.situacao.situacao}
                     navi={navi}
                     img={item.img}
-                    name={item.rg}
-                    age={item.age}
-                    query={item.query}
-                    schedule={item.schedule}
-                    email={item.email}
+                    name={item.paciente.idNavigation.nome}
+                    age={item.paciente.idNavigation.idade}
+                    query={item.descricao}
+                    schedule={item.dataConsulta}
+                    email={item.paciente.email}
                 />
             )}
         />
@@ -29,15 +29,15 @@ export const CardMedicList = ({ status, navi, cardsData }) => {
         <ListCard
             data={cardsData}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => status == item.situation && (
+            renderItem={({ item }) => status == item.situacao.situacao && (
                 <AppointmentMedicCard
                     id={item.id}
                     situation={item.situacao.situacao}
                     navi={navi}
                     img={item.img}
-                    name={item.consulta.paciente.rg}
+                    name={item.medicoClinica.medico.idNavigation.nome}
                     age={item.age}
-                    query={item.query}
+                    query={item.descricao}
                     schedule={item.dataConsulta}
                     email={item.email}
                     crm={item.crm}

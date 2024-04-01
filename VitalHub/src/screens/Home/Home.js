@@ -11,86 +11,27 @@ import * as Notifications from 'expo-notifications'
 import api from "../../services/Service";
 import { userDecodeToken} from '../../Utils/Auth'
 
-
-const cardsPatient = [
-    {
-        id: 1, img: require('../../assets/foto-de-perfil-2.png'),
-        situation: 'pendente', name: 'Nicole Sarga', age: '22 anos',
-        query: 'Rotina', schedule: '14:00', email: 'niccole.sarga@gmail.com'
-    },
-    {
-        id: 2, img: require('../../assets/foto-de-perfil.png'),
-        situation: 'pendente', name: 'Richard Kosta', age: '28 anos',
-        query: 'Urgência', schedule: '15:00', email: 'richard.kosta@gmail.com'
-    },
-    {
-        id: 3, img: require('../../assets/foto-de-perfil-2.png'),
-        situation: 'realizada', name: 'Nicole Sarga', age: '22 anos',
-        query: 'Rotina', schedule: '14:00', email: 'niccole.sarga@gmail.com'
-    },
-    {
-        id: 4, img: require('../../assets/foto-de-perfil.png'),
-        situation: 'realizada', name: 'Richard Kosta', age: '28 anos',
-        query: 'Urgência', schedule: '15:00', email: 'richard.kosta@gmail.com'
-    },
-    {
-        id: 5, img: require('../../assets/foto-de-perfil-3.png'),
-        situation: 'cancelada', name: 'Robbert Charlie', age: '62 anos',
-        query: 'Consulta', schedule: '15:00', email: 'robbert.@gmail.com'
-    },
-    {
-        id: 6, img: ({ uri: "https://github.com/MarceloAC04.png" }),
-        situation: 'pendente', name: 'Yotsugi Ononoki', age: '100 anos',
-        query: 'Consulta', schedule: '13:00', email: 'onono.@gmail.com'
-    }
-]
-
-const cardsMedic = [{
-    id: '1',
-    img: require('../../assets/foto-de-perfil-medico.png'),
-    situation: 'pendente',
-    name: 'Dr.Claudio',
-    age: '22 anos',
-    query: 'Rotina',
-    schedule: '14:00',
-    email: 'doutor.claudio@gmail.com',
-    crm: 'CRM-15286',
-    specialty: 'Clinico Geral'
-},
-{
-    id: '2',
-    img: require('../../assets/foto-de-perfil-medico.png'),
-    situation: 'realizada',
-    name: 'Dr.Claudio',
-    age: '22 anos',
-    query: 'Rotina',
-    schedule: '14:00',
-    email: 'doutor.claudio@gmail.com',
-    crm: 'CRM-15286',
-    specialty: 'Clinico Geral'
-}
-]
 export const Home = ({ navigation}) => {
     const [statusLista, setStatusLista] = useState("Pendentes");
     const [modalVisible, setModalVisible] = useState(false);
     const [role, setRole] = useState('')
+    const [userId, setUserId] = useState('')
 
     const data = '2024-04-02T11:22:24.46'
-    const id = 'A48387F7-4659-4DC1-B2FA-7D7B93577785'
 
     const [appointmentList, setAppointmentList] = useState([])
 
     async function roleLoad(){
         const token = await userDecodeToken();
         setRole(token.role)
+        setUserId(token.jti)
     }
 
     async function ListAppointment() {
         // Instancia a chamada da api
-      await api.get(`/Consultas/ConsultasMedico?id=${id}`)
+      await api.get(role == 'Medico' ? `/Consultas/ConsultasMedico?id=${userId}` : `/Pacientes/BuscarPorData?data=${data}&id=${userId}`)
        .then(response => {
         setAppointmentList(response.data)
-        console.log(response.data)
        }).catch( error => {
         console.log(error)
        })
