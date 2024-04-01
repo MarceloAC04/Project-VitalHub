@@ -16,23 +16,67 @@ export const UserProfile = ({ navigation }) => {
 
     const [userName, setUserName] = useState('')
     const [userEmail, setUserEmail] = useState('')
+    const [userId, setUserId] = useState('')
     const [userCpf, setUserCpf] = useState('')
+    const [userNiver, setUserNiver] = useState('')
+    const [userCep, setUserCep] = useState('')
+    const [userCidade, setUserCidade] = useState('')
+    const [userLugardouro, setUserLugardouro] = useState('')
 
-    async function profileLoad(){
+    async function profileLoad() {
         const token = await userDecodeToken();
-        
+
         setUserName(token.name)
         setUserEmail(token.email)
-        // setUserCpf(cpf)
-        // console.log(cpf)
-        console.log(token)
-        const cpf = await api.get(`./Paciente/BuscarPorID?id=${token.jt}`)
-        
+        setUserId(token.jti)
+        // console.log(token)
+        // console.log(userId)
+
+        // console.log(dadosBuscar)
+        const dadosBuscar = await api.get(`/Pacientes/BuscarPorID?id=${userId}`)
+        // console.log(dadosBuscar.data.cpf)
+        setUserCpf(dadosBuscar.data.cpf)
+
+        // console.log(dadosBuscar.data.dataNascimento)  
+        setUserNiver(dadosBuscar.data.dataNascimento)
+
+        // console.log(dadosBuscar.data.endereco)
+
+        // console.log(dadosBuscar.data.endereco.cep)  
+        setUserCep(dadosBuscar.data.endereco.cep)
+
+        // console.log(dadosBuscar.data.endereco.cidade)  
+        setUserCidade(dadosBuscar.data.endereco.cidade)
+
+        setUserLugardouro(dadosBuscar.data.endereco.logradouro)
     }
 
-    useEffect(() =>{
+    // async function setandoDados() {
+
+    //     // console.log(dadosBuscar)
+    //     const dadosBuscar = await api.get(`/Pacientes/BuscarPorID?id=${userId}`)
+    //     // console.log(dadosBuscar.data.cpf)
+    //     setUserCpf(dadosBuscar.data.cpf)
+
+    //     // console.log(dadosBuscar.data.dataNascimento)  
+    //     setUserNiver(dadosBuscar.data.dataNascimento)
+
+    //     console.log(dadosBuscar.data.endereco)
+
+    //     // console.log(dadosBuscar.data.endereco.cep)  
+    //     setUserCep(dadosBuscar.data.endereco.cep)
+
+    //     // console.log(dadosBuscar.data.endereco.cidade)  
+    //     setUserCidade(dadosBuscar.data.endereco.cidade)
+
+    //     setUserLugardouro(dadosBuscar.data.endereco.logradouro)
+    // }
+
+    useEffect(() => {
         profileLoad()
+        // setandoDados()
     }, [])
+
     return (
         <ContainerScrollView>
             <Container>
@@ -44,25 +88,25 @@ export const UserProfile = ({ navigation }) => {
 
                 <GenericInput
                     textLabel={'Data de Nascimento: '}
-                    placeholder={'04/05/1999'}
+                    placeholder={userNiver}
                 />
                 <GenericInput
-                    textLabel={'CPF: '}
+                    textLabel={'CPF:'}
                     placeholder={userCpf}
                 />
                 <GenericInput
                     textLabel={'Endereço: '}
-                    placeholder={'Rua Vicenso Silva, 987'}
+                    placeholder={userLugardouro}
                 />
 
                 <GenericProfileInputContainerRow>
                     <GenericProfileAddressInput
                         textLabel={'Cep: '}
-                        placeholder={'06548-909'}
+                        placeholder={userCep}
                     />
                     <GenericProfileAddressInput
                         textLabel={'Cidade: '}
-                        placeholder={'Moema-SP'}
+                        placeholder={userCidade}
                     />
                 </GenericProfileInputContainerRow>
 
@@ -77,7 +121,7 @@ export const UserProfile = ({ navigation }) => {
                 <ButtonGrey
                     onPress={() => {
                         AsyncStorage.removeItem('token')
-                        
+
                         // user.role=''
                         navigation.replace('Login')
                     }}
