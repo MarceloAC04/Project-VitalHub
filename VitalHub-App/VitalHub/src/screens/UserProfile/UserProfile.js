@@ -13,69 +13,96 @@ import api from "../../services/service";
 
 
 export const UserProfile = ({ navigation }) => {
+    const [user, setUser] = useState('')
 
+    //Usuario em Geral
     const [userName, setUserName] = useState('')
+    const [userRole, setUserRole] = useState('')
     const [userEmail, setUserEmail] = useState('')
     const [userId, setUserId] = useState('')
-    const [userCpf, setUserCpf] = useState('')
-    const [userNiver, setUserNiver] = useState('')
     const [userCep, setUserCep] = useState('')
     const [userCidade, setUserCidade] = useState('')
     const [userLugardouro, setUserLugardouro] = useState('')
 
+    //Paciente
+    const [userCpf, setUserCpf] = useState('')
+    const [userNiver, setUserNiver] = useState('')
+
+    //Medico
+    const [userCrm, setUserCrm] = useState('')
+
     async function profileLoad() {
         const token = await userDecodeToken();
 
-        setUserName(token.name)
-        setUserEmail(token.email)
-        setUserId(token.jti)
-        // console.log(token)
-        // console.log(userId)
+        setUser(token)
 
-        // console.log(dadosBuscar)
-        const dadosBuscar = await api.get(`/Pacientes/BuscarPorID?id=${userId}`)
-        // console.log(dadosBuscar.data.cpf)
-        setUserCpf(dadosBuscar.data.cpf)
-
-        // console.log(dadosBuscar.data.dataNascimento)  
-        setUserNiver(dadosBuscar.data.dataNascimento)
-
-        // console.log(dadosBuscar.data.endereco)
-
-        // console.log(dadosBuscar.data.endereco.cep)  
-        setUserCep(dadosBuscar.data.endereco.cep)
-
-        // console.log(dadosBuscar.data.endereco.cidade)  
-        setUserCidade(dadosBuscar.data.endereco.cidade)
-
-        setUserLugardouro(dadosBuscar.data.endereco.logradouro)
+        if (token !== null) {
+            setUserName(token.name)
+            setUserEmail(token.email)
+            setUserId(token.jti)
+            setUserRole(token.role)
+            console.log(token.jti)
+            console.log(token.role)
+            // console.log(token)
+            // console.log(profile)
+            // console.log(dataConsulta)
+        }
     }
 
-    // async function setandoDados() {
+    async function LoadMedicOrPacient() {
 
-    //     // console.log(dadosBuscar)
-    //     const dadosBuscar = await api.get(`/Pacientes/BuscarPorID?id=${userId}`)
-    //     // console.log(dadosBuscar.data.cpf)
-    //     setUserCpf(dadosBuscar.data.cpf)
+        const url = (userRole === 'Medico' ? 'Medicos' : 'Pacientes')
 
-    //     // console.log(dadosBuscar.data.dataNascimento)  
-    //     setUserNiver(dadosBuscar.data.dataNascimento)
+        await api.get(`/${url}/BuscarPorId?id=${user.jti}`)
+            .then(response => {
+                if (userRole === "Medico") {
 
-    //     console.log(dadosBuscar.data.endereco)
+                    setUserCrm(response.data.crm)
+                    console.log(userCrm)
 
-    //     // console.log(dadosBuscar.data.endereco.cep)  
-    //     setUserCep(dadosBuscar.data.endereco.cep)
+                    setUserCep(response.data.endereco.cep)
 
-    //     // console.log(dadosBuscar.data.endereco.cidade)  
-    //     setUserCidade(dadosBuscar.data.endereco.cidade)
+                    // console.log(response.data.endereco.cidade)  
+                    setUserCidade(response.data.endereco.cidade)
 
-    //     setUserLugardouro(dadosBuscar.data.endereco.logradouro)
-    // }
+                    setUserLugardouro(response.data.endereco.logradouro)
+                } else {
+                    // console.log(response.data.cpf)
+                    setUserCpf(response.data.cpf)
+
+                    // console.log(response.data.dataNascimento)  
+                    setUserNiver(response.data.dataNascimento)
+
+                    // console.log(response.data.endereco)
+
+                    // console.log(response.data.endereco.cep)  
+                    setUserCep(response.data.endereco.cep)
+
+                    // console.log(response.data.endereco.cidade)  
+                    setUserCidade(response.data.endereco.cidade)
+
+                    setUserLugardouro(response.data.endereco.logradouro)
+                }
+            }).catch(error =>{
+                console.log(error)
+            })
+
+
+
+
+
+
+    }
+
 
     useEffect(() => {
         profileLoad()
-        // setandoDados()
+        LoadMedicOrPacient()
     }, [])
+
+    // useEffect(() => {
+        
+    // }, [])
 
     return (
         <ContainerScrollView>
@@ -90,10 +117,21 @@ export const UserProfile = ({ navigation }) => {
                     textLabel={'Data de Nascimento: '}
                     placeholder={userNiver}
                 />
-                <GenericInput
-                    textLabel={'CPF:'}
-                    placeholder={userCpf}
-                />
+
+                {
+                    userRole === 'Medico' ? (
+                        <GenericInput
+                            textLabel={'CRM:'}
+                            placeholder={userCrm}
+                        />
+                    ) : (
+                        <GenericInput
+                            textLabel={'CPF:'}
+                            placeholder={userCpf}
+                        />
+                    )
+                }
+
                 <GenericInput
                     textLabel={'Endereço: '}
                     placeholder={userLugardouro}
