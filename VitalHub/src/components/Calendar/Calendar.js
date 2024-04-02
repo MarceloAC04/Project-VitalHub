@@ -12,10 +12,11 @@ const startingDate = new Date(currentDate.getFullYear(), currentDate.getMonth(),
 //define a data final como sendo o último dia do mês
 const endingDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
 
-export const Calendar = () => {
+export const Calendar = ({setCalendarDate}) => {
     return (
             <CalendarStyle
                 scrollable
+                onDateSelected={date => setCalendarDate(moment(date).format('YYYY-MM-DD'))}
 
                 calendarAnimation={{ type: "sequence", duration: 30 }}
                 daySelectionAnimation={styleCalendar.selectedAnimationStyle}

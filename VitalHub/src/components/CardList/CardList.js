@@ -16,7 +16,7 @@ export const CardList = ({ status, navi, cardsData }) => {
                     name={item.paciente.idNavigation.nome}
                     age={item.paciente.idNavigation.idade}
                     query={item.descricao}
-                    schedule={item.dataConsulta}
+                    schedule={item.dataConsulta.format('MM-DD')}
                     email={item.paciente.email}
                 />
             )}

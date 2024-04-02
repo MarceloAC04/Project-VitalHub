@@ -9,49 +9,61 @@ import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import * as Notifications from 'expo-notifications'
 import api from "../../services/Service";
-import { userDecodeToken} from '../../Utils/Auth'
+import { userDecodeToken } from '../../Utils/Auth'
+import moment from "moment";
 
-export const Home = ({ navigation}) => {
+export const Home = ({ navigation }) => {
     const [statusLista, setStatusLista] = useState("Pendentes");
     const [modalVisible, setModalVisible] = useState(false);
     const [role, setRole] = useState('')
     const [userId, setUserId] = useState('')
 
-    const data = '2024-04-02T11:22:24.46'
+    const [calendarDate, setCalendarDate] = useState('')
 
     const [appointmentList, setAppointmentList] = useState([])
 
-    async function roleLoad(){
+    async function roleLoad() {
         const token = await userDecodeToken();
-        setRole(token.role)
-        setUserId(token.jti)
+        if (token != null) {
+            setRole(token.role)
+            setUserId(token.jti)
+            setCalendarDate(moment().format('YYYY-MM-DD'))
+        }
     }
 
     async function ListAppointment() {
         // Instancia a chamada da api
-      await api.get(role == 'Medico' ? `/Consultas/ConsultasMedico?id=${userId}` : `/Pacientes/BuscarPorData?data=${data}&id=${userId}`)
-       .then(response => {
-        setAppointmentList(response.data)
-       }).catch( error => {
-        console.log(error)
-       })
+        await api.get(role == 'Medico' ? `/Consultas/ConsultasMedico?id=${userId}` : `/Pacientes/BuscarPorData?data=2024-04-10&id=${userId}`)
+            .then(response => {
+                setAppointmentList(response.data)
+            }).catch(error => {
+                console.log(error)
+            })
     }
 
     useEffect(() => {
         roleLoad()
-        ListAppointment()
     }, [])
+
+    useEffect(() => {
+        if (calendarDate !== '') {
+            console.log(calendarDate)
+            ListAppointment()
+        }
+    }, [calendarDate])
 
     return (
         <>
             {role === "Medico" ? (
                 <Container>
-                     <StatusBar />
+                    <StatusBar />
                     <Header
                         userPhoto={require('../../assets/foto-de-perfil-medico.png')}
                         navi={() => navigation.navigate('UserProfile')}
                     />
-                    <Calendar />
+                    <Calendar
+                        setCalendarDate={() => setCalendarDate()}
+                    />
 
                     <StatusButtonContainer>
                         <FilterStatusButton
@@ -80,12 +92,14 @@ export const Home = ({ navigation}) => {
                 </Container>
             ) : (
                 <Container>
-                     <StatusBar />
+                    <StatusBar />
                     <Header
                         navi={() => navigation.navigate('UserProfile')}
                         userPhoto={require('../../assets/foto-de-perfil.png')}
                     />
-                    <Calendar />
+                    <Calendar
+                        setCalendarDate={() => setCalendarDate()}
+                    />
 
                     <StatusButtonContainer>
                         <FilterStatusButton
