@@ -3,22 +3,35 @@ import { ClinicCardList } from "../../components/CardList/CardList";
 import { Container } from "../../components/Container/Styles";
 import { ButtonEnter } from "../../components/Button/Button";
 import { TitleSelectScreen } from "../../components/Title/Styles";
-
-
-const clinicCards = [
-    { id: 1, clinicName: 'Clínica Natureh', score: '4,5', city: 'São Paulo', uf: 'SP', days: 'Seg-Sex' },
-    { id: 2, clinicName: 'Diamond Pró-Mulher', score: '4,8', city: 'São Paulo', uf: 'SP', days: 'Seg-Sex' },
-    { id: 3, clinicName: 'Clínica Villa Lobos', score: '4,2', city: 'Taboão', uf: 'SP', days: 'Seg-Sab' },
-    { id: 4, clinicName: 'SP Oncologia Clínica', score: '4,2', city: 'Taboão', uf: 'SP', days: 'Seg-Sab' },
-]
+import { useEffect, useState } from "react";
+import api from "../../services/Service";
 
 export const ClinicSelect = ({ navigation }) => {
+
+    const [clinicaListar, setClinicaListar] = useState([])
+
+    async function ListarClinicas(){
+       await api.get('/Clinica/ListarTodas')
+            .then(response =>{
+                setClinicaListar(response.data)
+            }).catch(error =>{
+                console.log(error)
+            })
+
+    }
+
+    useEffect(() =>{
+
+        ListarClinicas()
+    }, [])
+
+
     return (
         <Container>
             <TitleSelectScreen>Selecionar Clínica</TitleSelectScreen>
 
             <ClinicCardList
-                cardsData={clinicCards}
+                cardsData={clinicaListar}
             />
 
             <ButtonEnter
