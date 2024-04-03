@@ -9,12 +9,12 @@ import { SubTitle } from "../SubTitle/Styles";
 import {RouteCancelMapButton, RouteMapButton } from '../Button/Button'
 
 
-export const MapClinicLocation = () => {
+export const MapClinicLocation = ({lat, long}) => {
     const mapsReference = useRef(null);
     const [initialPosition, setInitialPosition] = useState(null);
     const [finalPosition, setFinalPosition] = useState({
-        latitude: -23.600524,
-        longitude: -46.661866
+        latitude: lat,
+        longitude: long
     });
 
     const [routeClinic, setRouteClinic] = useState(false)
@@ -35,7 +35,7 @@ export const MapClinicLocation = () => {
         if (mapsReference.current && initialPosition) {
             await mapsReference.current.fitToCoordinates(
                 [{ latitude: initialPosition.coords.latitude, longitude: initialPosition.coords.longitude },
-                { latitude: finalPosition.latitude, longitude: finalPosition.longitude }
+                { latitude: lat, longitude: long }
                 ],
                 {
                     edgePadding: { top: 60, right: 60, bottom: 60, left: 60 },

@@ -8,7 +8,7 @@ import { SubTitle } from "../../components/SubTitle/Styles";
 import { Title } from "../../components/Title/Styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import { userDecodeToken } from "../../utlis/Auth";
+import { userDecodeToken } from "../../Utils/Auth"
 import api from "../../services/Service";
 import moment from "moment";
 

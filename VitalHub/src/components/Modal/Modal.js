@@ -181,8 +181,8 @@ export const ModalLocalAppointment = ({ animation, transparent, onPressConfirm, 
             <ModalMedicalRecordView>
                 <ModalMedicalRecordContainer>
                     <UserProfilePhotoModal source={img} />
-                    <Title>{idClinic} </Title>
-                    <SubTitle>{specialty} <SubTitle>{crm}</SubTitle></SubTitle>
+                    <Title>{name} </Title>
+                    <SubTitle>{specialty} <SubTitle>CRM-{crm}</SubTitle></SubTitle>
                     <ButtonEnter
                         onPress={onPressConfirm}
                         placeholder={'Ver local da consulta'}
