@@ -1,6 +1,7 @@
 import { AppointmentCard, AppointmentMedicCard, ClinicSelectCard, MedicSelectCard } from "../../components/Card/Card";
 import { ListCard } from "./Styles";
 import { useState } from "react";
+import moment from "moment";
 
 export const CardList = ({ status, navi, cardsData }) => {
     return (
@@ -16,7 +17,7 @@ export const CardList = ({ status, navi, cardsData }) => {
                     name={item.paciente.idNavigation.nome}
                     age={item.paciente.idNavigation.idade}
                     query={item.descricao}
-                    schedule={item.dataConsulta.format('MM-DD')}
+                    schedule={moment(item.dataConsulta).format('h:mm')}
                     email={item.paciente.email}
                 />
             )}
@@ -32,15 +33,16 @@ export const CardMedicList = ({ status, navi, cardsData }) => {
             renderItem={({ item }) => status == item.situacao.situacao && (
                 <AppointmentMedicCard
                     id={item.id}
+                    idClinic={item.medicoClinica.clinicaId}
                     situation={item.situacao.situacao}
                     navi={navi}
                     img={item.img}
                     name={item.medicoClinica.medico.idNavigation.nome}
                     age={item.age}
                     query={item.descricao}
-                    schedule={item.dataConsulta}
+                    schedule={moment(item.dataConsulta).format('h:mm')}
                     email={item.email}
-                    crm={item.crm}
+                    crm={item.medicoClinica.medico.crm}
                     specialty={item.specialty}
                 />
             )

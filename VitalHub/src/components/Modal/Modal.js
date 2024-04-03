@@ -172,7 +172,7 @@ export const ModalConfirmAppointment = ({ animation, transparent, visible, date,
     )
 }
 
-export const ModalLocalAppointment = ({ animation, transparent, onPressConfirm, onPressCancel, visible, img, specialty, crm, name, ...rest }) => {
+export const ModalLocalAppointment = ({ animation, transparent, onPressConfirm, onPressCancel, idClinic, visible, img, specialty, crm, name, ...rest }) => {
     return (
         <Modal  {...rest}
             animationType={animation}
@@ -181,8 +181,8 @@ export const ModalLocalAppointment = ({ animation, transparent, onPressConfirm, 
             <ModalMedicalRecordView>
                 <ModalMedicalRecordContainer>
                     <UserProfilePhotoModal source={img} />
-                    <Title>{name}</Title>
-                    <SubTitle>{specialty}   <SubTitle>{crm}</SubTitle></SubTitle>
+                    <Title>{idClinic} </Title>
+                    <SubTitle>{specialty} <SubTitle>{crm}</SubTitle></SubTitle>
                     <ButtonEnter
                         onPress={onPressConfirm}
                         placeholder={'Ver local da consulta'}

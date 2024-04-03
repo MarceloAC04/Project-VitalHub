@@ -6,7 +6,7 @@ import { ActivityIndicator, StyleSheet } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { mapskey } from '../../services/mapsApiKeys'
 import { SubTitle } from "../SubTitle/Styles";
-import { ButtonEnter, RouteCancelMapButton, RouteMapButton } from '../Button/Button'
+import {RouteCancelMapButton, RouteMapButton } from '../Button/Button'
 
 
 export const MapClinicLocation = () => {

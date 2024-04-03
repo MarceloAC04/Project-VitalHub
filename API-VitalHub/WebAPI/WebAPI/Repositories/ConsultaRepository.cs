@@ -45,9 +45,11 @@ namespace WebAPI.Repositories
 
         public List<Consulta> ListarPorMedico(Guid IdMedico)
         {
-            
+
             List<Consulta> listaConsultas = ctx.Consultas
-                .Include(x => x.MedicoClinica)
+                .Include(x => x.Paciente!.IdNavigation)
+                .Include(x => x.Situacao)
+                .Include(x => x.Prioridade)
                 .Where(x => x.MedicoClinica != null && x.MedicoClinica.MedicoId == IdMedico)
                 .ToList();
 

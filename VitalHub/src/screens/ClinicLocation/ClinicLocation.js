@@ -5,9 +5,27 @@ import { ButtonSecondary } from "../../components/SecondaryButton/SecondaryButto
 import { SubTitle } from "../../components/SubTitle/Styles";
 import { Title } from "../../components/Title/Styles";
 import { MapClinicLocation } from "../../components/MapClinic/MapClinic";
+import api from "../../services/Service";
+import { useEffect, useState } from "react";
 
 
-export const ClinicLocation = ({ navigation }) => {
+export const ClinicLocation = ({ navigation, route }) => {
+    const {clinicaId} = route.params;
+    const {clincLocation, setClinicLocation} = useState({})
+
+    async function searchClinic() {
+        await api.get(`/Clinica/BuscarPorId?id=${clinicaId}`)
+        .then((response => {
+            setClinicLocation(response.data)
+            console.log(clincLocation)
+        }).catch(error => {
+            console.log(error)
+        }))
+    }
+
+    useEffect(() => {
+        searchClinic()
+    }, [])
     return (
         <ContainerScrollView>
             <Container>

@@ -123,7 +123,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
     )
 }
 
-export const AppointmentMedicCard = ({ id, img, name, age, navi, query, crm, specialty, schedule, email, situation }) => {
+export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query, crm, specialty, schedule, email, situation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalLocalVisible, setModalLocalVisible] = useState(false);
 
@@ -160,16 +160,17 @@ export const AppointmentMedicCard = ({ id, img, name, age, navi, query, crm, spe
                 <UserProfilePhotoCard source={img} />
                 <CardContainerText>
                     <TitleCard>{name}</TitleCard>
-                    <SubTitleCardAge>{age}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                    <SubTitleCardAge>{crm}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
                     <ModalLocalAppointment
                         visible={modalLocalVisible}
                         onPressCancel={() => setModalLocalVisible(false)}
-                        onPressConfirm={() => handleClose('ClinicLocation')}
+                        onPressConfirm={() => handleClose('ClinicLocation', { clinicaId: idClinic })}
                         animation={'fade'}
                         transparent={true}
                         id={id}
                         img={img}
                         name={name}
+                        idClinic={idClinic}
                         crm={crm}
                         specialty={specialty}
                     />
@@ -189,7 +190,7 @@ export const AppointmentMedicCard = ({ id, img, name, age, navi, query, crm, spe
                         <ModalAppointment
                             visible={modalVisible}
                             onPressCancel={() => setModalVisible(false)}
-                            onPressConfirm={() => {handleClose('Main') 
+                            onPressConfirm={() => {handleClose('Main')
                             handleCallNotification()}}
                             animation={'fade'}
                             transparent={true}
