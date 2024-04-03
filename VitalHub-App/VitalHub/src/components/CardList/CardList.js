@@ -61,9 +61,7 @@ export const ClinicCardList = ({ cardsData }) => {
                     onPress={() => setIdClinic(item.id)}
                     isSelect={idClinic == item.id}
                     clinicName={item.nomeFantasia}
-                    score={item.score}
-                    city={item.endereco.logradouro}
-                    uf={item.uf}
+                    city={item.endereco.cidade}
                     days={item.days}
                     select={item.select}
                 />

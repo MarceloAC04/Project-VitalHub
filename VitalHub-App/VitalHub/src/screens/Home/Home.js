@@ -12,69 +12,12 @@ import { userDecodeToken } from "../../utlis/Auth";
 import api from "../../services/service";
 
 
-const cardsPatient = [
-    {
-        id: 1, img: require('../../assets/foto-de-perfil-2.png'),
-        situation: 'pendente', name: 'Nicole Sarga', age: '22 anos',
-        query: 'Rotina', schedule: '14:00', email: 'niccole.sarga@gmail.com'
-    },
-    {
-        id: 2, img: require('../../assets/foto-de-perfil.png'),
-        situation: 'pendente', name: 'Richard Kosta', age: '28 anos',
-        query: 'Urgência', schedule: '15:00', email: 'richard.kosta@gmail.com'
-    },
-    {
-        id: 3, img: require('../../assets/foto-de-perfil-2.png'),
-        situation: 'realizada', name: 'Nicole Sarga', age: '22 anos',
-        query: 'Rotina', schedule: '14:00', email: 'niccole.sarga@gmail.com'
-    },
-    {
-        id: 4, img: require('../../assets/foto-de-perfil.png'),
-        situation: 'realizada', name: 'Richard Kosta', age: '28 anos',
-        query: 'Urgência', schedule: '15:00', email: 'richard.kosta@gmail.com'
-    },
-    {
-        id: 5, img: require('../../assets/foto-de-perfil-3.png'),
-        situation: 'cancelada', name: 'Robbert Charlie', age: '62 anos',
-        query: 'Consulta', schedule: '15:00', email: 'robbert.@gmail.com'
-    },
-    {
-        id: 6, img: ({ uri: "https://github.com/MarceloAC04.png" }),
-        situation: 'pendente', name: 'Yotsugi Ononoki', age: '100 anos',
-        query: 'Consulta', schedule: '13:00', email: 'onono.@gmail.com'
-    }
-]
 
-const cardsMedic = [{
-    id: '1',
-    img: require('../../assets/foto-de-perfil-medico.png'),
-    situation: 'pendente',
-    name: 'Dr.Claudio',
-    age: '22 anos',
-    query: 'Rotina',
-    schedule: '14:00',
-    email: 'doutor.claudio@gmail.com',
-    crm: 'CRM-15286',
-    specialty: 'Clinico Geral'
-},
-{
-    id: '2',
-    img: require('../../assets/foto-de-perfil-medico.png'),
-    situation: 'realizada',
-    name: 'Dr.Claudio',
-    age: '22 anos',
-    query: 'Rotina',
-    schedule: '14:00',
-    email: 'doutor.claudio@gmail.com',
-    crm: 'CRM-15286',
-    specialty: 'Clinico Geral'
-}
-]
 export const Home = ({ navigation}) => {
     const [statusLista, setStatusLista] = useState("Pendentes");
     const [modalVisible, setModalVisible] = useState(false);
     const [pacienteListar, setPacienteListar] = useState([]);
-    const [data, setData] = useState([]) 
+    
 
     const [role, setRole] = useState("")
 
@@ -86,7 +29,7 @@ export const Home = ({ navigation}) => {
         await api.get('/Consultas/ConsultasMedico') 
             .then(response =>{
                 setPacienteListar(response.data)
-                console.log(response.data)
+                // console.log(response.data)
             }).catch(error => {
                 console.log(error)
             })

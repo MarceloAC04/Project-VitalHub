@@ -1,7 +1,7 @@
 import { ActivityIndicator } from "react-native";
 import { Button, ButtonCancelRouteMap, ButtonMedicRecord, ButtonRouteMap, ButtonTitle, ButtonTitleGoogle, GoogleButton, GreyButton, ModalAppointmentButton, ModalConfirmAppointmentButton } from "./Styles"
 import { MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
-import { Loading } from "../Loding/Styles";
+import { Loading } from "../Loading/Styles";
 import { useState } from "react";
 
 

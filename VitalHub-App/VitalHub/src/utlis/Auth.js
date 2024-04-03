@@ -23,7 +23,7 @@ export const userDecodeToken = async() => {
 
     //Descriptografando
     const decode = jwtDecode(token)
-    console.log(token)
+    // console.log(token)
 
     //Retorna só esse valores
     return{

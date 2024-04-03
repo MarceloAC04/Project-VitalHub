@@ -10,16 +10,16 @@ import { useEffect, useState } from "react";
 import { userDecodeToken } from "../../utlis/Auth";
 import { user } from "../../utlis/User";
 import api from "../../services/service";
+import moment from "moment";
 
 
 export const UserProfile = ({ navigation }) => {
-    const [user, setUser] = useState('')
+    // const [userId, setUserId] = useState('') // Deixando salvo aqui para caso eu use
 
     //Usuario em Geral
     const [userName, setUserName] = useState('')
     const [userRole, setUserRole] = useState('')
     const [userEmail, setUserEmail] = useState('')
-    const [userId, setUserId] = useState('')
     const [userCep, setUserCep] = useState('')
     const [userCidade, setUserCidade] = useState('')
     const [userLugardouro, setUserLugardouro] = useState('')
@@ -31,78 +31,68 @@ export const UserProfile = ({ navigation }) => {
     //Medico
     const [userCrm, setUserCrm] = useState('')
 
+    //Função para puxar os dados
     async function profileLoad() {
+        //Decodificação do Token
         const token = await userDecodeToken();
 
-        setUser(token)
-
         if (token !== null) {
+            //Aqui está pegando os dados do token como (Nome, email, role e id)
             setUserName(token.name)
             setUserEmail(token.email)
-            setUserId(token.jti)
+            // setUserId(token.jti) //Tirei o ID pois não tem mais utilidade
             setUserRole(token.role)
             console.log(token.jti)
             console.log(token.role)
-            // console.log(token)
-            // console.log(profile)
-            // console.log(dataConsulta)
+
+            //Determinando que caso o role for Medico, a propriedade "url" irá se torna um "Medicos" ou "Pacientes" (Caso o role for Paciente)
+            const url = (token.role === 'Medico' ? 'Medicos' : 'Pacientes')
+
+            //Aqui ele entra no Swegger e acha o caminho para pegar o dados do banco de dados
+            //Nota: O useState não atualiza os dados imediatamente, então use a url cru, se não os dados não vão ser pego de prmeira
+            await api.get(`/${url}/BuscarPorId?id=${token.jti}`)
+                .then(response => {
+                    if (token.role === "Medico") {
+
+                        setUserCrm(response.data.crm)
+                        console.log(response.data)
+
+                        setUserCep(response.data.endereco.cep)
+
+                        // console.log(response.data.endereco.cidade)  
+                        setUserCidade(response.data.endereco.cidade)
+
+                        setUserLugardouro(response.data.endereco.logradouro)
+                    } else {
+                        // console.log(response.data.cpf)
+                        setUserCpf(response.data.cpf)
+
+                        // console.log(response.data.dataNascimento)  
+                        setUserNiver(moment(response.data.dataNascimento).format('YYYY-MM-DD'))
+
+                        // console.log(response.data.endereco)
+
+                        // console.log(response.data.endereco.cep)  
+                        setUserCep(response.data.endereco.cep)
+
+                        // console.log(response.data.endereco.cidade)  
+                        setUserCidade(response.data.endereco.cidade)
+
+                        setUserLugardouro(response.data.endereco.logradouro)
+                    }
+                }).catch(error => {
+                    console.log(error)
+                })
+
         }
-    }
-
-    async function LoadMedicOrPacient() {
-
-        const url = (userRole === 'Medico' ? 'Medicos' : 'Pacientes')
-
-        await api.get(`/${url}/BuscarPorId?id=${user.jti}`)
-            .then(response => {
-                if (userRole === "Medico") {
-
-                    setUserCrm(response.data.crm)
-                    console.log(userCrm)
-
-                    setUserCep(response.data.endereco.cep)
-
-                    // console.log(response.data.endereco.cidade)  
-                    setUserCidade(response.data.endereco.cidade)
-
-                    setUserLugardouro(response.data.endereco.logradouro)
-                } else {
-                    // console.log(response.data.cpf)
-                    setUserCpf(response.data.cpf)
-
-                    // console.log(response.data.dataNascimento)  
-                    setUserNiver(response.data.dataNascimento)
-
-                    // console.log(response.data.endereco)
-
-                    // console.log(response.data.endereco.cep)  
-                    setUserCep(response.data.endereco.cep)
-
-                    // console.log(response.data.endereco.cidade)  
-                    setUserCidade(response.data.endereco.cidade)
-
-                    setUserLugardouro(response.data.endereco.logradouro)
-                }
-            }).catch(error =>{
-                console.log(error)
-            })
-
-
-
-
-
-
     }
 
 
     useEffect(() => {
         profileLoad()
-        LoadMedicOrPacient()
     }, [])
 
-    // useEffect(() => {
-        
-    // }, [])
+
 
     return (
         <ContainerScrollView>
@@ -113,10 +103,14 @@ export const UserProfile = ({ navigation }) => {
 
                 <SubTitle>{userEmail}</SubTitle>
 
-                <GenericInput
-                    textLabel={'Data de Nascimento: '}
-                    placeholder={userNiver}
-                />
+                {
+                    userRole === "Paciente" ? (
+                        <GenericInput
+                            textLabel={'Data de Nascimento: '}
+                            placeholder={userNiver}
+                        />
+                    ) : (<></>)
+                }
 
                 {
                     userRole === 'Medico' ? (

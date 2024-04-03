@@ -216,11 +216,11 @@ export const ClinicSelectCard = ({ id, clinicName, onPress, isSelect = false, sc
             <>
                 <CardClinicContent>
                     <TitleCard>{clinicName}</TitleCard>
-                    <SubTitleCardScore><AntDesign name="star" size={16} color="#F9A620" />{score}</SubTitleCardScore>
+                    {/* <SubTitleCardScore><AntDesign name="star" size={16} color="#F9A620" />{score}</SubTitleCardScore> */}
                 </CardClinicContent>
 
                 <CardClinicContent>
-                    <SubTitleClinicCard>{city}, {uf}</SubTitleClinicCard>
+                    <SubTitleClinicCard>{city}</SubTitleClinicCard>
                     <ScheduleClinicContainer>
                         <ScheduleTime><MaterialCommunityIcons name="calendar-outline" size={16} color="#49B3BA" /> {days}</ScheduleTime>
                     </ScheduleClinicContainer>
