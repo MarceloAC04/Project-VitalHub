@@ -12,10 +12,10 @@ import {RouteCancelMapButton, RouteMapButton } from '../Button/Button'
 export const MapClinicLocation = ({lat, long}) => {
     const mapsReference = useRef(null);
     const [initialPosition, setInitialPosition] = useState(null);
-    const [finalPosition, setFinalPosition] = useState({
-        latitude: lat,
-        longitude: long
-    });
+    const finalPosition = {
+        latitude: long,
+        longitude: lat
+    };
 
     const [routeClinic, setRouteClinic] = useState(false)
 
@@ -26,7 +26,6 @@ export const MapClinicLocation = ({lat, long}) => {
             const captureLocation = await getCurrentPositionAsync()
 
             setInitialPosition(captureLocation)
-            console.log(initialPosition)
 
         }
     }
@@ -35,7 +34,7 @@ export const MapClinicLocation = ({lat, long}) => {
         if (mapsReference.current && initialPosition) {
             await mapsReference.current.fitToCoordinates(
                 [{ latitude: initialPosition.coords.latitude, longitude: initialPosition.coords.longitude },
-                { latitude: lat, longitude: long }
+                { latitude: finalPosition.latitude, longitude: finalPosition.longitude }
                 ],
                 {
                     edgePadding: { top: 60, right: 60, bottom: 60, left: 60 },
@@ -75,7 +74,7 @@ export const MapClinicLocation = ({lat, long}) => {
                                 latitudeDelta: 0.005
                             }}
                             title='Clinica'
-                            pinColor='#496BBA'
+                            pinColor='red'
                         />
                         {
                             routeClinic ? (
@@ -110,7 +109,9 @@ export const MapClinicLocation = ({lat, long}) => {
 
                             ) : (
                                 <RouteMapButton
-                                    onPress={() => ReloadViewMap()}
+                                    onPress={() =>{ 
+                                        ReloadViewMap()
+                                    }}
                                 />
                             )
                         }

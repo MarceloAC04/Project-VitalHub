@@ -18,7 +18,7 @@ export const Home = ({ navigation }) => {
     const [role, setRole] = useState('')
     const [userId, setUserId] = useState('')
 
-    const [calendarDate, setCalendarDate] = useState('')
+    const [calendarDate, setCalendarDate] = useState()
 
     const [appointmentList, setAppointmentList] = useState([])
 
@@ -33,7 +33,7 @@ export const Home = ({ navigation }) => {
 
     async function ListAppointment() {
         // Instancia a chamada da api
-        await api.get(role == 'Medico' ? `/Consultas/ConsultasMedico?id=C28C013A-3DC8-4C46-BD4A-0DB6DCE090E9` : `/Pacientes/BuscarPorData?data=2024-04-10&id=${userId}`)
+        await api.get(role == 'Medico' ? `/Consultas/ConsultasMedico?id=${userId}` : `/Pacientes/BuscarPorData?data=${calendarDate}&id=${userId}`)
             .then(response => {
                 setAppointmentList(response.data)
             }).catch(error => {
@@ -48,6 +48,7 @@ export const Home = ({ navigation }) => {
     useEffect(() => {
         if (calendarDate !== '') {
             ListAppointment()
+            console.log(calendarDate);
         }
     }, [calendarDate])
 

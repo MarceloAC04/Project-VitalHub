@@ -30,8 +30,8 @@ export const ClinicLocation = ({ navigation, route }) => {
         <ContainerScrollView>
             <Container>
              <MapClinicLocation 
-             lat={clincLocation.latitude}
-             long={clincLocation.longitude}
+             lat={clincLocation.endereco?.latitude}
+             long={clincLocation.endereco?.longitude}
              />
 
                 <Title>{clincLocation.nomeFantasia}</Title>
@@ -39,17 +39,17 @@ export const ClinicLocation = ({ navigation, route }) => {
 
                 <GenericInput
                     textLabel={'Endereço'}
-                    placeholder={clincLocation.endereco.longradouro}
+                    placeholder={clincLocation.endereco?.logradouro}
                 />
                 <GenericProfileInputContainerRow>
                     <GenericProfileAddressInput
                         textLabel={'Número'}
-                        placeholder={clincLocation.endereco.numero}
+                        placeholder={clincLocation.endereco?.numero.toString()}
                     />
 
                     <GenericProfileAddressInput
-                        textLabel={'Bairro'}
-                        placeholder={'Moema-SP'}
+                        textLabel={'Cidade'}
+                        placeholder={clincLocation.endereco?.cidade}
                     />
                 </GenericProfileInputContainerRow>
 
