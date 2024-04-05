@@ -106,7 +106,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                         visible={modalVisible}
                         onPressCancel={() => setModalVisible(false)}
                         onPressConfirm={() => handleClose("MedicalRecord",
-                            { userImg: img, userName: name, userAge: age, userEmail: email })
+                            {userId: id, userImg: img, userName: name, userAge: age, userEmail: email })
                         }
                         animation={'fade'}
                         transparent={true}
