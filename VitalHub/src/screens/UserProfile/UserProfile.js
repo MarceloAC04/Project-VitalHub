@@ -1,4 +1,3 @@
-
 import { GenericInput, GenericProfileAddressInput } from "../../components/GenericProfileInput/GenericProfileInput";
 import { GenericProfileInputContainerRow } from "../../components/GenericProfileInput/Styles";
 import { Container, ContainerScrollView } from "../../components/Container/Styles";
@@ -42,8 +41,6 @@ export const UserProfile = ({ navigation }) => {
             setUserEmail(token.email)
             // setUserId(token.jti) //Tirei o ID pois não tem mais utilidade
             setUserRole(token.role)
-            console.log(token.jti)
-            console.log(token.role)
 
             //Determinando que caso o role for Medico, a propriedade "url" irá se torna um "Medicos" ou "Pacientes" (Caso o role for Paciente)
             const url = (token.role === 'Medico' ? 'Medicos' : 'Pacientes')
@@ -55,27 +52,19 @@ export const UserProfile = ({ navigation }) => {
                     if (token.role === "Medico") {
 
                         setUserCrm(response.data.crm)
-                        console.log(response.data)
 
                         setUserCep(response.data.endereco.cep)
 
-                        // console.log(response.data.endereco.cidade)  
                         setUserCidade(response.data.endereco.cidade)
 
                         setUserLugardouro(response.data.endereco.logradouro)
                     } else {
-                        // console.log(response.data.cpf)
                         setUserCpf(response.data.cpf)
 
-                        // console.log(response.data.dataNascimento)  
                         setUserNiver(moment(response.data.dataNascimento).format('YYYY-MM-DD'))
 
-                        // console.log(response.data.endereco)
-
-                        // console.log(response.data.endereco.cep)  
                         setUserCep(response.data.endereco.cep)
-
-                        // console.log(response.data.endereco.cidade)  
+ 
                         setUserCidade(response.data.endereco.cidade)
 
                         setUserLugardouro(response.data.endereco.logradouro)
@@ -86,8 +75,6 @@ export const UserProfile = ({ navigation }) => {
 
         }
     }
-
-
     useEffect(() => {
         profileLoad()
     }, [])
@@ -127,7 +114,7 @@ export const UserProfile = ({ navigation }) => {
                 }
 
                 <GenericInput
-                    textLabel={'Endereço: '}
+                    textLabel={'Logradouro: '}
                     placeholder={userLugardouro}
                 />
 
