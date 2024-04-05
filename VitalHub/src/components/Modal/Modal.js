@@ -28,7 +28,7 @@ export const ModalAppointment = ({ id, animation, transparent, visible, onPressC
             transparent={transparent}
             visible={visible}
         >
-            {situation == 'pendente' ? (
+            {situation == 'Pendentes' ? (
                 <ModalView>
                     <ModalContainer>
                         <Title>Cancelar Consulta</Title>
