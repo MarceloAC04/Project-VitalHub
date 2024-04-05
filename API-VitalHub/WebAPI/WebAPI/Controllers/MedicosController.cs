@@ -78,5 +78,7 @@ namespace WebAPI.Controllers
         {
             return Ok(_medicoRepository.BuscarPorData(data, id));
         }
+
+
     }
 }
