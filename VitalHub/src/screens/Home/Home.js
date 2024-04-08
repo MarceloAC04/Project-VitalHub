@@ -33,7 +33,7 @@ export const Home = ({ navigation }) => {
 
     async function ListAppointment() {
         // Instancia a chamada da api
-        await api.get(role == 'Medico' ? `/Consultas/ConsultasMedico?id=${userId}` : `/Pacientes/BuscarPorData?data=${calendarDate}&id=${userId}`)
+        await api.get(role == 'Medico' ? `/Consultas/ConsultasMedico?id=${userId}` : `/Pacientes/BuscarPorData?data=2024-04-10&id=${userId}`)
             .then(response => {
                 setAppointmentList(response.data)
             }).catch(error => {

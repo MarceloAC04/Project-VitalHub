@@ -3,6 +3,7 @@ import {
     GenericPrescriptionImageInput,
     GenericProfileInput,
     GenericProfileInputAddress,
+    GenericProfileInputAddressEdition,
     GenericProfileInputContainer,
     GenericProfileInputContainerAddress,
     GenericProfileInputEdition,
@@ -27,6 +28,14 @@ export const GenericProfileAddressInput = ({ textLabel, placeholder }) => {
         <GenericProfileInputContainerAddress>
             <LabelText>{textLabel}</LabelText>
             <GenericProfileInputAddress placeholder={placeholder} />
+        </GenericProfileInputContainerAddress>
+    )
+}
+export const GenericProfileEditAddressInput = ({ textLabel, placeholder }) => {
+    return (
+        <GenericProfileInputContainerAddress>
+            <LabelText>{textLabel}</LabelText>
+            <GenericProfileInputAddressEdition placeholder={placeholder} />
         </GenericProfileInputContainerAddress>
     )
 }

@@ -18,10 +18,10 @@ namespace WebAPI.Repositories
             //cpf
             //endereco logradouro numero cep
 
-            Paciente pacienteBuscado = ctx.Pacientes.FirstOrDefault(x => x.Id == Id)!;
+            Paciente pacienteBuscado = ctx.Pacientes.Find(Id)!;
 
-            if (paciente.Foto != null)
-                pacienteBuscado!.IdNavigation.Foto = paciente.Foto;
+            //if (paciente.Foto != null)
+                //pacienteBuscado!.IdNavigation.Foto = paciente.Foto;
 
             if (paciente.DataNascimento != null)
                 pacienteBuscado!.DataNascimento = paciente.DataNascimento;
@@ -30,13 +30,13 @@ namespace WebAPI.Repositories
                 pacienteBuscado!.Cpf = paciente.Cpf;
 
             if (paciente.Logradouro != null)
-                pacienteBuscado!.Endereco!.Logradouro = paciente.Logradouro;
+                pacienteBuscado.Endereco.Logradouro = paciente!.Logradouro;
 
             if (paciente.Numero != null)
-                pacienteBuscado!.Endereco!.Numero = paciente.Numero;
+                pacienteBuscado!.Endereco!.Numero = paciente!.Numero;
 
             if (paciente.Cep != null)
-                pacienteBuscado!.Endereco!.Cep = paciente.Cep;
+                pacienteBuscado!.Endereco!.Cep = paciente!.Cep;
 
             ctx.Pacientes.Update(pacienteBuscado!);
             ctx.SaveChanges();

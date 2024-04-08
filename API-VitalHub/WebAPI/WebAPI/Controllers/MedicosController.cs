@@ -32,13 +32,13 @@ namespace WebAPI.Controllers
             return Ok(_medicoRepository.BuscarPorId(id)); ;
         }
 
-        [Authorize]
-        [HttpPut]
-        public IActionResult AtualizarPerfil(MedicoViewModel medico)
+        //[Authorize]
+        [HttpPut("AtualizarPerfil")]
+        public IActionResult AtualizarPerfil(MedicoViewModel medico, Guid id)
         {
-            Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
+           // Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
 
-            return Ok(_medicoRepository.AtualizarPerfil(idUsuario, medico));
+            return Ok(_medicoRepository.AtualizarPerfil(id, medico));
         }
 
         [HttpPost]

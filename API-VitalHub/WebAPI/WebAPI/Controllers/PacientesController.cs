@@ -62,13 +62,12 @@ namespace WebAPI.Controllers
             return Ok(pacienteRepository.BuscarPorId(id));
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("AtualizarPerfil")]
-        public IActionResult AtualizarPerfil(PacienteViewModel paciente)
+        public IActionResult AtualizarPerfil(PacienteViewModel paciente, Guid id)
         {
-            Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
 
-            return Ok(pacienteRepository.AtualizarPerfil(idUsuario, paciente));
+            return Ok(pacienteRepository.AtualizarPerfil(id, paciente));
         }
 
         [HttpPost]

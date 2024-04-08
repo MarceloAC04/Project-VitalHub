@@ -66,6 +66,10 @@ export const GenericProfileInputContainerAddress = styled(GenericProfileInputCon
 export const GenericProfileInputAddress = styled(GenericProfileInput)`
     width: 80%;
 `
+export const GenericProfileInputAddressEdition = styled(GenericProfileInputEdition)`
+    width: 80%;
+`
+
 export const GenericPrescriptionContainer = styled.View`
     height: 120px;
     flex-direction: row;

@@ -21,11 +21,11 @@ namespace WebAPI.Repositories
 
             if (medicoBuscado == null) return null!;
 
-            if (medico.Foto != null)
-                medicoBuscado.IdNavigation.Foto = medico.Foto;
+            //if (medico.Foto != null)
+               // medicoBuscado.IdNavigation.Foto = medico.Foto;
 
-            if (medico.EspecialidadeId != null)
-                medicoBuscado.EspecialidadeId = medico.EspecialidadeId;
+           // if (medico.EspecialidadeId != null)
+              //  medicoBuscado.EspecialidadeId = medico.EspecialidadeId;
 
             if (medico.Crm != null)
                 medicoBuscado.Crm = medico.Crm;
@@ -33,8 +33,8 @@ namespace WebAPI.Repositories
             if (medico.Logradouro != null)
                 medicoBuscado.Endereco!.Logradouro = medico.Logradouro;
 
-            if (medico.Numero != null)
-                medicoBuscado.Endereco!.Numero = medico.Numero;
+            // if (medico.Numero != null)
+               // medicoBuscado.Endereco!.Numero = medico.Numero;
 
             if (medico.Cep != null)
                 medicoBuscado.Endereco!.Cep = medico.Cep;

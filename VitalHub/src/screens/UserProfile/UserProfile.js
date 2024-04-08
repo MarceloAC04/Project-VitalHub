@@ -1,4 +1,4 @@
-import { GenericInput, GenericProfileAddressInput } from "../../components/GenericProfileInput/GenericProfileInput";
+import { GenericEditInput, GenericInput, GenericProfileAddressInput, GenericProfileEditAddressInput } from "../../components/GenericProfileInput/GenericProfileInput";
 import { GenericProfileInputContainerRow } from "../../components/GenericProfileInput/Styles";
 import { Container, ContainerScrollView } from "../../components/Container/Styles";
 import { UserProfilePhoto } from "../../components/UserProfilePhoto/Styles";
@@ -11,9 +11,9 @@ import { userDecodeToken } from "../../Utils/Auth"
 import api from "../../services/Service";
 import moment from "moment";
 
-
 export const UserProfile = ({ navigation }) => {
-    // const [userId, setUserId] = useState('') // Deixando salvo aqui para caso eu use
+    const [userId, setUserId] = useState('') // Deixando salvo aqui para caso eu use
+    const [isEditing, setIsEditing] = useState(false)
 
     //Usuario em Geral
     const [userName, setUserName] = useState('')
@@ -39,7 +39,7 @@ export const UserProfile = ({ navigation }) => {
             //Aqui está pegando os dados do token como (Nome, email, role e id)
             setUserName(token.name)
             setUserEmail(token.email)
-            // setUserId(token.jti) //Tirei o ID pois não tem mais utilidade
+            setUserId(token.jti) 
             setUserRole(token.role)
 
             //Determinando que caso o role for Medico, a propriedade "url" irá se torna um "Medicos" ou "Pacientes" (Caso o role for Paciente)
@@ -64,7 +64,7 @@ export const UserProfile = ({ navigation }) => {
                         setUserNiver(moment(response.data.dataNascimento).format('YYYY-MM-DD'))
 
                         setUserCep(response.data.endereco.cep)
- 
+
                         setUserCidade(response.data.endereco.cidade)
 
                         setUserLugardouro(response.data.endereco.logradouro)
@@ -75,6 +75,30 @@ export const UserProfile = ({ navigation }) => {
 
         }
     }
+
+    async function updateProfile() {
+        try {
+            if (userRole === 'Medico') {
+                await api.put(`/Medicos/AtualizarPerfil?id=${userId}`, {
+                    cep: userCep,
+                    logradouro: userLugardouro,
+                    cidade: userCidade,
+                    crm: userCrm
+                })
+            }
+    
+            await api.put(`/Pacientes/AtualizarPerfil?id=${userId}`, {
+                dataNascimento: userNiver,
+                cpf: userCpf,
+                cep: userCep,
+                logradouro: userLugardouro,
+                cidade: userCidade
+            }) 
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         profileLoad()
     }, [])
@@ -90,58 +114,114 @@ export const UserProfile = ({ navigation }) => {
 
                 <SubTitle>{userEmail}</SubTitle>
 
-                {
-                    userRole === "Paciente" ? (
-                        <GenericInput
-                            textLabel={'Data de Nascimento: '}
-                            placeholder={userNiver}
-                        />
-                    ) : (<></>)
-                }
+                {!isEditing ? (
+                    <>
+                        {
+                            userRole === "Paciente" ? (
+                                <GenericInput
+                                    textLabel={'Data de Nascimento: '}
+                                    placeholder={userNiver}
+                                />
+                            ) : (<></>)
+                        }
 
-                {
-                    userRole === 'Medico' ? (
-                        <GenericInput
-                            textLabel={'CRM:'}
-                            placeholder={userCrm}
-                        />
-                    ) : (
-                        <GenericInput
-                            textLabel={'CPF:'}
-                            placeholder={userCpf}
-                        />
-                    )
-                }
+                        {
+                            userRole === 'Medico' ? (
+                                <GenericInput
+                                    textLabel={'CRM:'}
+                                    placeholder={userCrm}
+                                />
+                            ) : (
+                                <GenericInput
+                                    textLabel={'CPF:'}
+                                    placeholder={userCpf}
+                                />
+                            )
+                        }
 
-                <GenericInput
-                    textLabel={'Logradouro: '}
-                    placeholder={userLugardouro}
-                />
+                        <GenericInput
+                            textLabel={'Logradouro: '}
+                            placeholder={userLugardouro}
+                        />
 
-                <GenericProfileInputContainerRow>
-                    <GenericProfileAddressInput
-                        textLabel={'Cep: '}
-                        placeholder={userCep}
-                    />
-                    <GenericProfileAddressInput
-                        textLabel={'Cidade: '}
-                        placeholder={userCidade}
-                    />
-                </GenericProfileInputContainerRow>
+                        <GenericProfileInputContainerRow>
+                            <GenericProfileAddressInput
+                                textLabel={'Cep: '}
+                                placeholder={userCep}
+                            />
+                            <GenericProfileAddressInput
+                                textLabel={'Cidade: '}
+                                placeholder={userCidade}
+                            />
+                        </GenericProfileInputContainerRow>
+                    </>
+                ) : (
+                    <>
+                        {
+                            userRole === "Paciente" ? (
+                                <GenericEditInput
+                                    textLabel={'Data de Nascimento: '}
+                                    placeholder={userNiver}
+                                    onChangeText={(txt) => setUserNiver(txt)}
+                                />
+                            ) : (<></>)
+                        }
+
+                        {
+                            userRole === 'Medico' ? (
+                                <GenericEditInput
+                                    textLabel={'CRM:'}
+                                    placeholder={userCrm}
+                                    onChangeText={(txt) => setUserCrm(txt)}
+                                />
+                            ) : (
+                                <GenericEditInput
+                                    textLabel={'CPF:'}
+                                    placeholder={userCpf}
+                                    onChangeText={(txt) => setUserCpf(txt)}
+                                />
+                            )
+                        }
+
+                        <GenericEditInput
+                            textLabel={'Logradouro: '}
+                            placeholder={userLugardouro}
+                            onChangeText={(txt) => setUserLugardouro(txt)}
+                        />
+
+                        <GenericProfileInputContainerRow>
+                            <GenericProfileEditAddressInput
+                                textLabel={'Cep: '}
+                                placeholder={userCep}
+                                onChangeText={(txt) => setUserCep(txt)}
+                            />
+                            <GenericProfileEditAddressInput
+                                textLabel={'Cidade: '}
+                                placeholder={userCidade}
+                                onChangeText={(txt) => setUserCidade(txt)}
+                            />
+                        </GenericProfileInputContainerRow>
+                    </>
+                )}
+
 
                 <ButtonEnter
                     placeholder={'salvar'}
+                    onPress={() => {
+                        updateProfile()
+                        setIsEditing(false)
+                    }}
                 />
 
                 <ButtonEnter
                     placeholder={'editar'}
+                    onPress={() => setIsEditing(true)}
                 />
 
                 <ButtonGrey
                     onPress={() => {
                         AsyncStorage.removeItem('token')
 
-                        // user.role=''
                         navigation.replace('Login')
                     }}
                     placeholder={'Sair do app'}
