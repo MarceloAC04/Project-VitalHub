@@ -19,16 +19,47 @@ import { UserProfilePhotoModal } from "../UserProfilePhoto/Styles";
 import { LabelText } from "../LabelText/Styles";
 import { Title } from "../Title/Styles";
 import { Modal } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { userDecodeToken } from '../../Utils/Auth'
+import api from "../../services/Service"; 
 
-export const ModalAppointment = ({ id, animation, transparent, visible, onPressCancel, onPressConfirm, img, name, age, email, situation, ...rest }) => {
+
+
+
+export const ModalAppointment = ({ id, idSituacao, animation, transparent, visible, onPressCancel, onPressConfirm, img, name, age, email, situation, ...rest }) => {
+
+    const [idConsulta, setIdConsulta] = useState('')
+    const [status, setStatus] = useState('')
+    // Dentro do seu componente
+    async function CancelarConsulta() {
+        try {
+
+            setStatus(idSituacao)
+            // Verifica se o status é "Pendente" para permitir o cancelamento
+            if (idSituacao === '4f2d403f-8928-4135-a306-724cf9fb4bfa') {
+                // Chama a rota da API para atualizar o status da consulta para "Cancelar"
+                const response = await api.put(`/Consultas/Status`, { id: id, situacaoId: '9E21D12D-36D8-4A11-9E8E-9AA46805DBAD' });
+                console.log("Consulta cancelada com sucesso.");
+
+            } else {
+                console.log("Não é possível cancelar uma consulta que não está pendente.");
+            }
+        } catch (error) {
+            console.log("Erro ao cancelar consulta:", error);
+        }
+
+
+    }
+
+    //useEffect chamando a função
+
     return (
         <Modal {...rest}
             animationType={animation}
             transparent={transparent}
             visible={visible}
         >
-            {situation == 'pendente' ? (
+            {situation == 'Pendentes' ? (
                 <ModalView>
                     <ModalContainer>
                         <Title>Cancelar Consulta</Title>
@@ -36,7 +67,12 @@ export const ModalAppointment = ({ id, animation, transparent, visible, onPressC
                             <SubTitle>Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?</SubTitle>
                         </SubTitleContainerModal>
                         <ButtonEnter
-                            onPress={onPressConfirm}
+                            onPress={() => {
+                                // console.log(`Id de Consulta:${id}`)
+                                // console.log(idSituacao)
+                                CancelarConsulta();  // Chama a função para cancelar a consulta
+                                onPressConfirm();    // Chama a função fornecida para confirmar a ação
+                            }}
                             placeholder={'Confirmar'}
                         />
                         <ButtonSecondary

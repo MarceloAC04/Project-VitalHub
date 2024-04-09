@@ -43,7 +43,7 @@ export const MedicalRecord = ({ navigation, route }) => {
             //Defini "consults" como um objeto para acessar os dados
             const consultas = response.data;
 
-            //Defini que o objeto BuscarId, is
+            //Deixando claro que o userId = Busca o "Id de Consulta"
             const BuscarId = consultas.find(consulta => consulta.id === userId);
 
             if (BuscarId) {
@@ -108,16 +108,16 @@ ${observacao}
                         <>
                             <GenericEditTextArea
                                 textLabel={'Descrição da Consulta'}
-                                placeholder={'Descrição'}
+                                placeholder={descricao}
                             />
 
                             <GenericEditInput
                                 textLabel={'Diagnóstico do paciente'}
-                                placeholder={'Infecção no ouvindo'}
+                                placeholder={diagnostico}
                             />
                             <GenericEditTextArea
                                 textLabel={'Prescrição Médica'}
-                                placeholder={'Prescrição Médica'}
+                                placeholder={medicamento}
                             />
                         </>
                     )

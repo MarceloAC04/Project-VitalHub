@@ -35,7 +35,7 @@ Notifications.setNotificationHandler({
   }),
 })
 
-export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, email, situation }) => {
+export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, email, situation, idSituacao }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     async function handleClose(screen, props) {
@@ -96,6 +96,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                         age={age}
                         email={email}
                         situation={situation}
+                        idSituacao={idSituacao}
                     />
                 </>
             ) : (null)}

@@ -13,11 +13,15 @@ import * as MediaLibrary from 'expo-media-library';
 import { Line } from "./Styles";
 import { Alert } from "react-native";
 
-export const MedicRecord = ({ navigation }) => {
+export const MedicRecord = ({ navigation, name, crm, specialty }) => {
     const [openCamera, setOpenCamera] = useState(false)
     const [openModalPhoto, setOpenModalPhoto] = useState(false)
     const cameraRef = useRef(null)
     const [photo, setPhoto] = useState(null)
+
+    async function DadosDoMedico(){
+        
+    }
 
     async function CapturePhoto() {
         if (cameraRef) {
@@ -33,6 +37,12 @@ export const MedicRecord = ({ navigation }) => {
 
         setOpenModalPhoto(false)
     }
+    useEffect(() => {
+        console.log(name)
+        console.log(crm)
+        console.log(specialty)
+
+    },[])
 
     async function SavePhoto() {
         if (photo) {
@@ -50,9 +60,9 @@ export const MedicRecord = ({ navigation }) => {
         <ContainerScrollView>
             <Container>
                 <UserProfilePhoto source={require('../../assets/foto-de-perfil-medico.png')} />
-                <Title>Dr. Claudio</Title>
+                <Title>{name}</Title>
 
-                <SubTitle>Cliníco geral    <SubTitle>CRM-15286</SubTitle></SubTitle>
+                <SubTitle>{specialty}   <SubTitle>{crm}</SubTitle></SubTitle>
 
                 <GenericTextArea
                     textLabel={'Descrição da Consulta'}

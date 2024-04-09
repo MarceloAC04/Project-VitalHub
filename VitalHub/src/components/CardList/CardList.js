@@ -12,6 +12,7 @@ export const CardList = ({ status, navi, cardsData }) => {
                 <AppointmentCard
                     id={item.id}
                     situation={item.situacao.situacao}
+                    idSituacao={item.situacaoId}
                     navi={navi}
                     img={item.img}
                     name={item.paciente.idNavigation.nome}
