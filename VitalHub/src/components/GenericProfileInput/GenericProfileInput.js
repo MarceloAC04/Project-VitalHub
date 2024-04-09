@@ -27,15 +27,15 @@ export const GenericProfileAddressInput = ({ textLabel, placeholder }) => {
     return (
         <GenericProfileInputContainerAddress>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInputAddress placeholder={placeholder} />
+            <GenericProfileInputAddress placeholder={placeholder}/>
         </GenericProfileInputContainerAddress>
     )
 }
-export const GenericProfileEditAddressInput = ({ textLabel, placeholder }) => {
+export const GenericProfileEditAddressInput = ({ textLabel, placeholder, onChangeText }) => {
     return (
         <GenericProfileInputContainerAddress>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInputAddressEdition placeholder={placeholder} />
+            <GenericProfileInputAddressEdition placeholder={placeholder} onChangeText={onChangeText} />
         </GenericProfileInputContainerAddress>
     )
 }
@@ -54,12 +54,13 @@ export const GenericTextArea = ({ textLabel, placeholder }) => {
     )
 }
 
-export const GenericEditTextArea = ({ textLabel, placeholder }) => {
+export const GenericEditTextArea = ({ textLabel, placeholder, onChangeText}) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
             <GenericProfileTextAreaEdition
                 placeholder={placeholder}
+                onChangeText={onChangeText}
                 multiline
                 numberOfLines={5}
                 maxLength={200}
@@ -68,11 +69,11 @@ export const GenericEditTextArea = ({ textLabel, placeholder }) => {
     )
 }
 
-export const GenericEditInput = ({ textLabel, placeholder }) => {
+export const GenericEditInput = ({ textLabel, placeholder, onChangeText }) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInputEdition placeholder={placeholder} />
+            <GenericProfileInputEdition placeholder={placeholder} onChangeText={onChangeText} />
         </GenericProfileInputContainer>
     )
 }

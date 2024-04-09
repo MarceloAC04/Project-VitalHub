@@ -39,7 +39,7 @@ export const UserProfile = ({ navigation }) => {
             //Aqui está pegando os dados do token como (Nome, email, role e id)
             setUserName(token.name)
             setUserEmail(token.email)
-            setUserId(token.jti) 
+            setUserId(token.jti)
             setUserRole(token.role)
 
             //Determinando que caso o role for Medico, a propriedade "url" irá se torna um "Medicos" ou "Pacientes" (Caso o role for Paciente)
@@ -77,6 +77,7 @@ export const UserProfile = ({ navigation }) => {
     }
 
     async function updateProfile() {
+        console.log(userId, userCidade)
         try {
             if (userRole === 'Medico') {
                 await api.put(`/Medicos/AtualizarPerfil?id=${userId}`, {
@@ -86,14 +87,16 @@ export const UserProfile = ({ navigation }) => {
                     crm: userCrm
                 })
             }
-    
-            await api.put(`/Pacientes/AtualizarPerfil?id=${userId}`, {
-                dataNascimento: userNiver,
-                cpf: userCpf,
-                cep: userCep,
-                logradouro: userLugardouro,
-                cidade: userCidade
-            }) 
+            else {
+                await api.put(`/Pacientes/AtualizarPerfil?id=${userId}`, {
+                    dataNascimento: userNiver,
+                    cpf: userCpf,
+                    cep: userCep,
+                    logradouro: userLugardouro,
+                    cidade: userCidade
+                })
+            }
+
         } catch (error) {
             console.log(error);
         }

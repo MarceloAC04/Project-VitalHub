@@ -16,7 +16,7 @@ namespace WebAPI.Repositories
         public Medico AtualizarPerfil(Guid Id, MedicoViewModel medico)
         {
 
-            Medico medicoBuscado = ctx.Medicos.FirstOrDefault(x => x.Id == Id)!;
+            Medico medicoBuscado = ctx.Medicos.Include(x => x.Endereco).FirstOrDefault(x => x.Id == Id)!;
 
 
             if (medicoBuscado == null) return null!;
@@ -38,6 +38,9 @@ namespace WebAPI.Repositories
 
             if (medico.Cep != null)
                 medicoBuscado.Endereco!.Cep = medico.Cep;
+
+            if (medico.Cidade != null)
+                medicoBuscado.Endereco!.Cidade = medico.Cidade;
 
             ctx.Medicos.Update(medicoBuscado);
             ctx.SaveChanges();
@@ -88,7 +91,7 @@ namespace WebAPI.Repositories
             return ctx.Consultas
                .Include(x => x.Situacao)
                .Include(x => x.Prioridade)
-               .Include(x => x.Paciente.IdNavigation)
+               .Include(x => x.Paciente!.IdNavigation)
                .Include(x => x.MedicoClinica!.Medico!.IdNavigation)
                .Where(x => x.MedicoClinica!.MedicoId == idMedico && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0)
                .ToList();

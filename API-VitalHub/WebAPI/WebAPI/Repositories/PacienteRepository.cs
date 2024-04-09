@@ -18,7 +18,7 @@ namespace WebAPI.Repositories
             //cpf
             //endereco logradouro numero cep
 
-            Paciente pacienteBuscado = ctx.Pacientes.Find(Id)!;
+            Paciente pacienteBuscado = ctx.Pacientes.Include(x => x.Endereco).FirstOrDefault(x => x.Id == Id)!;
 
             //if (paciente.Foto != null)
                 //pacienteBuscado!.IdNavigation.Foto = paciente.Foto;
@@ -30,13 +30,18 @@ namespace WebAPI.Repositories
                 pacienteBuscado!.Cpf = paciente.Cpf;
 
             if (paciente.Logradouro != null)
-                pacienteBuscado.Endereco.Logradouro = paciente!.Logradouro;
+                pacienteBuscado!.Endereco!.Logradouro = paciente!.Logradouro;
 
             if (paciente.Numero != null)
                 pacienteBuscado!.Endereco!.Numero = paciente!.Numero;
 
             if (paciente.Cep != null)
                 pacienteBuscado!.Endereco!.Cep = paciente!.Cep;
+
+            if (paciente.Cidade != null)
+            {
+                pacienteBuscado!.Endereco!.Cidade = paciente!.Cidade;
+            }
 
             ctx.Pacientes.Update(pacienteBuscado!);
             ctx.SaveChanges();
@@ -46,12 +51,12 @@ namespace WebAPI.Repositories
 
         public List<Consulta> BuscarAgendadas(Guid Id)
         {
-            return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao.Situacao == "Agendada").ToList();
+            return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao!.Situacao == "Agendada").ToList();
         }
 
         public List<Consulta> BuscarCanceladas(Guid Id)
         {
-            return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao.Situacao == "Cancelada").ToList();
+            return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao!.Situacao == "Cancelada").ToList()!;
         }
 
         public List<Consulta> BuscarPorData(DateTime dataConsulta, Guid idPaciente)
@@ -69,12 +74,12 @@ namespace WebAPI.Repositories
             return ctx.Pacientes
                 .Include(x => x.IdNavigation)
                 .Include(x => x.Endereco)
-                .FirstOrDefault(x => x.Id == Id);
+                .FirstOrDefault(x => x.Id == Id)!;
         }
 
         public List<Consulta> BuscarRealizadas(Guid Id)
         {
-            return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao.Situacao == "Realizada").ToList();
+            return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao!.Situacao == "Realizada").ToList();
         }
 
         public void Cadastrar(Usuario user)
