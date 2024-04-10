@@ -4,14 +4,15 @@ namespace WebAPI.Interfaces
 {
     public interface IUsuarioRepository
     {
-        void Cadastrar(Usuario usuario);
+       public void Cadastrar(Usuario usuario);
 
-        Usuario BuscarPorId(Guid id);
+        public Usuario BuscarPorId(Guid id);
 
-        Usuario BuscarPorEmailESenha(string email, string senha);
+        public Usuario BuscarPorEmailESenha(string email, string senha);
 
-        bool AlterarSenha(Guid Id, string senhaAntiga, string senhaNova);
+       public bool AlterarSenha(string email, string senhaNova);
 
+        public void AtualizarFoto(Guid id, string novaURLFoto);
    
     }
 }
