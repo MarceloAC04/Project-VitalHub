@@ -1,5 +1,4 @@
-﻿
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
@@ -47,7 +46,7 @@ namespace WebAPI.Utils.Mail
                     //autentica-se no servidor STMP usando os dados do emailSettings
                     stmp.Authenticate(emailSettings.Email, emailSettings.Password);
 
-                    //envia o e-mail assicrono
+                    //envia o e-mail assincrono
                     await stmp.SendAsync(email);
                 }
             }
