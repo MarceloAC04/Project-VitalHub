@@ -35,7 +35,7 @@ Notifications.setNotificationHandler({
   }),
 })
 
-export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, email, situation }) => {
+export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, email, situation, idSituacao }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     async function handleClose(screen, props) {
@@ -69,7 +69,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
             <UserProfilePhotoCard source={img} />
             <CardContainerText>
                 <TitleCard>{name}</TitleCard>
-                <SubTitleCardAge>Idade: {age}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                <SubTitleCardAge>{age}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
                 {situation == 'Pendentes' ? (
                     <ScheduleContainer>
                         <ScheduleTime> <AntDesign name="clockcircle" size={14} color="#49B3BA" />  {schedule}</ScheduleTime>
@@ -96,6 +96,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                         age={age}
                         email={email}
                         situation={situation}
+                        idSituacao={idSituacao}
                     />
                 </>
             ) : (null)}
@@ -106,7 +107,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                         visible={modalVisible}
                         onPressCancel={() => setModalVisible(false)}
                         onPressConfirm={() => handleClose("MedicalRecord",
-                            {userId: id, userImg: img, userName: name, userAge: age, userEmail: email })
+                            {userId: id ,userImg: img, userName: name, userAge: age, userEmail: email})
                         }
                         animation={'fade'}
                         transparent={true}
@@ -217,13 +218,13 @@ export const ClinicSelectCard = ({ id, clinicName, onPress, isSelect = false, sc
             <>
                 <CardClinicContent>
                     <TitleCard>{clinicName}</TitleCard>
-                    <SubTitleCardScore><AntDesign name="star" size={16} color="#F9A620" />{score}</SubTitleCardScore>
+                    {/* <SubTitleCardScore><AntDesign name="star" size={16} color="#F9A620" />{score}</SubTitleCardScore> */}
                 </CardClinicContent>
 
                 <CardClinicContent>
-                    <SubTitleClinicCard>{city}, {uf}</SubTitleClinicCard>
+                    <SubTitleClinicCard>{city}</SubTitleClinicCard>
                     <ScheduleClinicContainer>
-                        <ScheduleTime><MaterialCommunityIcons name="calendar-outline" size={16} color="#49B3BA" /> {days}</ScheduleTime>
+                        <ScheduleTime><MaterialCommunityIcons name="calendar-outline" size={16} color="#49B3BA" /> Seg - Sex</ScheduleTime>
                     </ScheduleClinicContainer>
                 </CardClinicContent>
             </>

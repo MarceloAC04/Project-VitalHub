@@ -12,10 +12,11 @@ export const CardList = ({ status, navi, cardsData }) => {
                 <AppointmentCard
                     id={item.id}
                     situation={item.situacao.situacao}
+                    idSituacao={item.situacaoId}
                     navi={navi}
                     img={item.img}
                     name={item.paciente.idNavigation.nome}
-                    age={moment().format('YYYY') - moment(item.paciente.dataNascimento).format('YYYY')}
+                    age={moment(item.dataConsulta).format('YYYY') - moment(item.paciente.dataNascimento).format('YYYY')}
                     query={item.descricao}
                     schedule={moment(item.dataConsulta).format('h:mm')}
                     email={item.paciente.email}
@@ -63,9 +64,7 @@ export const ClinicCardList = ({ cardsData }) => {
                     onPress={() => setIdClinic(item.id)}
                     isSelect={idClinic == item.id}
                     clinicName={item.nomeFantasia}
-                    score={item.score}
                     city={item.endereco.cidade}
-                    uf={item.uf}
                     days={item.days}
                     select={item.select}
                 />
