@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\48260449846\\Desktop\\Project-VitalHub\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {}
+    "E:\\Project-VitalHub\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\48260449846\\Desktop\\Project-VitalHub\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {
+    "E:\\Project-VitalHub\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\48260449846\\Desktop\\Project-VitalHub\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "projectUniqueName": "E:\\Project-VitalHub\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
         "projectName": "WebAPI",
-        "projectPath": "C:\\Users\\48260449846\\Desktop\\Project-VitalHub\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "projectPath": "E:\\Project-VitalHub\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
         "packagesPath": "C:\\Users\\48260449846\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\48260449846\\Desktop\\Project-VitalHub\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
+        "outputPath": "E:\\Project-VitalHub\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\48260449846\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -63,6 +63,10 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[7.0.11, )"
+            },
+            "Microsoft.Azure.CognitiveServices.Vision.ComputerVision": {
+              "target": "Package",
+              "version": "[7.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
