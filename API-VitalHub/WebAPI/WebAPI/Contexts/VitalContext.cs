@@ -243,7 +243,7 @@ public partial class VitalContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Situaco>(entity =>
+        modelBuilder.Entity<SituacaoConsulta>(entity =>
         {
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()

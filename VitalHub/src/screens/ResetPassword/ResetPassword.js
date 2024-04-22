@@ -5,9 +5,26 @@ import { Input } from "../../components/Input/Styles";
 import { Title } from "../../components/Title/Styles";
 import { Logo } from "../../components/Logo/Styles";
 import { AntDesign } from '@expo/vector-icons';
+import { useState } from "react";
+import api from "../../services/Service";
 
 
-export const ResetPassword = ({navigation}) => {
+export const ResetPassword = ({navigation, route}) => {
+    const [pass, setPass] = useState('')
+    const [confirmPass, setConfirmPass] = useState('')
+    const email = route.params.recoveEmail;
+
+    async function UpdatePassword() {
+        if (pass === confirmPass) {
+            await api.put(`/Usuario/AlterarSenha?email=${email}`, {
+                senhaNova: pass
+            }).then(() => {
+                navigation.replace('Login')
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
     return (
         <Container>
             <ContainerIcons>
@@ -19,12 +36,20 @@ export const ResetPassword = ({navigation}) => {
 
             <SubTitle>Insira e confirme a sua nova senha</SubTitle>
 
-            <Input placeholder={'Nova Senha'} secureTextEntry/>
+            <Input placeholder={'Nova Senha'} 
+                secureTextEntry
+                value={pass}
+                onChangeText={(txt) => setPass(txt)}
+            />
 
-            <Input placeholder={'Confirme nova senha'} secureTextEntry />
+            <Input placeholder={'Confirme nova senha'} 
+              secureTextEntry
+              value={confirmPass}
+              onChangeText={(txt) => setConfirmPass(txt)}
+            />
 
             <ButtonEnter
-                onPress={() => navigation.replace('Login')}
+                onPress={() => UpdatePassword()}
                 placeholder={'confirmar nova senha'}
             />
         </Container>

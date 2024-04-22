@@ -34,9 +34,9 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
 
             setStatus(idSituacao)
             // Verifica se o status é "Pendente" para permitir o cancelamento
-            if (idSituacao === '4f2d403f-8928-4135-a306-724cf9fb4bfa') {
+            if (idSituacao === '7737D6FE-8331-4FB5-AAF4-C671A8A72384') {
                 // Chama a rota da API para atualizar o status da consulta para "Cancelar"
-                const response = await api.put(`/Consultas/Status`, { id: id, situacaoId: '9E21D12D-36D8-4A11-9E8E-9AA46805DBAD' });
+                const response = await api.put(`/Consultas/Status`, { id: id, situacaoId: '3E8658D2-1C1A-4994-AD92-41422AA081F1' });
                 console.log("Consulta cancelada com sucesso.");
 
             } else {
