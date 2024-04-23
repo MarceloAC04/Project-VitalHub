@@ -12,7 +12,7 @@ namespace WebAPI.Interfaces
 
        public bool AlterarSenha(string email, string senhaNova);
 
-        public void AtualizarFoto(Guid id, string novaURLFoto);
-   
+        public void AtualizarFoto(Guid id, string novaUrlFoto);
+
     }
 }

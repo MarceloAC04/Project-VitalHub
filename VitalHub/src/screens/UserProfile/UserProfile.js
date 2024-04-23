@@ -1,17 +1,56 @@
-import { GenericEditInput, GenericInput, GenericProfileAddressInput, GenericProfileEditAddressInput } from "../../components/GenericProfileInput/GenericProfileInput";
+import { GenericEditInput, GenericInput, 
+        GenericProfileAddressInput, GenericProfileEditAddressInput } from "../../components/GenericProfileInput/GenericProfileInput";
 import { GenericProfileInputContainerRow } from "../../components/GenericProfileInput/Styles";
 import { Container, ContainerScrollView } from "../../components/Container/Styles";
 import { UserProfilePhoto } from "../../components/UserProfilePhoto/Styles";
 import { ButtonEnter, ButtonGrey } from "../../components/Button/Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AppCamera } from "../../components/Camera/Camera";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SubTitle } from "../../components/SubTitle/Styles";
 import { Title } from "../../components/Title/Styles";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
+import { ButtonCamera, ContentImage } from "./Styles";
+import * as MediaLibrary from 'expo-media-library';
 import { userDecodeToken } from "../../Utils/Auth"
+import { useEffect, useState } from "react";
 import api from "../../services/Service";
+import { useRef } from "react";
 import moment from "moment";
+import { Alert } from "react-native";
 
 export const UserProfile = ({ navigation }) => {
+    const [openCamera, setOpenCamera] = useState(false)
+    const [openModalPhoto, setOpenModalPhoto] = useState(false)
+    const cameraRef = useRef(null)
+    const [photo, setPhoto] = useState(null)
+
+    async function CapturePhoto() {
+        if (cameraRef) {
+            const photo = await cameraRef.current.takePictureAsync();
+            setPhoto(photo.uri)
+
+            setOpenModalPhoto(true)
+        }
+    }
+
+    function ClearPhoto() {
+        setPhoto(null)
+
+        setOpenModalPhoto(false)
+    }
+
+    async function SavePhoto() {
+        if (photo) {
+            await MediaLibrary.createAssetAsync(photo)
+                .then(() => {
+                    Alert.alert('Sucesso', 'foto salva na galeria')
+                    setOpenModalPhoto(false)
+                    setOpenCamera(false)
+                }).catch(erro => {
+                    console.log(erro);
+                })
+        }
+    }
     const [userId, setUserId] = useState('') // Deixando salvo aqui para caso eu use
     const [isEditing, setIsEditing] = useState(false)
 
@@ -111,7 +150,13 @@ export const UserProfile = ({ navigation }) => {
     return (
         <ContainerScrollView>
             <Container>
-                <UserProfilePhoto source={require('../../assets/foto-de-perfil.png')} />
+                <ContentImage>
+                    <UserProfilePhoto source={require('../../assets/foto-de-perfil.png')} />
+
+                    <ButtonCamera onPress={() => setOpenCamera(true)}>
+                        <MaterialCommunityIcons name="camera-plus" size={20} color={"#fbfbfb"} />
+                    </ButtonCamera>
+                </ContentImage>
 
                 <Title>{userName}</Title>
 
@@ -228,6 +273,18 @@ export const UserProfile = ({ navigation }) => {
                         navigation.replace('Login')
                     }}
                     placeholder={'Sair do app'}
+                />
+
+                <AppCamera
+                    visibleCamera={openCamera}
+                    refCamera={cameraRef}
+                    openModalPhoto={openModalPhoto}
+                    onPressPhoto={() => CapturePhoto()}
+                    onPressCancel={() => ClearPhoto()}
+                    confirmPhoto={() => SavePhoto()}
+                    onPressExit={() => setOpenCamera(false)}
+                    photo={photo}
+                    getMediaLibrary={true}
                 />
             </Container>
         </ContainerScrollView>

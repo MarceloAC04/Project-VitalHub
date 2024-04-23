@@ -4,7 +4,7 @@ namespace WebAPI.Utils.BlobStorage
 {
     public static class AzureBlobStorageHelper
     {
-        public static async Task<string> UpLoadImageBlobAsync(IFormFile arquivo, string stringConexao, string nomeContainer)
+        public static async Task<string> UploadImageBlobAsync(IFormFile arquivo, string stringConexao, string nomeContainer)
         {
 			try
 			{

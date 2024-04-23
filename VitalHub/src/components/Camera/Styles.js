@@ -14,16 +14,16 @@ export const ViewButton = styled.View`
 `
 
 export const ButtonFlip = styled.TouchableOpacity`
-    padding: 15px;
-`
-
-export const ButtonCapture = styled(ButtonFlip)`
     margin: 10px;
-    padding: 20px;
+    padding: 15px;
     border-radius: 15px;
     background-color: #121212;
     justify-content: center;
     align-items: center;
+`
+
+export const ButtonCapture = styled(ButtonFlip)`
+    padding: 20px;
 `
 export const ButtonExit = styled(ButtonCapture)`
     padding: 20px;

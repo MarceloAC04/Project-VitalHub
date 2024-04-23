@@ -63,7 +63,7 @@ namespace WebAPI.Controllers
 
                 var connectionString = "";
 
-                user.Foto = await AzureBlobStorageHelper.UpLoadImageBlobAsync(pacienteModel!.Arquivo!, connectionString, containerName);
+                user.Foto = await AzureBlobStorageHelper.UploadImageBlobAsync(pacienteModel!.Arquivo!, connectionString, containerName);
 
                 user.Senha = pacienteModel.Senha;
 
