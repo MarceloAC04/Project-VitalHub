@@ -66,7 +66,7 @@ export const Home = ({ navigation }) => {
                         navi={() => navigation.navigate('UserProfile')}
                     />
                     <Calendar
-                        setCalendarDate={() => setCalendarDate()}
+                        setCalendarDate={setCalendarDate}
                     />
 
                     <StatusButtonContainer>
@@ -102,7 +102,7 @@ export const Home = ({ navigation }) => {
                         userPhoto={require('../../assets/foto-de-perfil.png')}
                     />
                     <Calendar
-                        setCalendarDate={() => setCalendarDate()}
+                        setCalendarDate={setCalendarDate}
                     />
 
                     <StatusButtonContainer>

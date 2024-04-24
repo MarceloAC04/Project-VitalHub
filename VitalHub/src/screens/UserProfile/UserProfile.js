@@ -14,43 +14,14 @@ import * as MediaLibrary from 'expo-media-library';
 import { userDecodeToken } from "../../Utils/Auth"
 import { useEffect, useState } from "react";
 import api from "../../services/Service";
-import { useRef } from "react";
 import moment from "moment";
 import { Alert } from "react-native";
 
 export const UserProfile = ({ navigation }) => {
     const [openCamera, setOpenCamera] = useState(false)
-    const [openModalPhoto, setOpenModalPhoto] = useState(false)
-    const cameraRef = useRef(null)
-    const [photo, setPhoto] = useState(null)
-
-    async function CapturePhoto() {
-        if (cameraRef) {
-            const photo = await cameraRef.current.takePictureAsync();
-            setPhoto(photo.uri)
-
-            setOpenModalPhoto(true)
-        }
-    }
-
-    function ClearPhoto() {
-        setPhoto(null)
-
-        setOpenModalPhoto(false)
-    }
-
-    async function SavePhoto() {
-        if (photo) {
-            await MediaLibrary.createAssetAsync(photo)
-                .then(() => {
-                    Alert.alert('Sucesso', 'foto salva na galeria')
-                    setOpenModalPhoto(false)
-                    setOpenCamera(false)
-                }).catch(erro => {
-                    console.log(erro);
-                })
-        }
-    }
+    const [uriCameraCapture, setUriCameraCapture] = useState(null)
+   
+    
     const [userId, setUserId] = useState('') // Deixando salvo aqui para caso eu use
     const [isEditing, setIsEditing] = useState(false)
 
@@ -61,6 +32,7 @@ export const UserProfile = ({ navigation }) => {
     const [userCep, setUserCep] = useState('')
     const [userCidade, setUserCidade] = useState('')
     const [userLugardouro, setUserLugardouro] = useState('')
+    const [userPhoto, setUserPhoto] = useState('')
 
     //Paciente
     const [userCpf, setUserCpf] = useState('')
@@ -107,6 +79,8 @@ export const UserProfile = ({ navigation }) => {
                         setUserCidade(response.data.endereco.cidade)
 
                         setUserLugardouro(response.data.endereco.logradouro)
+
+                        setUserPhoto(response.data.foto)
                     }
                 }).catch(error => {
                     console.log(error)
@@ -145,13 +119,37 @@ export const UserProfile = ({ navigation }) => {
         profileLoad()
     }, [])
 
+    async function UpdateProfilePhoto() {
+        const formData = new FormData();
+        formData.append("Arquivo", {
+            uri: uriCameraCapture,
+            name: `image.${uriCameraCapture.split(".")[1]}`,
+            type:  `image/${uriCameraCapture.split(".")[1]}`
+        })
+        await api.put(`/Usuario/AlterarFotoPerfil?id=${userId}`, formData, {
+            headers: {
+                "Content-Type" : "multipart/form-data"
+            }
+        }).then( async response => {
+            await userPhoto(uriCameraCapture)
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+    useEffect(() => {
+        console.log(uriCameraCapture);
+        if (uriCameraCapture) {
+            UpdateProfilePhoto()
+        }
+    },[uriCameraCapture])
 
 
     return (
         <ContainerScrollView>
             <Container>
                 <ContentImage>
-                    <UserProfilePhoto source={require('../../assets/foto-de-perfil.png')} />
+                    <UserProfilePhoto  />
 
                     <ButtonCamera onPress={() => setOpenCamera(true)}>
                         <MaterialCommunityIcons name="camera-plus" size={20} color={"#fbfbfb"} />
@@ -277,13 +275,8 @@ export const UserProfile = ({ navigation }) => {
 
                 <AppCamera
                     visibleCamera={openCamera}
-                    refCamera={cameraRef}
-                    openModalPhoto={openModalPhoto}
-                    onPressPhoto={() => CapturePhoto()}
-                    onPressCancel={() => ClearPhoto()}
-                    confirmPhoto={() => SavePhoto()}
-                    onPressExit={() => setOpenCamera(false)}
-                    photo={photo}
+                    setUriCameraCapture={setUriCameraCapture}
+                    setOpenCamera={setOpenCamera}
                     getMediaLibrary={true}
                 />
             </Container>

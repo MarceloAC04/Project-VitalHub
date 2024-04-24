@@ -7,10 +7,21 @@ export const ViewFlip = styled.View`
 `
 export const ViewButton = styled.View`
     background-color: transparent;
+    align-items: center;
     flex-direction: row;
     justify-content: flex-end;
     width: 90%;
-    gap: 42px;
+    gap: 10px;
+`
+
+export const LastPhoto = styled.Image`
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+`
+
+export const ButtonLatest = styled.TouchableOpacity`
+    padding: 10px;
 `
 
 export const ButtonFlip = styled.TouchableOpacity`

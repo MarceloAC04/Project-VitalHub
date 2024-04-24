@@ -8,44 +8,12 @@ import { SubTitle } from "../../components/SubTitle/Styles";
 import { AppCamera } from "../../components/Camera/Camera";
 import { CardLinkText } from "../../components/Card/Style";
 import { Title } from "../../components/Title/Styles";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import * as MediaLibrary from 'expo-media-library';
 import { Line } from "./Styles";
-import { Alert } from "react-native";
 
 export const MedicRecord = ({ navigation }) => {
     const [openCamera, setOpenCamera] = useState(false)
-    const [openModalPhoto, setOpenModalPhoto] = useState(false)
-    const cameraRef = useRef(null)
-    const [photo, setPhoto] = useState(null)
-
-    async function CapturePhoto() {
-        if (cameraRef) {
-            const photo = await cameraRef.current.takePictureAsync();
-            setPhoto(photo.uri)
-
-            setOpenModalPhoto(true)
-        }
-    }
-
-    function ClearPhoto() {
-        setPhoto(null)
-
-        setOpenModalPhoto(false)
-    }
-
-    async function SavePhoto() {
-        if (photo) {
-            await MediaLibrary.createAssetAsync(photo)
-                .then(() => {
-                    Alert.alert('Sucesso', 'foto salva na galeria')
-                    setOpenModalPhoto(false)
-                    setOpenCamera(false)
-                }).catch(erro => {
-                    alert("Error ao processar foto")
-                })
-        }
-    }
     return (
         <ContainerScrollView>
             <Container>
@@ -82,13 +50,7 @@ export const MedicRecord = ({ navigation }) => {
 
                 <AppCamera
                     visibleCamera={openCamera}
-                    refCamera={cameraRef}
-                    openModalPhoto={openModalPhoto}
-                    onPressPhoto={() => CapturePhoto()}
-                    onPressCancel={() => ClearPhoto()}
-                    confirmPhoto={() => SavePhoto()}
-                    onPressExit={() => setOpenCamera(false)}
-                    photo={photo}
+                    setOpenCamera={setOpenCamera}
                 />
 
                 <Line />
