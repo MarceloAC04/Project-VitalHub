@@ -11,16 +11,16 @@ import { useEffect, useState } from "react";
 
 export const ClinicLocation = ({ navigation, route }) => {
     const {clinicaId} = route.params;
-    const {clincLocation, setClinicLocation} = useState({})
+    const [clincLocation, setClinicLocation]= useState({})
 
     async function searchClinic() {
         await api.get(`/Clinica/BuscarPorId?id=${clinicaId}`)
-        .then((response => {
-            setClinicLocation(response.data)
-            console.log(clincLocation)
+        .then(response => {
+           setClinicLocation(response.data)
+           console.log(response.data);
         }).catch(error => {
             console.log(error)
-        }))
+        })
     }
 
     useEffect(() => {
@@ -29,24 +29,27 @@ export const ClinicLocation = ({ navigation, route }) => {
     return (
         <ContainerScrollView>
             <Container>
-             <MapClinicLocation />
+             <MapClinicLocation 
+             lat={clincLocation.endereco?.latitude}
+             long={clincLocation.endereco?.longitude}
+             />
 
-                <Title>Clínica Natureh</Title>
+                <Title>{clincLocation.nomeFantasia}</Title>
                 <SubTitle>São Paulo, SP</SubTitle>
 
                 <GenericInput
                     textLabel={'Endereço'}
-                    placeholder={'Rua Vicenso Silva, 987'}
+                    placeholder={clincLocation.endereco?.logradouro}
                 />
                 <GenericProfileInputContainerRow>
                     <GenericProfileAddressInput
                         textLabel={'Número'}
-                        placeholder={'578'}
+                        placeholder={clincLocation.endereco?.numero.toString()}
                     />
 
                     <GenericProfileAddressInput
-                        textLabel={'Bairro'}
-                        placeholder={'Moema-SP'}
+                        textLabel={'Cidade'}
+                        placeholder={clincLocation.endereco?.cidade}
                     />
                 </GenericProfileInputContainerRow>
 

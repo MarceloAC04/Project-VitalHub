@@ -21,6 +21,7 @@ export const Home = ({ navigation }) => {
     const [calendarDate, setCalendarDate] = useState('')
 
     const [appointmentList, setAppointmentList] = useState([])
+    const [url, setUrl] = useState('');
 
     async function roleLoad() {
         const token = await userDecodeToken();
@@ -33,10 +34,11 @@ export const Home = ({ navigation }) => {
 
     async function ListAppointment() {
         // Instancia a chamada da api
-        await api.get(role == 'Medico' ? `/Consultas/ConsultasMedico?id=${userId}` : `/Pacientes/BuscarPorData?data=2024-04-10&id=${userId}`)
+        console.log(url);
+        (role === 'Medico' ? setUrl('Medicos') : setUrl('Pacientes'))
+        await api.get(`/${url}/BuscarPorData?data=2024-04-10&id=${userId}`)
             .then(response => {
                 setAppointmentList(response.data)
-                console.log(response.data)
             }).catch(error => {
                 console.log(error)
             })
@@ -49,6 +51,7 @@ export const Home = ({ navigation }) => {
     useEffect(() => {
         if (calendarDate !== '') {
             ListAppointment()
+            console.log(calendarDate);
         }
     }, [calendarDate])
 
@@ -124,6 +127,7 @@ export const Home = ({ navigation }) => {
                         status={statusLista}
                         cardsData={appointmentList}
                         navi={navigation}
+                        Date={calendarDate}
                     />
 
                     <ScheduleAppointmentButton

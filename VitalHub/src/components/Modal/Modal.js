@@ -24,25 +24,25 @@ import { userDecodeToken } from '../../Utils/Auth'
 import api from "../../services/Service"; 
 
 
-
-
 export const ModalAppointment = ({ id, idSituacao, animation, transparent, visible, onPressCancel, onPressConfirm, img, name, age, email, situation, ...rest }) => {
 
     const [idConsulta, setIdConsulta] = useState('')
-    const [status, setStatus] = useState('')
+    const [status, setStatus] = useState('Cancelado')
     // Dentro do seu componente
     async function CancelarConsulta() {
+        console.log(`idConsutla:${id} \n idSituacao:${idSituacao} \n Situacao:${situation}`)
+
         try {
 
-            setStatus(idSituacao)
+            
             // Verifica se o status é "Pendente" para permitir o cancelamento
             if (idSituacao === '4f2d403f-8928-4135-a306-724cf9fb4bfa') {
                 // Chama a rota da API para atualizar o status da consulta para "Cancelar"
-                const response = await api.put(`/Consultas/Status`, { id: id, situacaoId: '9E21D12D-36D8-4A11-9E8E-9AA46805DBAD' });
+                await api.put(`Consultas/Status?idConsulta=${id}&status=Cancelados`);
                 console.log("Consulta cancelada com sucesso.");
 
             } else {
-                console.log("Não é possível cancelar uma consulta que não está pendente.");
+                console.log("Não é possível cancelar uma consulta que não está pendente.",situation );
             }
         } catch (error) {
             console.log("Erro ao cancelar consulta:", error);

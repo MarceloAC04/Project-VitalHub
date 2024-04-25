@@ -3,6 +3,7 @@ import {
     GenericPrescriptionImageInput,
     GenericProfileInput,
     GenericProfileInputAddress,
+    GenericProfileInputAddressEdition,
     GenericProfileInputContainer,
     GenericProfileInputContainerAddress,
     GenericProfileInputEdition,
@@ -13,11 +14,11 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LabelText } from "../LabelText/Styles";
 
-export const GenericInput = ({ textLabel, placeholder }) => {
+export const GenericInput = ({ textLabel, placeholder, editable }) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInput placeholder={placeholder} />
+            <GenericProfileInput placeholder={placeholder} editable={editable} />
         </GenericProfileInputContainer>
     )
 }
@@ -26,12 +27,20 @@ export const GenericProfileAddressInput = ({ textLabel, placeholder }) => {
     return (
         <GenericProfileInputContainerAddress>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInputAddress placeholder={placeholder} />
+            <GenericProfileInputAddress placeholder={placeholder}/>
+        </GenericProfileInputContainerAddress>
+    )
+}
+export const GenericProfileEditAddressInput = ({ textLabel, placeholder, onChangeText }) => {
+    return (
+        <GenericProfileInputContainerAddress>
+            <LabelText>{textLabel}</LabelText>
+            <GenericProfileInputAddressEdition placeholder={placeholder} onChangeText={onChangeText} />
         </GenericProfileInputContainerAddress>
     )
 }
 
-export const GenericTextArea = ({ textLabel, placeholder }) => {
+export const GenericTextArea = ({ textLabel, placeholder, editable, onChangeText }) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
@@ -40,17 +49,20 @@ export const GenericTextArea = ({ textLabel, placeholder }) => {
                 multiline
                 numberOfLines={5}
                 maxLength={200}
+                editable={editable}
+                onChangeText={onChangeText}
             />
         </GenericProfileInputContainer>
     )
 }
 
-export const GenericEditTextArea = ({ textLabel, placeholder }) => {
+export const GenericEditTextArea = ({ textLabel, placeholder, onChangeText}) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
             <GenericProfileTextAreaEdition
                 placeholder={placeholder}
+                onChangeText={onChangeText}
                 multiline
                 numberOfLines={5}
                 maxLength={200}
@@ -59,11 +71,11 @@ export const GenericEditTextArea = ({ textLabel, placeholder }) => {
     )
 }
 
-export const GenericEditInput = ({ textLabel, placeholder }) => {
+export const GenericEditInput = ({ textLabel, placeholder, onChangeText }) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInputEdition placeholder={placeholder} />
+            <GenericProfileInputEdition placeholder={placeholder} onChangeText={onChangeText} />
         </GenericProfileInputContainer>
     )
 }

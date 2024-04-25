@@ -12,15 +12,63 @@ import { useEffect, useRef, useState } from "react";
 import * as MediaLibrary from 'expo-media-library';
 import { Line } from "./Styles";
 import { Alert } from "react-native";
+import { userDecodeToken } from '../../Utils/Auth'
+import api from "../../services/Service";
 
-export const MedicRecord = ({ navigation, name, crm, specialty }) => {
+export const MedicRecord = ({ navigation, route }) => {
     const [openCamera, setOpenCamera] = useState(false)
     const [openModalPhoto, setOpenModalPhoto] = useState(false)
     const cameraRef = useRef(null)
     const [photo, setPhoto] = useState(null)
 
-    async function DadosDoMedico(){
-        
+    //Id do Medico
+    const [userId, setUserid] = useState('')
+
+    //Consutla - Medico
+    const [diagnostico, setDiagnostico] = useState('')
+    const [descricao, setDescricao] = useState('')
+
+    //Receita
+    const [medicamento, setMedicamento] = useState('')
+    const { userName, userCrm, specialty, consultaId } = route.params;
+
+    async function DadosDoMedico() {
+        try {
+            const token = await userDecodeToken();
+            if (token != null) {
+                setUserid(token.jti)
+            }
+            console.log(token.jti)
+            console.log(consultaId)
+            //Rota usada para Buscar os dados
+            const response = await api.get(`/Pacientes/BuscarPorData?data=2024-04-10&id=${token.jti}`);
+
+            //Defini "consults" como um objeto para acessar os dados
+            const consultas = response.data;
+
+            //Defini que o objeto BuscarId, is
+            const BuscarId = consultas.find(consulta => consulta.id === consultaId);
+
+            if (BuscarId) {
+
+                // Consulta encontrada, agora você pode acessar os dados dela
+                console.log(BuscarId)
+                console.log("Diagnóstico do paciente:", BuscarId.diagnostico);
+                console.log("Exames do paciente:", BuscarId.descricao);
+                console.log("Medicamento do Paciente:", BuscarId.receita.medicamento);
+
+
+                setDiagnostico(BuscarId.diagnostico)
+                setDescricao(BuscarId.descricao)
+                setMedicamento(BuscarId.receita.medicamento)
+
+                // Faça o que precisar com os dados da consulta associada ao paciente clicado
+            } else {
+                console.log("Consulta para o paciente não encontrada.");
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     async function CapturePhoto() {
@@ -38,11 +86,9 @@ export const MedicRecord = ({ navigation, name, crm, specialty }) => {
         setOpenModalPhoto(false)
     }
     useEffect(() => {
-        console.log(name)
-        console.log(crm)
-        console.log(specialty)
+        DadosDoMedico()
 
-    },[])
+    }, [])
 
     async function SavePhoto() {
         if (photo) {
@@ -60,23 +106,26 @@ export const MedicRecord = ({ navigation, name, crm, specialty }) => {
         <ContainerScrollView>
             <Container>
                 <UserProfilePhoto source={require('../../assets/foto-de-perfil-medico.png')} />
-                <Title>{name}</Title>
+                <Title>{userName}</Title>
 
-                <SubTitle>{specialty}   <SubTitle>{crm}</SubTitle></SubTitle>
+                <SubTitle>{specialty}   <SubTitle>{userCrm}</SubTitle></SubTitle>
 
                 <GenericTextArea
                     textLabel={'Descrição da Consulta'}
-                    placeholder={`O paciente possuí uma infecção no ouvido. Necessario repouso de 2 dias e acompanhamento médico constante.`}
+                    placeholder={ descricao}
+                    editable={false}
                 />
 
                 <GenericInput
                     textLabel={'Diagnóstico do paciente'}
-                    placeholder={'Infecção no ouvindo'}
+                    placeholder={diagnostico }
+                    editable={false}
                 />
 
                 <GenericTextArea
                     textLabel={'Descrição da Consulta'}
-                    placeholder={`Medicamento: Advil \nDosagem: 50 mg \nFrequência: 3 vezes ao dia \nDuração: 3 dias`}
+                    placeholder={`Medicamento: ${medicamento}`}
+                    editable={false}
                 />
 
                 <GenericPrescriptionInput

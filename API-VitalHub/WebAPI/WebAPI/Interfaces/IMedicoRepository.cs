@@ -7,10 +7,10 @@ namespace WebAPI.Interfaces
     {
         public List<Medico> ListarTodos();
         public Medico BuscarPorId(Guid Id);
-
-        public List<Consulta> BuscarPorData(DateTime dataConsulta, Guid idMedico);
         public Medico AtualizarPerfil(Guid Id, MedicoViewModel medico);
         public void Cadastrar(Usuario medico);
         public List<Medico> ListarPorClinica(Guid id);
+
+        public List<Consulta> BuscarPorDatas(DateTime dataConsulta, Guid id);
     }
 }

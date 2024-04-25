@@ -9,13 +9,13 @@ import { SubTitle } from "../SubTitle/Styles";
 import {RouteCancelMapButton, RouteMapButton } from '../Button/Button'
 
 
-export const MapClinicLocation = () => {
+export const MapClinicLocation = ({lat, long}) => {
     const mapsReference = useRef(null);
     const [initialPosition, setInitialPosition] = useState(null);
-    const [finalPosition, setFinalPosition] = useState({
-        latitude: -23.600524,
-        longitude: -46.661866
-    });
+    const finalPosition = {
+        latitude: long,
+        longitude: lat
+    };
 
     const [routeClinic, setRouteClinic] = useState(false)
 
@@ -26,7 +26,6 @@ export const MapClinicLocation = () => {
             const captureLocation = await getCurrentPositionAsync()
 
             setInitialPosition(captureLocation)
-            console.log(initialPosition)
 
         }
     }
@@ -75,7 +74,7 @@ export const MapClinicLocation = () => {
                                 latitudeDelta: 0.005
                             }}
                             title='Clinica'
-                            pinColor='#496BBA'
+                            pinColor='red'
                         />
                         {
                             routeClinic ? (
@@ -110,7 +109,9 @@ export const MapClinicLocation = () => {
 
                             ) : (
                                 <RouteMapButton
-                                    onPress={() => ReloadViewMap()}
+                                    onPress={() =>{ 
+                                        ReloadViewMap()
+                                    }}
                                 />
                             )
                         }

@@ -12,7 +12,7 @@ export const CardList = ({ status, navi, cardsData }) => {
                 <AppointmentCard
                     id={item.id}
                     situation={item.situacao.situacao}
-                    idSituacao={item.situacaoId}
+                    idSituacao={item.situacao.id}
                     navi={navi}
                     img={item.img}
                     name={item.paciente.idNavigation.nome}
@@ -26,7 +26,7 @@ export const CardList = ({ status, navi, cardsData }) => {
     )
 }
 
-export const CardMedicList = ({ status, navi, cardsData }) => {
+export const CardMedicList = ({ status, navi, cardsData, Date }) => {
     return (
         <ListCard
             data={cardsData}
@@ -44,7 +44,8 @@ export const CardMedicList = ({ status, navi, cardsData }) => {
                     schedule={moment(item.dataConsulta).format('h:mm')}
                     email={item.email}
                     crm={item.medicoClinica.medico.crm}
-                    specialty={item.specialty}
+                    specialty={item.medicoClinica.medico.especialidade.especialidade1}
+                    data={Date}
                 />
             )
             }

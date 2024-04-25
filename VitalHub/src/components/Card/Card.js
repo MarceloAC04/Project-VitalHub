@@ -27,12 +27,12 @@ import * as Notifications from 'expo-notifications'
 Notifications.requestPermissionsAsync();
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
+    handleNotification: async () => ({
+        shouldShowAlert: true,
 
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+    }),
 })
 
 export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, email, situation, idSituacao }) => {
@@ -45,24 +45,24 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
 
     const handleCallNotification = async () => {
 
-        const {status} = await Notifications.getPermissionsAsync();
-    
+        const { status } = await Notifications.getPermissionsAsync();
+
         //verifica se o usuário concedeu permissão para notificações
         if (status !== "granted") {
-          alert("Você não deixou as notificações ativas.")
-          return;
+            alert("Você não deixou as notificações ativas.")
+            return;
         }
-    
+
         await Notifications.scheduleNotificationAsync({
-          content: {
-            title: "Consulta cancelada!",
-            body: "Sua consulta marcada foi cancelada",
-            sound: 'default',
-          },
-          trigger: null
+            content: {
+                title: "Consulta cancelada!",
+                body: "Sua consulta marcada foi cancelada",
+                sound: 'default',
+            },
+            trigger: null
         })
-      }
-    
+    }
+
 
     return (
         <CardContainer>
@@ -86,8 +86,10 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                     <ModalAppointment
                         visible={modalVisible}
                         onPressCancel={() => setModalVisible(false)}
-                        onPressConfirm={() => { handleClose('Main') 
-                        handleCallNotification()}}
+                        onPressConfirm={() => {
+                            handleClose('Main')
+                            handleCallNotification()
+                        }}
                         animation={'fade'}
                         transparent={true}
                         id={id}
@@ -107,7 +109,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                         visible={modalVisible}
                         onPressCancel={() => setModalVisible(false)}
                         onPressConfirm={() => handleClose("MedicalRecord",
-                            {userId: id ,userImg: img, userName: name, userAge: age, userEmail: email})
+                            { userId: id, userImg: img, userName: name, userAge: age, userEmail: email })
                         }
                         animation={'fade'}
                         transparent={true}
@@ -124,7 +126,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
     )
 }
 
-export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query, crm, specialty, schedule, email, situation }) => {
+export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query, crm, specialty, schedule, email, situation, data }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalLocalVisible, setModalLocalVisible] = useState(false);
 
@@ -136,25 +138,25 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
 
     const handleCallNotification = async () => {
 
-        const {status} = await Notifications.getPermissionsAsync();
-    
+        const { status } = await Notifications.getPermissionsAsync();
+
         //verifica se o usuário concedeu permissão para notificações
         if (status !== "granted") {
-          alert("Você não deixou as notificações ativas.")
-          return;
+            alert("Você não deixou as notificações ativas.")
+            return;
         }
-    
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: "Consulta cancelada!",
-            body: "Sua consulta marcada foi cancelada",
-            sound: 'default'
-          },
-          trigger: null
-        })
-      }
 
-    
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: "Consulta cancelada!",
+                body: "Sua consulta marcada foi cancelada",
+                sound: 'default'
+            },
+            trigger: null
+        })
+    }
+
+
     return (
         <CardMedicContainer onPress={() => { situation === 'Pendentes' ? setModalLocalVisible(true) : null }}>
             <>
@@ -191,8 +193,10 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
                         <ModalAppointment
                             visible={modalVisible}
                             onPressCancel={() => setModalVisible(false)}
-                            onPressConfirm={() => {handleClose('Main')
-                            handleCallNotification()}}
+                            onPressConfirm={() => {
+                                handleClose('Main')
+                                handleCallNotification()
+                            }}
                             animation={'fade'}
                             transparent={true}
                             id={id}
@@ -205,7 +209,7 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
                     </>
                 ) : (null)}
                 {situation == 'Realizados' ? (
-                    <RealizedCardLinkText onPress={() => navi.replace('MedicRecord')}>Ver Prontuário</RealizedCardLinkText>
+                    <RealizedCardLinkText onPress={() => navi.replace('MedicRecord', { consultaId: id, userImg: img, userName: name, userCrm: crm, specialty: specialty, consultaData: data })}>Ver Prontuário</RealizedCardLinkText>
                 ) : (<CardLinkText>           </CardLinkText>)}
             </>
         </CardMedicContainer >
