@@ -124,7 +124,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
     )
 }
 
-export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query, crm, specialty, schedule, email, situation }) => {
+export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, name, age, navi, query, crm, specialty, schedule, email, situation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalLocalVisible, setModalLocalVisible] = useState(false);
 
@@ -158,7 +158,7 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
     return (
         <CardMedicContainer onPress={() => { situation === 'Pendentes' ? setModalLocalVisible(true) : null }}>
             <>
-                <UserProfilePhotoCard source={img} />
+                <UserProfilePhotoCard src={img} />
                 <CardContainerText>
                     <TitleCard>{name}</TitleCard>
                     <SubTitleCardAge>{crm}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
@@ -201,11 +201,12 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
                             age={age}
                             email={email}
                             situation={situation}
+                            idSituacao={idSituacao}
                         />
                     </>
                 ) : (null)}
                 {situation == 'Realizados' ? (
-                    <RealizedCardLinkText onPress={() => navi.replace('MedicRecord')}>Ver Prontuário</RealizedCardLinkText>
+                    <RealizedCardLinkText onPress={() => navi.replace('MedicRecord', {Id: id, userName: name, userImg: img, userCrm: crm, userSpecialty: specialty})}>Ver Prontuário</RealizedCardLinkText>
                 ) : (<CardLinkText>           </CardLinkText>)}
             </>
         </CardMedicContainer >
@@ -236,7 +237,7 @@ export const MedicSelectCard = ({ id, img, medicName, onPress, isSelect = false,
     return (
         <CardMedicSelectContainer isSelect={isSelect} onPress={onPress}>
             <>
-                <UserProfilePhotoCard source={img} />
+                <UserProfilePhotoCard src={img} />
                 <CardContainerText>
                     <TitleCard>{medicName}</TitleCard>
                     <SubTitleMedicCard>{speciality}</SubTitleMedicCard>

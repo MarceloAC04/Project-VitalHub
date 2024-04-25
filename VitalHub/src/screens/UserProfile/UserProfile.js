@@ -69,6 +69,8 @@ export const UserProfile = ({ navigation }) => {
                         setUserCidade(response.data.endereco.cidade)
 
                         setUserLugardouro(response.data.endereco.logradouro)
+
+                        setUserPhoto(response.data.idNavigation.foto)
                     } else {
                         setUserCpf(response.data.cpf)
 
@@ -80,7 +82,7 @@ export const UserProfile = ({ navigation }) => {
 
                         setUserLugardouro(response.data.endereco.logradouro)
 
-                        setUserPhoto(response.data.foto)
+                        setUserPhoto(response.data.idNavigation.foto)
                     }
                 }).catch(error => {
                     console.log(error)
@@ -131,7 +133,7 @@ export const UserProfile = ({ navigation }) => {
                 "Content-Type" : "multipart/form-data"
             }
         }).then( async response => {
-            await userPhoto(uriCameraCapture)
+            setUserPhoto(uriCameraCapture)
         }).catch(error => {
             console.log(error);
         })
@@ -149,7 +151,7 @@ export const UserProfile = ({ navigation }) => {
         <ContainerScrollView>
             <Container>
                 <ContentImage>
-                    <UserProfilePhoto  />
+                    <UserProfilePhoto src={userPhoto} />
 
                     <ButtonCamera onPress={() => setOpenCamera(true)}>
                         <MaterialCommunityIcons name="camera-plus" size={20} color={"#fbfbfb"} />

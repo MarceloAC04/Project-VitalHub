@@ -79,6 +79,8 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
 
         if (!result.canceled) {
             setPhoto(result.assets[0].uri)
+            sendCapture()
+            closeCamera()
         }
     }
 

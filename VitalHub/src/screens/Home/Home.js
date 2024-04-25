@@ -36,7 +36,7 @@ export const Home = ({ navigation }) => {
         // Instancia a chamada da api
         console.log(url);
         (role === 'Medico' ? setUrl('Medicos') : setUrl('Pacientes'))
-        await api.get(`/${url}/BuscarPorData?data=2024-04-10&id=${userId}`)
+        await api.get(`/${url}/BuscarPorData?data=2024-04-08&id=${userId}`)
             .then(response => {
                 setAppointmentList(response.data)
             }).catch(error => {
@@ -62,7 +62,6 @@ export const Home = ({ navigation }) => {
                 <Container>
                     <StatusBar />
                     <Header
-                        userPhoto={require('../../assets/foto-de-perfil-medico.png')}
                         navi={() => navigation.navigate('UserProfile')}
                     />
                     <Calendar
@@ -99,7 +98,6 @@ export const Home = ({ navigation }) => {
                     <StatusBar />
                     <Header
                         navi={() => navigation.navigate('UserProfile')}
-                        userPhoto={require('../../assets/foto-de-perfil.png')}
                     />
                     <Calendar
                         setCalendarDate={setCalendarDate}

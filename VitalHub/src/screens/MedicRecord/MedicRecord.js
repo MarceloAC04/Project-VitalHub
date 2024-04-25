@@ -8,19 +8,51 @@ import { SubTitle } from "../../components/SubTitle/Styles";
 import { AppCamera } from "../../components/Camera/Camera";
 import { CardLinkText } from "../../components/Card/Style";
 import { Title } from "../../components/Title/Styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as MediaLibrary from 'expo-media-library';
 import { Line } from "./Styles";
+import api from '../../services/Service'
 
-export const MedicRecord = ({ navigation }) => {
+export const MedicRecord = ({ navigation, route}) => {
     const [openCamera, setOpenCamera] = useState(false)
+    const [uriCameraCapture, setUriCameraCapture] = useState(null)
+    const [descricaoExame, setDescricaoExame] = useState('')
+
+    async function InsertExame() {
+        console.log(route.params.Id);
+        const formData = new FormData();
+        formData.append("ConsultaId", route.params.id )
+        formData.append("Imagem", {
+            uri: uriCameraCapture,
+            name: `image.${uriCameraCapture.split('.').pop()}`,
+            type: `image/${uriCameraCapture.split('.').pop()}`
+        });
+
+        await api.post(`/Exame/Cadastrar`, formData, {
+            headers: {
+                "Content-Type" : "multipart/form-data"
+            }
+        }).then(response => {
+            setDescricaoExame(descricaoExame + "\n" + response.data.descricao)
+        })
+    }
+
+    useEffect(() => {
+        console.log(uriCameraCapture);
+    },[])
+
+    useEffect(() => {
+        if (uriCameraCapture != null) {
+            InsertExame()
+        }
+    }, [uriCameraCapture])
     return (
         <ContainerScrollView>
             <Container>
-                <UserProfilePhoto source={require('../../assets/foto-de-perfil-medico.png')} />
-                <Title>Dr. Claudio</Title>
+                <UserProfilePhoto src={route.params.userImg} />
+                <Title>Dr. {route.params.userName}</Title>
 
-                <SubTitle>Cliníco geral    <SubTitle>CRM-15286</SubTitle></SubTitle>
+                <SubTitle>{route.params.userSpecialty}    <SubTitle>CRM-{route.params.userCrm}</SubTitle></SubTitle>
 
                 <GenericTextArea
                     textLabel={'Descrição da Consulta'}
@@ -34,13 +66,15 @@ export const MedicRecord = ({ navigation }) => {
 
                 <GenericTextArea
                     textLabel={'Descrição da Consulta'}
+                    editable={false}
+                    value={descricaoExame}
                     placeholder={`Medicamento: Advil \nDosagem: 50 mg \nFrequência: 3 vezes ao dia \nDuração: 3 dias`}
                 />
 
                 <GenericPrescriptionInput
                     textLabel={'Prescrição médica'}
                     placeholder={`Nenhuma foto informada`}
-                    img={photo}
+                    img={uriCameraCapture}
                 />
 
                 <GenericProfileInputContainerRow>
@@ -50,13 +84,15 @@ export const MedicRecord = ({ navigation }) => {
 
                 <AppCamera
                     visibleCamera={openCamera}
+                    setUriCameraCapture={setUriCameraCapture}
                     setOpenCamera={setOpenCamera}
                 />
 
                 <Line />
 
                 <GenericTextArea
-                    placeholder={`Resultado do exame de sangue : \ntudo normal`}
+                value={descricaoExame}
+                    // placeholder={`Resultado do exame de sangue : \ntudo normal`}
                 />
                 <ButtonSecondary
                     onPress={() => navigation.replace('Main')}

@@ -33,10 +33,11 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
         try {
 
             setStatus(idSituacao)
+            console.log(id);
             // Verifica se o status é "Pendente" para permitir o cancelamento
-            if (idSituacao === '7737D6FE-8331-4FB5-AAF4-C671A8A72384') {
+            if (idSituacao === '7737d6fe-8331-4fb5-aaf4-c671a8a72384') {
                 // Chama a rota da API para atualizar o status da consulta para "Cancelar"
-                const response = await api.put(`/Consultas/Status`, { id: id, situacaoId: '3E8658D2-1C1A-4994-AD92-41422AA081F1' });
+                await api.put(`Consultas/Status?idConsulta=${id}&status=Cancelados`);
                 console.log("Consulta cancelada com sucesso.");
 
             } else {
@@ -66,8 +67,6 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
                         </SubTitleContainerModal>
                         <ButtonEnter
                             onPress={() => {
-                                // console.log(`Id de Consulta:${id}`)
-                                // console.log(idSituacao)
                                 CancelarConsulta();  // Chama a função para cancelar a consulta
                                 onPressConfirm();    // Chama a função fornecida para confirmar a ação
                             }}
@@ -82,7 +81,7 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
             ) : (
                 <ModalMedicalRecordView>
                     <ModalMedicalRecordContainer>
-                        <UserProfilePhotoModal source={img} />
+                        <UserProfilePhotoModal src={img} />
                         <Title>{name}</Title>
                         <SubTitle>{age} idade <SubTitle>{email}</SubTitle></SubTitle>
                         <ButtonEnter
@@ -214,7 +213,7 @@ export const ModalLocalAppointment = ({ animation, transparent, onPressConfirm, 
             visible={visible}>
             <ModalMedicalRecordView>
                 <ModalMedicalRecordContainer>
-                    <UserProfilePhotoModal source={img} />
+                    <UserProfilePhotoModal src={img} />
                     <Title>{idClinic} </Title>
                     <SubTitle>{specialty} <SubTitle>{crm}</SubTitle></SubTitle>
                     <ButtonEnter
