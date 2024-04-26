@@ -27,8 +27,8 @@ namespace WebAPI.Repositories
                 //if (medico.Foto != null)
                 //    medicoBuscado.IdNavigation.Foto = medico.Foto;
 
-                if (medico.EspecialidadeId != null)
-                    medicoBuscado.EspecialidadeId = medico.EspecialidadeId;
+               // if (medico.EspecialidadeId != null)
+                   // medicoBuscado.EspecialidadeId = medico.EspecialidadeId;
 
                 if (medico.Crm != null)
                     medicoBuscado.Crm = medico.Crm;

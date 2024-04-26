@@ -9,7 +9,6 @@ import { AppCamera } from "../../components/Camera/Camera";
 import { CardLinkText } from "../../components/Card/Style";
 import { Title } from "../../components/Title/Styles";
 import { useEffect, useState } from "react";
-import * as MediaLibrary from 'expo-media-library';
 import { Line } from "./Styles";
 import api from '../../services/Service'
 
@@ -19,14 +18,16 @@ export const MedicRecord = ({ navigation, route}) => {
     const [descricaoExame, setDescricaoExame] = useState('')
 
     async function InsertExame() {
-        console.log(route.params.Id);
+        const idConsulta = route.params.Id
+        console.log(idConsulta)
         const formData = new FormData();
-        formData.append("ConsultaId", route.params.id )
+        formData.append("ConsultaId", idConsulta )
         formData.append("Imagem", {
             uri: uriCameraCapture,
             name: `image.${uriCameraCapture.split('.').pop()}`,
             type: `image/${uriCameraCapture.split('.').pop()}`
         });
+        formData.append("Descricao", "")
 
         await api.post(`/Exame/Cadastrar`, formData, {
             headers: {
@@ -34,6 +35,8 @@ export const MedicRecord = ({ navigation, route}) => {
             }
         }).then(response => {
             setDescricaoExame(descricaoExame + "\n" + response.data.descricao)
+        }).catch(error => {
+            console.log(error);
         })
     }
 
@@ -66,8 +69,8 @@ export const MedicRecord = ({ navigation, route}) => {
 
                 <GenericTextArea
                     textLabel={'Descrição da Consulta'}
-                    editable={false}
-                    value={descricaoExame}
+                    // editable={false}
+                    // value={descricaoExame}
                     placeholder={`Medicamento: Advil \nDosagem: 50 mg \nFrequência: 3 vezes ao dia \nDuração: 3 dias`}
                 />
 
@@ -92,7 +95,7 @@ export const MedicRecord = ({ navigation, route}) => {
 
                 <GenericTextArea
                 value={descricaoExame}
-                    // placeholder={`Resultado do exame de sangue : \ntudo normal`}
+                placeholder={`Resultado do exame de sangue : \ntudo normal`}
                 />
                 <ButtonSecondary
                     onPress={() => navigation.replace('Main')}

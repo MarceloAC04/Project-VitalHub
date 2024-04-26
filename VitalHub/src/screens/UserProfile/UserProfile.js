@@ -95,7 +95,7 @@ export const UserProfile = ({ navigation }) => {
         console.log(userId, userCidade)
         try {
             if (userRole === 'Medico') {
-                await api.put(`/Medicos/AtualizarPerfil?id=${userId}`, {
+                await api.put(`/Medicos?idUsuario=${userId}`, {
                     cep: userCep,
                     logradouro: userLugardouro,
                     cidade: userCidade,
@@ -103,7 +103,7 @@ export const UserProfile = ({ navigation }) => {
                 })
             }
             else {
-                await api.put(`/Pacientes/AtualizarPerfil?id=${userId}`, {
+                await api.put(`/Pacientes?idUsuario=${userId}`, {
                     dataNascimento: userNiver,
                     cpf: userCpf,
                     cep: userCep,

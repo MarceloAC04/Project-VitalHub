@@ -19,7 +19,7 @@ export const CardList = ({ status, navi, cardsData }) => {
                     age={moment(item.dataConsulta).format('YYYY') - moment(item.paciente.dataNascimento).format('YYYY')}
                     query={item.descricao}
                     schedule={moment(item.dataConsulta).format('h:mm')}
-                    email={item.paciente.email}
+                    email={item.paciente.idNavigation.email}
                 />
             )}
         />

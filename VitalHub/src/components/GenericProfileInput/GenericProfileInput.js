@@ -40,13 +40,14 @@ export const GenericProfileEditAddressInput = ({ textLabel, placeholder, onChang
     )
 }
 
-export const GenericTextArea = ({ textLabel, placeholder }) => {
+export const GenericTextArea = ({ textLabel, placeholder, value }) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
             <GenericProfileTextArea
                 placeholder={placeholder}
                 multiline
+                value={value}
                 numberOfLines={5}
                 maxLength={200}
             />

@@ -83,7 +83,7 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
                     <ModalMedicalRecordContainer>
                         <UserProfilePhotoModal src={img} />
                         <Title>{name}</Title>
-                        <SubTitle>{age} idade <SubTitle>{email}</SubTitle></SubTitle>
+                        <SubTitle>{age} anos <SubTitle>{email}</SubTitle></SubTitle>
                         <ButtonEnter
                             onPress={onPressConfirm}
                             placeholder={'Ver Prontuário'}
@@ -214,7 +214,7 @@ export const ModalLocalAppointment = ({ animation, transparent, onPressConfirm, 
             <ModalMedicalRecordView>
                 <ModalMedicalRecordContainer>
                     <UserProfilePhotoModal src={img} />
-                    <Title>{idClinic} </Title>
+                    <Title>{name} </Title>
                     <SubTitle>{specialty} <SubTitle>{crm}</SubTitle></SubTitle>
                     <ButtonEnter
                         onPress={onPressConfirm}

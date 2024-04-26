@@ -66,10 +66,10 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
 
     return (
         <CardContainer>
-            <UserProfilePhotoCard source={img} />
+            <UserProfilePhotoCard src={img} />
             <CardContainerText>
                 <TitleCard>{name}</TitleCard>
-                <SubTitleCardAge>{age}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                <SubTitleCardAge>{age} anos  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
                 {situation == 'Pendentes' ? (
                     <ScheduleContainer>
                         <ScheduleTime> <AntDesign name="clockcircle" size={14} color="#49B3BA" />  {schedule}</ScheduleTime>
@@ -160,8 +160,8 @@ export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, name, age,
             <>
                 <UserProfilePhotoCard src={img} />
                 <CardContainerText>
-                    <TitleCard>{name}</TitleCard>
-                    <SubTitleCardAge>{crm}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                    <TitleCard>Dr.{name}</TitleCard>
+                    <SubTitleCardAge>CRM-{crm}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
                     <ModalLocalAppointment
                         visible={modalLocalVisible}
                         onPressCancel={() => setModalLocalVisible(false)}
