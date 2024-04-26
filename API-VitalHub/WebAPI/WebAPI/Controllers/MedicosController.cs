@@ -114,13 +114,13 @@ namespace WebAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Medico")]
         [HttpPut]
-        public IActionResult UpdateProfile(MedicoViewModel medico)
+        public IActionResult UpdateProfile( Guid idUsuario,MedicoViewModel medico)
         {
             try
             {
-                Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
+               // Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
 
                 return Ok(_medicoRepository.AtualizarPerfil(idUsuario, medico));
 

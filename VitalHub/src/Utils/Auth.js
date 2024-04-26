@@ -22,6 +22,7 @@ export const userDecodeToken = async () => {
     // Descriptografando o token
     const decoded = jwtDecode(token)
 
+    //Retorna as propriedades que estão dentro do TOKEN como objeto
     return {
         role: decoded.role,
         name : decoded.name,

@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { userDecodeToken } from "../../Utils/Auth"
 import api from "../../services/Service";
 import moment from "moment";
+import axios from "axios";
 
 export const UserProfile = ({ navigation }) => {
     const [userId, setUserId] = useState('') // Deixando salvo aqui para caso eu use
@@ -34,6 +35,7 @@ export const UserProfile = ({ navigation }) => {
     async function profileLoad() {
         //Decodificação do Token
         const token = await userDecodeToken();
+        console.log(token)
 
         if (token !== null) {
             //Aqui está pegando os dados do token como (Nome, email, role e id)
@@ -77,24 +79,43 @@ export const UserProfile = ({ navigation }) => {
     }
 
     async function updateProfile() {
-        console.log(userId, userCidade)
+
+        console.log(userId, userCidade, userCep, userLugardouro, userCrm, userRole)
         try {
             if (userRole === 'Medico') {
-                await api.put(`/Medicos/AtualizarPerfil?id=${userId}`, {
+
+                const token = await AsyncStorage.getItem('token');
+                console.log(token);
+
+                const axiosInstance = axios.create({
+                    baseURL: 'http://172.16.39.87:4466/api',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json', 
+                    },
+                });
+
+                //Mudei o caminho tava assim = /Medicos/AtualizarPerfil?id=${userId}
+                await axiosInstance.put(`/Medicos?idUsuario=${userId}`, {
+                    crm: userCrm,
                     cep: userCep,
                     logradouro: userLugardouro,
-                    cidade: userCidade,
-                    crm: userCrm
+                    cidade: userCidade
+
                 })
+
+                console.log("Perfil de Medico Atualizado com sucesso");
             }
             else {
-                await api.put(`/Pacientes/AtualizarPerfil?id=${userId}`, {
+                //Mudei o caminho tava Assim = /Pacientes/AtualizarPerfil?id=${userId}
+                await api.put(`/Pacientes?idUsuario=${userId}`, {
                     dataNascimento: userNiver,
                     cpf: userCpf,
                     cep: userCep,
                     logradouro: userLugardouro,
                     cidade: userCidade
                 })
+                console.log("Perfil de Paciente Atualizado com sucesso");
             }
 
         } catch (error) {
@@ -119,11 +140,13 @@ export const UserProfile = ({ navigation }) => {
 
                 {!isEditing ? (
                     <>
+                        {/* Marchetti - Coloquei o editable={false}, dessa forma quando pressionarem o input ele não é acionado */}
                         {
                             userRole === "Paciente" ? (
                                 <GenericInput
                                     textLabel={'Data de Nascimento: '}
                                     placeholder={userNiver}
+                                    editable={false}
                                 />
                             ) : (<></>)
                         }
@@ -133,11 +156,13 @@ export const UserProfile = ({ navigation }) => {
                                 <GenericInput
                                     textLabel={'CRM:'}
                                     placeholder={userCrm}
+                                    editable={false}
                                 />
                             ) : (
                                 <GenericInput
                                     textLabel={'CPF:'}
                                     placeholder={userCpf}
+                                    editable={false}
                                 />
                             )
                         }
@@ -145,26 +170,30 @@ export const UserProfile = ({ navigation }) => {
                         <GenericInput
                             textLabel={'Logradouro: '}
                             placeholder={userLugardouro}
+                            editable={false}
                         />
 
                         <GenericProfileInputContainerRow>
                             <GenericProfileAddressInput
                                 textLabel={'Cep: '}
                                 placeholder={userCep}
+                                editable={false}
                             />
                             <GenericProfileAddressInput
                                 textLabel={'Cidade: '}
                                 placeholder={userCidade}
+                                editable={false}
                             />
                         </GenericProfileInputContainerRow>
                     </>
                 ) : (
                     <>
+                        {/* Marchetti - Troquei todos os Placeholders aqui por um defaultValue. Caso eu deixace o input estaria impossível de escrever*/}
                         {
                             userRole === "Paciente" ? (
                                 <GenericEditInput
                                     textLabel={'Data de Nascimento: '}
-                                    placeholder={userNiver}
+                                    defaultValue={userNiver}
                                     onChangeText={(txt) => setUserNiver(txt)}
                                 />
                             ) : (<></>)
@@ -174,13 +203,13 @@ export const UserProfile = ({ navigation }) => {
                             userRole === 'Medico' ? (
                                 <GenericEditInput
                                     textLabel={'CRM:'}
-                                    placeholder={userCrm}
+                                    defaultValue={userCrm}
                                     onChangeText={(txt) => setUserCrm(txt)}
                                 />
                             ) : (
                                 <GenericEditInput
                                     textLabel={'CPF:'}
-                                    placeholder={userCpf}
+                                    defaultValue={userCpf}
                                     onChangeText={(txt) => setUserCpf(txt)}
                                 />
                             )
@@ -188,41 +217,43 @@ export const UserProfile = ({ navigation }) => {
 
                         <GenericEditInput
                             textLabel={'Logradouro: '}
-                            placeholder={userLugardouro}
+                            defaultValue={userLugardouro}
                             onChangeText={(txt) => setUserLugardouro(txt)}
                         />
 
                         <GenericProfileInputContainerRow>
                             <GenericProfileEditAddressInput
                                 textLabel={'Cep: '}
-                                placeholder={userCep}
+                                defaultValue={userCep}
                                 onChangeText={(txt) => setUserCep(txt)}
                             />
                             <GenericProfileEditAddressInput
                                 textLabel={'Cidade: '}
-                                placeholder={userCidade}
+                                defaultValue={userCidade}
                                 onChangeText={(txt) => setUserCidade(txt)}
                             />
                         </GenericProfileInputContainerRow>
                     </>
                 )}
 
-
+                {/* Marchetti - mudei onPress() */}
                 <ButtonEnter
                     placeholder={'salvar'}
-                    onPress={() => {
-                        updateProfile()
-                        setIsEditing(false)
-                    }}
+                    onPress={() => isEditing ? [setIsEditing(false), updateProfile()] : null}
                 />
 
-                <ButtonEnter
-                    placeholder={'editar'}
-                    onPress={() => setIsEditing(true)}
-                />
+                {/* Marchetti - fiz um ifelse, para quando a gente clicar no botão de editar ele sumir. */}
+                {/* NOTA: Seria interessante a gente fazer que enquanto estamos no modo editar fazer o botão editar sai do modo*/}
+                {!isEditing ? (
+                    <ButtonEnter
+                        onPress={() => setIsEditing(true)}
+                        placeholder={'Editar'}
+                    />
+                ) : null}
 
                 <ButtonGrey
                     onPress={() => {
+                        //Aqui ele tira o token do APP - Dessa forma ele não salva e o perfil desloga
                         AsyncStorage.removeItem('token')
 
                         navigation.replace('Login')

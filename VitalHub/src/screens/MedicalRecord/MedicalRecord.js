@@ -120,26 +120,31 @@ export const MedicalRecord = ({ navigation, route }) => {
                             <GenericEditTextArea
                                 textLabel={'Descrição da Consulta'}
                                 onChangeText={(text) => setDescricao(text)}
+                                defaultValue={descricao}
                             />
 
                             <GenericEditInput
                                 textLabel={'Diagnóstico do paciente'}
                                 onChangeText={(text) => setDiagnostico(text)}
+                                defaultValue={diagnostico}
 
                             />
                             <GenericEditTextArea
                                 textLabel={'Prescrição Médica'}
                                 onChangeText={(text) => setMedicamento(text)}
+                                defaultValue={medicamento}
                             />
                         </>
                     )
                 }
 
+                {/* Marchetti - Mudei OnPress */}
                 <ButtonEnter
                     onPress={() => isEditing ? [setIsEditing(false), AtualizarDados() ]: null}
                     placeholder={'Salvar'}
                 />
 
+                {/* Marchetti - ifelse para quando for else o botão desaparecer (So clonei o código que eu vi no prontuario) */}
                 {!isEditing ? (
                     <ButtonEnter
                         onPress={() => setIsEditing(true)}
