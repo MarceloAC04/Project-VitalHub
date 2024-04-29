@@ -6,12 +6,22 @@ import { TitleSelectScreen } from "../../components/Title/Styles";
 import { useEffect, useState } from "react";
 import api from "../../services/Service";
 
-export const ClinicSelect = ({ navigation }) => {
-
+export const ClinicSelect = ({ navigation, route }) => {
+    const [selectClinic, setSelectClinic] = useState(null)
     const [clinicaListar, setClinicaListar] = useState([])
 
+    function handleContinue() {
+        navigation.replace("MedicSelect", {
+            agendamento: {
+
+            ...route.params.agendamento, 
+            ...selectClinic
+            }
+        })
+    }
+
     async function ListarClinicas(){
-       await api.get('/Clinica/ListarTodas')
+       await api.get(`/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`)
             .then(response =>{
                 setClinicaListar(response.data)
             }).catch(error =>{
@@ -21,7 +31,6 @@ export const ClinicSelect = ({ navigation }) => {
     }
 
     useEffect(() =>{
-
         ListarClinicas()
     }, [])
 
@@ -32,10 +41,11 @@ export const ClinicSelect = ({ navigation }) => {
 
             <ClinicCardList
                 cardsData={clinicaListar}
+                setSelectClinic={setSelectClinic}
             />
 
             <ButtonEnter
-                onPress={() => navigation.replace("MedicSelect")}
+                onPress={() => handleContinue()}
                 placeholder={'confirmar'}
             />
 

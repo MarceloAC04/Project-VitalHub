@@ -21,7 +21,7 @@ import { Title } from "../Title/Styles";
 import { Modal } from "react-native";
 import { useEffect, useState } from "react";
 import { userDecodeToken } from '../../Utils/Auth'
-import api from "../../services/Service"; 
+import api from "../../services/Service";
 
 
 export const ModalAppointment = ({ id, idSituacao, animation, transparent, visible, onPressCancel, onPressConfirm, img, name, age, email, situation, ...rest }) => {
@@ -98,8 +98,16 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
     )
 }
 
-export const ModalScheduleAppointment = ({ animation, transparent, visible, onPressConfirm, onPressCancel, ...rest }) => {
+export const ModalScheduleAppointment = ({ navigation, setModalVisible, animation, transparent, visible, onPressConfirm, onPressCancel, ...rest }) => {
     const [statusAppoinment, setStatusAppoinment] = useState("");
+    const [statusButton, setStatusButton] = useState("")
+
+    const [appointment, setAppoinment] = useState(null);
+
+     async function handleContinue() {
+       await setModalVisible(false)
+        navigation.replace("ClinicSelect", {agendamento: appointment})
+    }
     return (
         <Modal {...rest}
             animationType={animation}
@@ -116,20 +124,35 @@ export const ModalScheduleAppointment = ({ animation, transparent, visible, onPr
                             <AppointmentLevelButtonContainer>
                                 <AppointmentLevelButton
                                     textButton={'Rotina'}
-                                    clickButton={statusAppoinment === "Rotina"}
-                                    onPress={() => setStatusAppoinment("Rotina")}
+                                    clickButton={statusButton === "Rotina"}
+                                    onPress={() => { setStatusButton("Rotina"); setAppoinment({
+                                        ...appointment,
+
+                                        prioridadeId: "CC663923-B9F3-4165-8811-B65E3ABFA2CA",
+                                        prioridadeLabel: "Rotina"
+                                    })}}
                                 />
 
                                 <AppointmentLevelButton
                                     textButton={'Exame'}
-                                    clickButton={statusAppoinment === "Exame"}
-                                    onPress={() => setStatusAppoinment("Exame")}
+                                    clickButton={statusButton === "Exame"}
+                                    onPress={() => { setStatusButton("Exame"); setStatusAppoinment({
+                                        ...appointment,
+
+                                        prioridadeId: "37DB74DE-9AD6-44D0-973E-C717DF50AE4B",
+                                        prioridadeLabel: "Exame"
+                                    })}}
                                 />
 
                                 <AppointmentLevelButton
                                     textButton={'Urgência'}
-                                    clickButton={statusAppoinment === "Urgencia"}
-                                    onPress={() => setStatusAppoinment("Urgencia")}
+                                    clickButton={statusButton === "Urgencia"}
+                                    onPress={() => { setStatusButton("Urgencia"); setStatusAppoinment({
+                                        ...appointment,
+
+                                        prioridadeId: "2200AAC1-DBB5-4777-BD2F-7FDD8D1D55E8",
+                                        prioridadeLabel: "Urgência"
+                                    })}}
                                 />
                             </AppointmentLevelButtonContainer>
                         </ScheduleAppointmentContainer>
@@ -138,12 +161,17 @@ export const ModalScheduleAppointment = ({ animation, transparent, visible, onPr
                             <LabelText>informe a localização desejada</LabelText>
                             <ScheduleAppointmentInput
                                 placeholder={'Informe a localização'}
+                                value={appointment ? appointment.localizacao : null}
+                                onChangeText={(txt) => setAppoinment({
+                                    ...appointment,
+                                    localizacao: txt
+                                })}
                             />
                         </ScheduleAppointmentContainer>
                     </ModalScheduleAppointmentFormContainer>
 
                     <ButtonModalAppointment
-                        onPress={onPressConfirm}
+                        onPress={() => handleContinue()}
                         placeholder={'confirmar'}
                     />
 

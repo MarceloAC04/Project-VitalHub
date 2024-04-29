@@ -53,7 +53,7 @@ export const CardMedicList = ({ status, navi, cardsData }) => {
     )
 }
 
-export const ClinicCardList = ({ cardsData }) => {
+export const ClinicCardList = ({ cardsData, setSelectClinic }) => {
     const [idClinic, setIdClinic] = useState(null)
     return (
         <ListCard
@@ -62,7 +62,10 @@ export const ClinicCardList = ({ cardsData }) => {
             renderItem={({ item }) =>
                 <ClinicSelectCard
                     id={item.id}
-                    onPress={() => setIdClinic(item.id)}
+                    onPress={() => {setIdClinic(item.id); setSelectClinic({
+                        clinicaId: item.id,
+                        nameClinic: item.nomeFantasia
+                    })}}
                     isSelect={idClinic == item.id}
                     clinicName={item.nomeFantasia}
                     city={item.endereco.cidade}
@@ -74,7 +77,7 @@ export const ClinicCardList = ({ cardsData }) => {
     )
 }
 
-export const MedicSelectCardList = ({ cardsData }) => {
+export const MedicSelectCardList = ({ cardsData, setSelectMedic}) => {
     const [idMedic, setIdMedic] = useState(null)
     return (
         <ListCard
@@ -83,7 +86,10 @@ export const MedicSelectCardList = ({ cardsData }) => {
             renderItem={({ item }) =>
                 <MedicSelectCard
                     id={item.id}
-                    onPress={() => setIdMedic(item.id)}
+                    onPress={() => { setIdMedic(item.id); setSelectMedic({
+                        medicoClinicaId: item.id,
+                        medicoLabel: item.idNavigation.nome
+                    }) }}
                     isSelect={idMedic == item.id}
                     img={item.idNavigation.foto}
                     medicName={item.idNavigation.nome}

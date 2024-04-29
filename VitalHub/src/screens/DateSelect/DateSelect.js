@@ -5,12 +5,16 @@ import { ModalConfirmAppointment } from "../../components/Modal/Modal";
 import { Container, ContainerScrollView } from "../../components/Container/Styles";
 import { ButtonEnter } from "../../components/Button/Button";
 import { TitleSelectScreen } from "../../components/Title/Styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export const DateSelect = ({ navigation }) => {
+export const DateSelect = ({ navigation, route}) => {
     const [select, setSelect] = useState('')
     const [selectDate, setSelectDate] = useState('')
     const [modalVisible, setModalVisible] = useState(false);
+
+    useEffect(() => {
+        console.log(route);
+    })
     return (
         <ContainerScrollView>
 

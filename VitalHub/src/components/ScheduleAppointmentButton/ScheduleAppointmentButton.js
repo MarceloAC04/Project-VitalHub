@@ -3,7 +3,7 @@ import { ScheduleAppointment } from "./Styles"
 import { FontAwesome6 } from '@expo/vector-icons';
 
 
-export const ScheduleAppointmentButton = ({onPressModal, onPressConfirmAppointment , onPressCancel, visible}) => {
+export const ScheduleAppointmentButton = ({onPressModal, navigation, setModalVisible, onPressConfirmAppointment , onPressCancel, visible}) => {
     return (
         <>
         <ScheduleAppointment onPress={onPressModal}>
@@ -11,9 +11,10 @@ export const ScheduleAppointmentButton = ({onPressModal, onPressConfirmAppointme
         </ScheduleAppointment>
         <ModalScheduleAppointment
             visible={visible}
+            navigation={navigation}
+            setModalVisible={setModalVisible}
             animation={'slide'}
             transparent={true} 
-            onPressConfirm={onPressConfirmAppointment}
             onPressCancel={onPressCancel}
         />
         </>

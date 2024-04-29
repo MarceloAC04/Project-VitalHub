@@ -129,10 +129,8 @@ export const Home = ({ navigation }) => {
                     />
 
                     <ScheduleAppointmentButton
-                        onPressConfirmAppointment={() => {
-                            setModalVisible(false)
-                            navigation.navigate("ClinicSelect")
-                        }}
+                        navigation={navigation}
+                        setModalVisible={setModalVisible}
                         visible={modalVisible}
                         onPressModal={() => setModalVisible(true)}
                         onPressCancel={() => setModalVisible(false)}
