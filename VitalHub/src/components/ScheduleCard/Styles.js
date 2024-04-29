@@ -21,6 +21,7 @@ export const ScheduleTime = styled.Text`
 `
 export const RealizedTimeContainer = styled(ScheduleContainer)`
     background-color: #F1F0F5;
+    width: 105px;
 `
 
 export const RealizedScheduleTime = styled(ScheduleTime)`

@@ -46,6 +46,7 @@ export const Home = ({ navigation }) => {
 
     useEffect(() => {
         roleLoad()
+        ListAppointment()
     }, [])
 
     useEffect(() => {
@@ -61,11 +62,10 @@ export const Home = ({ navigation }) => {
                 <Container>
                     <StatusBar />
                     <Header
-                        userPhoto={require('../../assets/foto-de-perfil-medico.png')}
                         navi={() => navigation.navigate('UserProfile')}
                     />
                     <Calendar
-                        setCalendarDate={() => setCalendarDate()}
+                        setCalendarDate={setCalendarDate}
                     />
 
                     <StatusButtonContainer>
@@ -98,10 +98,9 @@ export const Home = ({ navigation }) => {
                     <StatusBar />
                     <Header
                         navi={() => navigation.navigate('UserProfile')}
-                        userPhoto={require('../../assets/foto-de-perfil.png')}
                     />
                     <Calendar
-                        setCalendarDate={() => setCalendarDate()}
+                        setCalendarDate={setCalendarDate}
                     />
 
                     <StatusButtonContainer>

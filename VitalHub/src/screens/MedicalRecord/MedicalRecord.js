@@ -89,7 +89,7 @@ export const MedicalRecord = ({ navigation, route }) => {
         <ContainerScrollView>
             <Container>
 
-                <UserProfilePhoto source={userImg} />
+                <UserProfilePhoto src={userImg} />
                 <Title>{userName}</Title>
 
                 <SubTitle>{userAge} Idade <SubTitle>{userEmail}</SubTitle></SubTitle>

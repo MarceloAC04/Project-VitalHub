@@ -8,8 +8,7 @@ import { SubTitle } from "../../components/SubTitle/Styles";
 import { AppCamera } from "../../components/Camera/Camera";
 import { CardLinkText } from "../../components/Card/Style";
 import { Title } from "../../components/Title/Styles";
-import { useEffect, useRef, useState } from "react";
-import * as MediaLibrary from 'expo-media-library';
+import { useEffect, useState,useRef } from "react";
 import { Line } from "./Styles";
 import { Alert } from "react-native";
 import { userDecodeToken } from '../../Utils/Auth'
@@ -17,8 +16,10 @@ import api from "../../services/Service";
 
 export const MedicRecord = ({ navigation, route }) => {
     const [openCamera, setOpenCamera] = useState(false)
-    const [openModalPhoto, setOpenModalPhoto] = useState(false)
+    const [uriCameraCapture, setUriCameraCapture] = useState(null)
+    const [descricaoExame, setDescricaoExame] = useState('')
     const cameraRef = useRef(null)
+    const [openModalPhoto, setOpenModalPhoto] = useState(false)
     const [photo, setPhoto] = useState(null)
 
     //Id do Medico
@@ -30,7 +31,7 @@ export const MedicRecord = ({ navigation, route }) => {
 
     //Receita
     const [medicamento, setMedicamento] = useState('')
-    const { userName, userCrm, specialty, consultaId } = route.params;
+    const { userImg,userName, userCrm, specialty, consultaId } = route.params;
 
     async function DadosDoMedico() {
         try {
@@ -80,6 +81,39 @@ export const MedicRecord = ({ navigation, route }) => {
         }
     }
 
+    async function InsertExame() {
+        const idConsulta = route.params.Id
+        console.log(idConsulta)
+        const formData = new FormData();
+        formData.append("ConsultaId", idConsulta )
+        formData.append("Imagem", {
+            uri: uriCameraCapture,
+            name: `image.${uriCameraCapture.split('.').pop()}`,
+            type: `image/${uriCameraCapture.split('.').pop()}`
+        });
+        formData.append("Descricao", "")
+
+        await api.post(`/Exame/Cadastrar`, formData, {
+            headers: {
+                "Content-Type" : "multipart/form-data"
+            }
+        }).then(response => {
+            setDescricaoExame(descricaoExame + "\n" + response.data.descricao)
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+    useEffect(() => {
+        console.log(uriCameraCapture);
+    },[])
+
+    useEffect(() => {
+        if (uriCameraCapture != null) {
+            InsertExame()
+        }
+    }, [uriCameraCapture])
+
     function ClearPhoto() {
         setPhoto(null)
 
@@ -105,7 +139,7 @@ export const MedicRecord = ({ navigation, route }) => {
     return (
         <ContainerScrollView>
             <Container>
-                <UserProfilePhoto source={require('../../assets/foto-de-perfil-medico.png')} />
+                <UserProfilePhoto src={userImg} />
                 <Title>{userName}</Title>
 
                 <SubTitle>{specialty}   <SubTitle>{userCrm}</SubTitle></SubTitle>
@@ -131,7 +165,7 @@ export const MedicRecord = ({ navigation, route }) => {
                 <GenericPrescriptionInput
                     textLabel={'Prescrição médica'}
                     placeholder={`Nenhuma foto informada`}
-                    img={photo}
+                    img={uriCameraCapture}
                 />
 
                 <GenericProfileInputContainerRow>
@@ -141,19 +175,15 @@ export const MedicRecord = ({ navigation, route }) => {
 
                 <AppCamera
                     visibleCamera={openCamera}
-                    refCamera={cameraRef}
-                    openModalPhoto={openModalPhoto}
-                    onPressPhoto={() => CapturePhoto()}
-                    onPressCancel={() => ClearPhoto()}
-                    confirmPhoto={() => SavePhoto()}
-                    onPressExit={() => setOpenCamera(false)}
-                    photo={photo}
+                    setUriCameraCapture={setUriCameraCapture}
+                    setOpenCamera={setOpenCamera}
                 />
 
                 <Line />
 
                 <GenericTextArea
-                    placeholder={`Resultado do exame de sangue : \ntudo normal`}
+                value={descricaoExame}
+                placeholder={`Resultado do exame de sangue : \ntudo normal`}
                 />
                 <ButtonSecondary
                     onPress={() => navigation.replace('Main')}

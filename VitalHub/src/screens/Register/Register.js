@@ -11,6 +11,7 @@ import { useState } from "react";
 
 export const Register = ({ navigation }) => {
     const [email, setEmail] = useState('')
+    const [name, setName] = useState('')
     const [senha, setSenha] = useState('')
     const [confirmarSenha, setConfirmarSenha] = useState('')
 
@@ -19,19 +20,29 @@ export const Register = ({ navigation }) => {
             if (senha !== confirmarSenha) {
                 alert("Senha errada!")
             }
-            await api.post('/Pacientes', {
-                email: email,
-                senha: senha,
-                rg: "",
-                cpf: "",
-                dataNascimento: "",
-                cep: "",
-                logradouro: "",
-                numero: 0,
-                cidade: "",
-                nome: "",
-                foto: "",
-                idTipoUsuario: "BE77826B-B330-423B-A8F3-BDA8C0FB3050"
+            const formData = new FormData();
+            formData.append("Rg", "")
+            formData.append("Cpf", "")
+            formData.append("DataNascimento", "")
+            formData.append("Cep", "")
+            formData.append("Logradouro", "")
+            formData.append("Numero", 0)
+            formData.append("Cidade", "")
+            formData.append("Nome", name)
+            formData.append("Email", email)
+            formData.append("Senha", senha)
+            formData.append("IdTipoUsuario", "BE77826B-B330-423B-A8F3-BDA8C0FB3050")
+            formData.append("Arquivo", "")
+            formData.append("Foto", "")
+
+            await api.post('/Pacientes', formData, {
+                headers: {
+                    "Content-Type" : "multipart/form-data"
+                }
+            }).then(response => {
+                console.log(response.data);
+            }).catch(error => {
+                console.log(error);
             })
 
             setTimeout(() => {
@@ -49,6 +60,11 @@ export const Register = ({ navigation }) => {
             <Title>Criar Conta</Title>
 
             <SubTitle>Insira seu endereço de e-mail e senha para realizar seu cadastro.</SubTitle>
+
+            <Input placeholder={'Insira seu Nome'}
+                value={name}
+                onChangeText={(txt) => setName(txt)}
+            />
 
             <Input placeholder={'Insira seu Email'}
                 value={email}

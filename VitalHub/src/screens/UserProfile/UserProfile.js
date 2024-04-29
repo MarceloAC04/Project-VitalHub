@@ -1,18 +1,27 @@
-import { GenericEditInput, GenericInput, GenericProfileAddressInput, GenericProfileEditAddressInput } from "../../components/GenericProfileInput/GenericProfileInput";
+import { GenericEditInput, GenericInput,
+        GenericProfileAddressInput, GenericProfileEditAddressInput } from "../../components/GenericProfileInput/GenericProfileInput";
 import { GenericProfileInputContainerRow } from "../../components/GenericProfileInput/Styles";
 import { Container, ContainerScrollView } from "../../components/Container/Styles";
 import { UserProfilePhoto } from "../../components/UserProfilePhoto/Styles";
 import { ButtonEnter, ButtonGrey } from "../../components/Button/Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AppCamera } from "../../components/Camera/Camera";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SubTitle } from "../../components/SubTitle/Styles";
 import { Title } from "../../components/Title/Styles";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
+import { ButtonCamera, ContentImage } from "./Styles";
+import * as MediaLibrary from 'expo-media-library';
 import { userDecodeToken } from "../../Utils/Auth"
+import { useEffect, useState } from "react";
 import api from "../../services/Service";
 import moment from "moment";
-import axios from "axios";
+import { Alert } from "react-native";
 
 export const UserProfile = ({ navigation }) => {
+    const [openCamera, setOpenCamera] = useState(false)
+    const [uriCameraCapture, setUriCameraCapture] = useState(null)
+
+
     const [userId, setUserId] = useState('') // Deixando salvo aqui para caso eu use
     const [isEditing, setIsEditing] = useState(false)
 
@@ -23,6 +32,7 @@ export const UserProfile = ({ navigation }) => {
     const [userCep, setUserCep] = useState('')
     const [userCidade, setUserCidade] = useState('')
     const [userLugardouro, setUserLugardouro] = useState('')
+    const [userPhoto, setUserPhoto] = useState('')
 
     //Paciente
     const [userCpf, setUserCpf] = useState('')
@@ -35,7 +45,6 @@ export const UserProfile = ({ navigation }) => {
     async function profileLoad() {
         //Decodificação do Token
         const token = await userDecodeToken();
-        console.log(token)
 
         if (token !== null) {
             //Aqui está pegando os dados do token como (Nome, email, role e id)
@@ -60,6 +69,8 @@ export const UserProfile = ({ navigation }) => {
                         setUserCidade(response.data.endereco.cidade)
 
                         setUserLugardouro(response.data.endereco.logradouro)
+
+                        setUserPhoto(response.data.idNavigation.foto)
                     } else {
                         setUserCpf(response.data.cpf)
 
@@ -70,6 +81,8 @@ export const UserProfile = ({ navigation }) => {
                         setUserCidade(response.data.endereco.cidade)
 
                         setUserLugardouro(response.data.endereco.logradouro)
+
+                        setUserPhoto(response.data.idNavigation.foto)
                     }
                 }).catch(error => {
                     console.log(error)
@@ -91,7 +104,7 @@ export const UserProfile = ({ navigation }) => {
                     baseURL: 'http://172.16.39.87:4466/api',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json', 
+                        'Content-Type': 'application/json',
                     },
                 });
 
@@ -127,12 +140,42 @@ export const UserProfile = ({ navigation }) => {
         profileLoad()
     }, [])
 
+    async function UpdateProfilePhoto() {
+        const formData = new FormData();
+        formData.append("Arquivo", {
+            uri: uriCameraCapture,
+            name: `image.${uriCameraCapture.split(".")[1]}`,
+            type: `image/${uriCameraCapture.split(".")[1]}`
+        })
+        await api.put(`/Usuario/AlterarFotoPerfil?id=${userId}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        }).then(async response => {
+            setUserPhoto(uriCameraCapture)
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
+    useEffect(() => {
+        console.log(uriCameraCapture);
+        if (uriCameraCapture) {
+            UpdateProfilePhoto()
+        }
+    }, [uriCameraCapture])
 
 
     return (
         <ContainerScrollView>
             <Container>
-                <UserProfilePhoto source={require('../../assets/foto-de-perfil.png')} />
+                <ContentImage>
+                    <UserProfilePhoto src={userPhoto} />
+
+                    <ButtonCamera onPress={() => setOpenCamera(true)}>
+                        <MaterialCommunityIcons name="camera-plus" size={20} color={"#fbfbfb"} />
+                    </ButtonCamera>
+                </ContentImage>
 
                 <Title>{userName}</Title>
 
@@ -140,7 +183,6 @@ export const UserProfile = ({ navigation }) => {
 
                 {!isEditing ? (
                     <>
-                        {/* Marchetti - Coloquei o editable={false}, dessa forma quando pressionarem o input ele não é acionado */}
                         {
                             userRole === "Paciente" ? (
                                 <GenericInput
@@ -239,11 +281,12 @@ export const UserProfile = ({ navigation }) => {
                 {/* Marchetti - mudei onPress() */}
                 <ButtonEnter
                     placeholder={'salvar'}
-                    onPress={() => isEditing ? [setIsEditing(false), updateProfile()] : null}
+                    onPress={() => {
+                        updateProfile()
+                        setIsEditing(false)
+                    }}
                 />
 
-                {/* Marchetti - fiz um ifelse, para quando a gente clicar no botão de editar ele sumir. */}
-                {/* NOTA: Seria interessante a gente fazer que enquanto estamos no modo editar fazer o botão editar sai do modo*/}
                 {!isEditing ? (
                     <ButtonEnter
                         onPress={() => setIsEditing(true)}
@@ -253,12 +296,18 @@ export const UserProfile = ({ navigation }) => {
 
                 <ButtonGrey
                     onPress={() => {
-                        //Aqui ele tira o token do APP - Dessa forma ele não salva e o perfil desloga
                         AsyncStorage.removeItem('token')
 
                         navigation.replace('Login')
                     }}
                     placeholder={'Sair do app'}
+                />
+
+                <AppCamera
+                    visibleCamera={openCamera}
+                    setUriCameraCapture={setUriCameraCapture}
+                    setOpenCamera={setOpenCamera}
+                    getMediaLibrary={true}
                 />
             </Container>
         </ContainerScrollView>

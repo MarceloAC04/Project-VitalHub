@@ -66,10 +66,10 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
 
     return (
         <CardContainer>
-            <UserProfilePhotoCard source={img} />
+            <UserProfilePhotoCard src={img} />
             <CardContainerText>
                 <TitleCard>{name}</TitleCard>
-                <SubTitleCardAge>{age}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                <SubTitleCardAge>{age} anos  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
                 {situation == 'Pendentes' ? (
                     <ScheduleContainer>
                         <ScheduleTime> <AntDesign name="clockcircle" size={14} color="#49B3BA" />  {schedule}</ScheduleTime>
@@ -109,7 +109,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                         visible={modalVisible}
                         onPressCancel={() => setModalVisible(false)}
                         onPressConfirm={() => handleClose("MedicalRecord",
-                            { userId: id, userImg: img, userName: name, userAge: age, userEmail: email })
+                            {userId: id ,userImg: img, userName: name, userAge: age, userEmail: email})
                         }
                         animation={'fade'}
                         transparent={true}
@@ -160,10 +160,10 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
     return (
         <CardMedicContainer onPress={() => { situation === 'Pendentes' ? setModalLocalVisible(true) : null }}>
             <>
-                <UserProfilePhotoCard source={img} />
+                <UserProfilePhotoCard src={img} />
                 <CardContainerText>
-                    <TitleCard>{name}</TitleCard>
-                    <SubTitleCardAge>{crm}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                    <TitleCard>Dr.{name}</TitleCard>
+                    <SubTitleCardAge>CRM-{crm}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
                     <ModalLocalAppointment
                         visible={modalLocalVisible}
                         onPressCancel={() => setModalLocalVisible(false)}
@@ -193,10 +193,8 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
                         <ModalAppointment
                             visible={modalVisible}
                             onPressCancel={() => setModalVisible(false)}
-                            onPressConfirm={() => {
-                                handleClose('Main')
-                                handleCallNotification()
-                            }}
+                            onPressConfirm={() => {handleClose('Main')
+                            handleCallNotification()}}
                             animation={'fade'}
                             transparent={true}
                             id={id}
@@ -205,6 +203,7 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
                             age={age}
                             email={email}
                             situation={situation}
+                            idSituacao={idSituacao}
                         />
                     </>
                 ) : (null)}
@@ -240,7 +239,7 @@ export const MedicSelectCard = ({ id, img, medicName, onPress, isSelect = false,
     return (
         <CardMedicSelectContainer isSelect={isSelect} onPress={onPress}>
             <>
-                <UserProfilePhotoCard source={img} />
+                <UserProfilePhotoCard src={img} />
                 <CardContainerText>
                     <TitleCard>{medicName}</TitleCard>
                     <SubTitleMedicCard>{speciality}</SubTitleMedicCard>
