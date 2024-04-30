@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import api from "../../services/Service";
 import moment from "moment";
 import { Alert } from "react-native";
+import axios from "axios";
 
 export const UserProfile = ({ navigation }) => {
     const [openCamera, setOpenCamera] = useState(false)
@@ -97,19 +98,19 @@ export const UserProfile = ({ navigation }) => {
         try {
             if (userRole === 'Medico') {
 
-                const token = await AsyncStorage.getItem('token');
-                console.log(token);
+                // const token = await AsyncStorage.getItem('token');
+                // console.log(token);
 
-                const axiosInstance = axios.create({
-                    baseURL: 'http://172.16.39.87:4466/api',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
+                // const axiosInstance = axios.create({
+                //     baseURL: 'http://172.16.39.87:4466/api',
+                //     headers: {
+                //         'Authorization': `Bearer ${token}`,
+                //         'Content-Type': 'application/json',
+                //     },
+                // });
 
                 //Mudei o caminho tava assim = /Medicos/AtualizarPerfil?id=${userId}
-                await axiosInstance.put(`/Medicos?idUsuario=${userId}`, {
+                await api.put(`/Medicos?idUsuario=${userId}`, {
                     crm: userCrm,
                     cep: userCep,
                     logradouro: userLugardouro,

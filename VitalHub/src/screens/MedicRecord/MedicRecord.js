@@ -31,9 +31,10 @@ export const MedicRecord = ({ navigation, route }) => {
 
     //Receita
     const [medicamento, setMedicamento] = useState('')
-    const { userImg,userName, userCrm, specialty, consultaId } = route.params;
+    const { userImg,userName, userCrm, specialty, consultaId, consultaData} = route.params;
 
     async function DadosDoMedico() {
+        console.log('Data:',consultaData)
         try {
             const token = await userDecodeToken();
             if (token != null) {
@@ -42,7 +43,7 @@ export const MedicRecord = ({ navigation, route }) => {
             console.log(token.jti)
             console.log(consultaId)
             //Rota usada para Buscar os dados
-            const response = await api.get(`/Pacientes/BuscarPorData?data=2024-04-10&id=${token.jti}`);
+            const response = await api.get(`/Pacientes/BuscarPorData?data=${consultaData}&id=${token.jti}`);
 
             //Defini "consults" como um objeto para acessar os dados
             const consultas = response.data;

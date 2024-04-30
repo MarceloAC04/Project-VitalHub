@@ -21,7 +21,7 @@ export const Home = ({ navigation }) => {
     const [calendarDate, setCalendarDate] = useState('')
 
     const [appointmentList, setAppointmentList] = useState([])
-    const [url, setUrl] = useState('');
+
 
     async function roleLoad() {
         const token = await userDecodeToken();
@@ -33,12 +33,14 @@ export const Home = ({ navigation }) => {
     }
 
     async function ListAppointment() {
+        //Define a URL do caminho do Swegger
+        var url = '';
         // Instancia a chamada da api
-        console.log(url);
-        (role === 'Medico' ? setUrl('Medicos') : setUrl('Pacientes'))
-        await api.get(`/${url}/BuscarPorData?data=2024-04-10&id=${userId}`)
+        (role === 'Medico' ? url = 'Medicos' : url = 'Pacientes')
+        await api.get(`/${url}/BuscarPorData?data=${calendarDate}&id=${userId}`)
             .then(response => {
                 setAppointmentList(response.data)
+                console.log('O que seria isso?', url, 'Role:', role);
             }).catch(error => {
                 console.log(error)
             })
@@ -126,7 +128,6 @@ export const Home = ({ navigation }) => {
                         status={statusLista}
                         cardsData={appointmentList}
                         navi={navigation}
-                        Date={calendarDate}
                     />
 
                     <ScheduleAppointmentButton

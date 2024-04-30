@@ -14,7 +14,7 @@ export const MedicalRecord = ({ navigation, route }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     //Dados do paciente (UserId é o ID da Consulta)
-    const { userImg, userName, userAge, userEmail, userId } = route.params;
+    const { userImg, userName, userAge, userEmail, userId, consultaData } = route.params;
 
     //Id do Medico
     const [userid, setUserid] = useState('')
@@ -30,8 +30,6 @@ export const MedicalRecord = ({ navigation, route }) => {
     async function AtualizarDados() {
         try {
 
-    
-            
             await api.put(`/Consultas/Prontuario`, { consultaId: userId, medicamento: medicamento, descricao:descricao, diagnostico: diagnostico });
 
             console.log("Consulta Atualizada com sucesso com sucesso.", `diagnostico: ${diagnostico}, medicamento: ${medicamento}, descricao: ${descricao}  `);
@@ -43,6 +41,7 @@ export const MedicalRecord = ({ navigation, route }) => {
     }
 
     async function BuscarDiagnostico() {
+        console.log(consultaData)
         try {
             const token = await userDecodeToken();
             if (token != null) {
@@ -51,7 +50,7 @@ export const MedicalRecord = ({ navigation, route }) => {
             console.log(token.jti)
             console.log(userId)
             //Rota usada para Buscar os dados
-            const response = await api.get(`/Medicos/BuscarPorData?data=2024-04-10&id=${token.jti}`);
+            const response = await api.get(`/Medicos/BuscarPorData?data=${consultaData}&id=${token.jti}`);
 
             //Defini "consults" como um objeto para acessar os dados
             const consultas = response.data;

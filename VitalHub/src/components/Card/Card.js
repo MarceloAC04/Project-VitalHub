@@ -35,7 +35,7 @@ Notifications.setNotificationHandler({
     }),
 })
 
-export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, email, situation, idSituacao }) => {
+export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, email, situation, idSituacao, data  }) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     async function handleClose(screen, props) {
@@ -109,7 +109,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                         visible={modalVisible}
                         onPressCancel={() => setModalVisible(false)}
                         onPressConfirm={() => handleClose("MedicalRecord",
-                            {userId: id ,userImg: img, userName: name, userAge: age, userEmail: email})
+                            {userId: id ,userImg: img, userName: name, userAge: age, userEmail: email, consultaData: data })
                         }
                         animation={'fade'}
                         transparent={true}
@@ -126,7 +126,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
     )
 }
 
-export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query, crm, specialty, schedule, email, situation, data }) => {
+export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query, crm, specialty, schedule, email, situation, data, idSituacao }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalLocalVisible, setModalLocalVisible] = useState(false);
 

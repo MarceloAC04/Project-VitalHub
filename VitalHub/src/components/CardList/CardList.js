@@ -3,7 +3,7 @@ import { ListCard } from "./Styles";
 import { useState } from "react";
 import moment from "moment";
 
-export const CardList = ({ status, navi, cardsData }) => {
+export const CardList = ({ status, navi, cardsData, Date }) => {
     return (
         <ListCard
             data={cardsData}
@@ -20,6 +20,7 @@ export const CardList = ({ status, navi, cardsData }) => {
                     query={item.descricao}
                     schedule={moment(item.dataConsulta).format('h:mm')}
                     email={item.paciente.idNavigation.email}
+                    data={moment(item.dataConsulta).format('YYYY-MM-DD')}
                 />
             )}
         />
@@ -46,7 +47,7 @@ export const CardMedicList = ({ status, navi, cardsData, Date }) => {
                     email={item.email}
                     crm={item.medicoClinica.medico.crm}
                     specialty={item.medicoClinica.medico.especialidade.especialidade1}
-                    data={Date}
+                    data={moment(item.dataConsulta).format('YYYY-MM-DD')}
                 />
             )
             }
