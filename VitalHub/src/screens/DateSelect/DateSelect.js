@@ -6,15 +6,50 @@ import { Container, ContainerScrollView } from "../../components/Container/Style
 import { ButtonEnter } from "../../components/Button/Button";
 import { TitleSelectScreen } from "../../components/Title/Styles";
 import { useEffect, useState } from "react";
+import api from "../../services/Service";
+import { userDecodeToken } from "../../Utils/Auth";
 
-export const DateSelect = ({ navigation, route}) => {
-    const [select, setSelect] = useState('')
-    const [selectDate, setSelectDate] = useState('')
+export const DateSelect = ({ navigation, route }) => {
+    const [agendamento, setAgendamento] = useState(null)
+    const [selectDay, setSelectDay] = useState('')
+    const [selectDateTime, setSelectDateTime] = useState('')
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [userId, setUserId] = useState('')
+    async function profileLoad() {
+        const token = await userDecodeToken();
+
+        if (token != null) {
+            setUserId(token.jti);
+        }
+    }
+
+    async function ConfirmAppointment() {
+        await api.post(`/Consultas/Cadastrar`, {
+            ...agendamento,
+            pacienteId: userId,
+            situacaoId: "7737D6FE-8331-4FB5-AAF4-C671A8A72384"
+        }).then(async response => {
+            setModalVisible(false)
+            navigation.replace("Main")
+        }).catch(error => {
+            console.log(agendamento);
+            console.log(error);
+        })
+    }
+
     useEffect(() => {
-        console.log(route);
-    })
+        profileLoad()
+    },[])
+
+    async function handleContinue() {
+        setAgendamento({
+            ...route.params.agendamento,
+            dataConsulta: `${selectDay} ${selectDateTime}`
+        });
+
+        setModalVisible(true);
+    }
     return (
         <ContainerScrollView>
 
@@ -22,31 +57,27 @@ export const DateSelect = ({ navigation, route}) => {
                 <TitleSelectScreen>Selecionar data</TitleSelectScreen>
 
                 <CalendarSchedule
-                    selected={select}
-                    selectedDateDay={setSelect}
+                    selected={selectDay}
+                    selectDay={setSelectDay}
                 />
 
                 <SelectInputPicker
                     textLabel={'Selecione um horário disponível'}
                     textInput={'Selecionar horário'}
-                    selectedTime={setSelectDate}
+                    setSelectDateTime={setSelectDateTime}
                 />
 
                 <ButtonEnter
-                    onPress={() => setModalVisible(true)}
+                    onPress={() => handleContinue()}
                     placeholder={'confirmar'}
                 />
 
                 <ModalConfirmAppointment
                     visible={modalVisible}
                     animation={'fade'}
-                    onPressConfirm={() => {
-                        setModalVisible(false)
-                        navigation.replace("Main")
-                    }}
+                    onPressConfirm={() => ConfirmAppointment()}
                     onPressCancel={() => setModalVisible(false)}
-                    date={select}
-                    appointmentTime={selectDate}
+                    appointment={agendamento}
                 />
 
                 <ButtonSecondary

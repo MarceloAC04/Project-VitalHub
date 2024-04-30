@@ -18,10 +18,11 @@ import { ButtonSecondary } from "../SecondaryButton/SecondaryButton";
 import { UserProfilePhotoModal } from "../UserProfilePhoto/Styles";
 import { LabelText } from "../LabelText/Styles";
 import { Title } from "../Title/Styles";
-import { Modal } from "react-native";
+import { Modal, SafeAreaViewBase } from "react-native";
 import { useEffect, useState } from "react";
 import { userDecodeToken } from '../../Utils/Auth'
 import api from "../../services/Service";
+import moment from "moment";
 
 
 export const ModalAppointment = ({ id, idSituacao, animation, transparent, visible, onPressCancel, onPressConfirm, img, name, age, email, situation, ...rest }) => {
@@ -104,9 +105,9 @@ export const ModalScheduleAppointment = ({ navigation, setModalVisible, animatio
 
     const [appointment, setAppoinment] = useState(null);
 
-     async function handleContinue() {
-       await setModalVisible(false)
-        navigation.replace("ClinicSelect", {agendamento: appointment})
+    async function handleContinue() {
+        await setModalVisible(false)
+        navigation.replace("ClinicSelect", { agendamento: appointment })
     }
     return (
         <Modal {...rest}
@@ -125,34 +126,40 @@ export const ModalScheduleAppointment = ({ navigation, setModalVisible, animatio
                                 <AppointmentLevelButton
                                     textButton={'Rotina'}
                                     clickButton={statusButton === "Rotina"}
-                                    onPress={() => { setStatusButton("Rotina"); setAppoinment({
-                                        ...appointment,
+                                    onPress={() => {
+                                        setStatusButton("Rotina"); setAppoinment({
+                                            ...appointment,
 
-                                        prioridadeId: "CC663923-B9F3-4165-8811-B65E3ABFA2CA",
-                                        prioridadeLabel: "Rotina"
-                                    })}}
+                                            prioridadeId: "CC663923-B9F3-4165-8811-B65E3ABFA2CA",
+                                            prioridadeLabel: "Rotina"
+                                        })
+                                    }}
                                 />
 
                                 <AppointmentLevelButton
                                     textButton={'Exame'}
                                     clickButton={statusButton === "Exame"}
-                                    onPress={() => { setStatusButton("Exame"); setStatusAppoinment({
-                                        ...appointment,
+                                    onPress={() => {
+                                        setStatusButton("Exame"); setStatusAppoinment({
+                                            ...appointment,
 
-                                        prioridadeId: "37DB74DE-9AD6-44D0-973E-C717DF50AE4B",
-                                        prioridadeLabel: "Exame"
-                                    })}}
+                                            prioridadeId: "37DB74DE-9AD6-44D0-973E-C717DF50AE4B",
+                                            prioridadeLabel: "Exame"
+                                        })
+                                    }}
                                 />
 
                                 <AppointmentLevelButton
                                     textButton={'Urgência'}
                                     clickButton={statusButton === "Urgencia"}
-                                    onPress={() => { setStatusButton("Urgencia"); setStatusAppoinment({
-                                        ...appointment,
+                                    onPress={() => {
+                                        setStatusButton("Urgencia"); setStatusAppoinment({
+                                            ...appointment,
 
-                                        prioridadeId: "2200AAC1-DBB5-4777-BD2F-7FDD8D1D55E8",
-                                        prioridadeLabel: "Urgência"
-                                    })}}
+                                            prioridadeId: "2200AAC1-DBB5-4777-BD2F-7FDD8D1D55E8",
+                                            prioridadeLabel: "Urgência"
+                                        })
+                                    }}
                                 />
                             </AppointmentLevelButtonContainer>
                         </ScheduleAppointmentContainer>
@@ -185,48 +192,43 @@ export const ModalScheduleAppointment = ({ navigation, setModalVisible, animatio
     )
 }
 
-export const ModalConfirmAppointment = ({ animation, transparent, visible, date, appointmentTime, onPressCancel, onPressConfirm }) => {
+export const ModalConfirmAppointment = ({ animation, transparent, visible, appointment, onPressCancel, onPressConfirm, ...rest }) => {
     return (
         <Modal
+            {...rest}
             animationType={animation}
             transparent={transparent}
             visible={visible}>
             <ModalView>
                 <ModalConfirmAppointmentContainer>
-                    <Title>Agendar consulta</Title>
-                    <SubTitleModalConfirm>Consulte os dados selecionados para a sua consulta</SubTitleModalConfirm>
+                    {appointment == null ? (null) : (
+                        <>
+                            <Title>Agendar consulta</Title><SubTitleModalConfirm>Consulte os dados selecionados para a sua consulta</SubTitleModalConfirm><ModalConfirmAppointmentContent>
+                                <ModalConfirmAppointmentContainerLabel>
+                                    <LabelText>Data da consulta</LabelText>
+                                    <SubTitleModalConfirmLabel>{appointment.dataConsulta}</SubTitleModalConfirmLabel>
+                                </ModalConfirmAppointmentContainerLabel>
 
-                    <ModalConfirmAppointmentContent>
-                        <ModalConfirmAppointmentContainerLabel>
-                            <LabelText>Data da consulta</LabelText>
-                            <SubTitleModalConfirmLabel>{date} {appointmentTime}</SubTitleModalConfirmLabel>
-                        </ModalConfirmAppointmentContainerLabel>
+                                <ModalConfirmAppointmentContainerLabel>
+                                    <LabelText>Médico(a) da consulta</LabelText>
+                                    <SubTitleModalConfirmLabel>Dr. {appointment.medicoLabel}</SubTitleModalConfirmLabel>
+                                    <SubTitleModalConfirmLabel>{appointment.medicoSpecialityLabel}</SubTitleModalConfirmLabel>
+                                </ModalConfirmAppointmentContainerLabel>
 
-                        <ModalConfirmAppointmentContainerLabel>
-                            <LabelText>Médico(a) da consulta</LabelText>
-                            <SubTitleModalConfirmLabel>Dra Alessandra</SubTitleModalConfirmLabel>
-                            <SubTitleModalConfirmLabel>Demartologa, Esteticista</SubTitleModalConfirmLabel>
-                        </ModalConfirmAppointmentContainerLabel>
+                                <ModalConfirmAppointmentContainerLabel>
+                                    <LabelText>Local da consulta</LabelText>
+                                    <SubTitleModalConfirmLabel>{appointment.localizacao}, SP</SubTitleModalConfirmLabel>
+                                </ModalConfirmAppointmentContainerLabel>
 
-                        <ModalConfirmAppointmentContainerLabel>
-                            <LabelText>Local da consulta</LabelText>
-                            <SubTitleModalConfirmLabel>São Paulo, SP</SubTitleModalConfirmLabel>
-                        </ModalConfirmAppointmentContainerLabel>
-
-                        <ModalConfirmAppointmentContainerLabel>
-                            <LabelText>Tipo da consulta</LabelText>
-                            <SubTitleModalConfirmLabel>Rotina</SubTitleModalConfirmLabel>
-                        </ModalConfirmAppointmentContainerLabel>
-                    </ModalConfirmAppointmentContent>
-
-                    <ButtonModalConfirmAppointment
-                        onPress={onPressConfirm}
-                        placeholder={'confirmar'}
-                    />
-
-                    <ButtonSecondary
-                        onPress={onPressCancel}
-                    />
+                                <ModalConfirmAppointmentContainerLabel>
+                                    <LabelText>Tipo da consulta</LabelText>
+                                    <SubTitleModalConfirmLabel>{appointment.prioridadeLabel}</SubTitleModalConfirmLabel>
+                                </ModalConfirmAppointmentContainerLabel>
+                            </ModalConfirmAppointmentContent><ButtonModalConfirmAppointment
+                                onPress={onPressConfirm}
+                                placeholder={'confirmar'} /><ButtonSecondary
+                                onPress={onPressCancel} />
+                        </>)}
                 </ModalConfirmAppointmentContainer>
             </ModalView>
         </Modal>
@@ -242,8 +244,8 @@ export const ModalLocalAppointment = ({ animation, transparent, onPressConfirm, 
             <ModalMedicalRecordView>
                 <ModalMedicalRecordContainer>
                     <UserProfilePhotoModal src={img} />
-                    <Title>{name} </Title>
-                    <SubTitle>{specialty} <SubTitle>{crm}</SubTitle></SubTitle>
+                    <Title>Dr. {name} </Title>
+                    <SubTitle>{specialty} - <SubTitle>CRM-{crm}</SubTitle></SubTitle>
                     <ButtonEnter
                         onPress={onPressConfirm}
                         placeholder={'Ver local da consulta'}

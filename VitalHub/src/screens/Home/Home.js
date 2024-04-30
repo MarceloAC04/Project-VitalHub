@@ -21,7 +21,6 @@ export const Home = ({ navigation }) => {
     const [calendarDate, setCalendarDate] = useState('')
 
     const [appointmentList, setAppointmentList] = useState([])
-    const [url, setUrl] = useState('');
 
     async function roleLoad() {
         const token = await userDecodeToken();
@@ -33,10 +32,10 @@ export const Home = ({ navigation }) => {
     }
 
     async function ListAppointment() {
-        // Instancia a chamada da api
-        console.log(url);
-        (role === 'Medico' ? setUrl('Medicos') : setUrl('Pacientes'))
-        await api.get(`/${url}/BuscarPorData?data=2024-04-08&id=${userId}`)
+        // Instancia a chamada da apis
+        var url = '';
+        (role === "Medico" ? url = 'Medicos' : url = 'Pacientes')
+        await api.get(`/${url}/BuscarPorData?data=${calendarDate}&id=${userId}`)
             .then(response => {
                 setAppointmentList(response.data)
             }).catch(error => {

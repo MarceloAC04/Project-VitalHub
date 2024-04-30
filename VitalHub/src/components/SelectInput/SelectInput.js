@@ -1,26 +1,53 @@
 import RNPickerSelect from "react-native-picker-select";
 import { LabelText } from "../LabelText/Styles";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
+import moment from "moment";
+import { useEffect, useState } from "react";
 
-const dataTime = [
-    { label: '13:00', value: '13:00' },
-    { label: '14:00', value: '14:00' },
-    { label: '15:00', value: '15:00' },
-    { label: '16:00', value: '16:00' },
-]
 
-export const SelectInputPicker = ({ textInput, textLabel, selectedTime = null }) => {
+export const SelectInputPicker = ({ textInput, textLabel, setSelectDateTime}) => {
+    const dataActual = moment().format('YYYY-MM-DD');
+    const [arrayOptions, setArraryOptions] = useState(null);
+
+    function loadOptions() {
+        //Conferir quantas as horas faltam até 00:00
+        const leftHours = moment(dataActual).add(24, 'hours').diff(moment(), 'hour')
+        console.log(leftHours)
+
+        //Criar um laço que rode a quantidade de horas que faltam
+        const options = Array.from({ length: leftHours }, (_, index) => {
+            let valor = new Date().getHours() + (index + 1);
+
+            return {
+                label: `${valor}:00`, value: `${valor}:00`
+            }
+        })
+
+        //Devolver para cada hora, uma nova opção no select
+        setArraryOptions(options);
+    }
+
+    useEffect(() => {
+        loadOptions();
+    }, [])
     return (
         <View style={styles.container}>
             <LabelText>{textLabel}</LabelText>
-            <RNPickerSelect
-                onValueChange={(value) => selectedTime(value)}
-                items={dataTime}
-                placeholder={{ label: textInput, value: null }}
-                Icon={() => <AntDesign name="caretdown" size={24} color="#34898F" />}
-                style={{...styles}}
-            />
+            {
+                arrayOptions != null ? (
+
+                    <RNPickerSelect
+                        onValueChange={(value) => setSelectDateTime(value)}
+                        items={arrayOptions}
+                        placeholder={{ label: textInput, value: null }}
+                        Icon={() => <AntDesign name="caretdown" size={24} color="#34898F" />}
+                        style={{ ...styles }}
+                    />) : 
+                    (
+                    <ActivityIndicator />
+                    )
+            }
         </View>
     )
 }

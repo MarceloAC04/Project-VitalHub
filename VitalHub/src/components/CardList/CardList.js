@@ -18,7 +18,7 @@ export const CardList = ({ status, navi, cardsData }) => {
                     name={item.paciente.idNavigation.nome}
                     age={moment(item.dataConsulta).format('YYYY') - moment(item.paciente.dataNascimento).format('YYYY')}
                     query={item.descricao}
-                    schedule={moment(item.dataConsulta).format('h:mm')}
+                    schedule={moment(item.dataConsulta).format('HH:mm')}
                     email={item.paciente.idNavigation.email}
                 />
             )}
@@ -42,10 +42,10 @@ export const CardMedicList = ({ status, navi, cardsData }) => {
                     name={item.medicoClinica.medico.idNavigation.nome}
                     age={item.age}
                     query={item.descricao}
-                    schedule={moment(item.dataConsulta).format('h:mm')}
+                    schedule={moment(item.dataConsulta).format('HH:mm')}
                     email={item.email}
                     crm={item.medicoClinica.medico.crm}
-                    specialty={item.medicoClinica.medico.specialty}
+                    specialty={item.medicoClinica.medico.especialidade.especialidade1}
                 />
             )
             }
@@ -88,7 +88,7 @@ export const MedicSelectCardList = ({ cardsData, setSelectMedic}) => {
                     id={item.id}
                     onPress={() => { setIdMedic(item.id); setSelectMedic({
                         medicoClinicaId: item.id,
-                        medicoLabel: item.idNavigation.nome
+                        medicoLabel: item.idNavigation.nome,
                     }) }}
                     isSelect={idMedic == item.id}
                     img={item.idNavigation.foto}
