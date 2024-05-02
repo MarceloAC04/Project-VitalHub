@@ -98,19 +98,19 @@ export const UserProfile = ({ navigation }) => {
         try {
             if (userRole === 'Medico') {
 
-                // const token = await AsyncStorage.getItem('token');
-                // console.log(token);
+                const token = await AsyncStorage.getItem('token');
+                console.log(token);
 
-                // const axiosInstance = axios.create({
-                //     baseURL: 'http://172.16.39.87:4466/api',
-                //     headers: {
-                //         'Authorization': `Bearer ${token}`,
-                //         'Content-Type': 'application/json',
-                //     },
-                // });
+                const axiosInstance = axios.create({
+                    baseURL: 'http://172.16.39.87:4466/api',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        
+                    },
+                });
 
                 //Mudei o caminho tava assim = /Medicos/AtualizarPerfil?id=${userId}
-                await api.put(`/Medicos?idUsuario=${userId}`, {
+                await axiosInstance.put(`/Medicos`, {
                     crm: userCrm,
                     cep: userCep,
                     logradouro: userLugardouro,

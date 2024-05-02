@@ -18,6 +18,7 @@ export const CardList = ({ status, navi, cardsData, Date }) => {
                     name={item.paciente.idNavigation.nome}
                     age={moment(item.dataConsulta).format('YYYY') - moment(item.paciente.dataNascimento).format('YYYY')}
                     query={item.descricao}
+                    urgency={item.prioridade.prioridade}
                     schedule={moment(item.dataConsulta).format('h:mm')}
                     email={item.paciente.idNavigation.email}
                     data={moment(item.dataConsulta).format('YYYY-MM-DD')}
@@ -43,6 +44,7 @@ export const CardMedicList = ({ status, navi, cardsData, Date }) => {
                     name={item.medicoClinica.medico.idNavigation.nome}
                     age={item.age}
                     query={item.descricao}
+                    urgency={item.prioridade.prioridade}
                     schedule={moment(item.dataConsulta).format('h:mm')}
                     email={item.email}
                     crm={item.medicoClinica.medico.crm}

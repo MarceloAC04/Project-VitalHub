@@ -114,7 +114,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut]
         public IActionResult UpdateProfile(MedicoViewModel medico)
         {

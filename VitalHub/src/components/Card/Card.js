@@ -9,6 +9,7 @@ import {
     CardClinicContainer,
     CardClinicContent,
     CardContainer,
+    CardContainerLinkText,
     CardContainerText,
     CardLinkText,
     CardMedicContainer,
@@ -20,7 +21,7 @@ import { ModalAppointment, ModalLocalAppointment } from "../Modal/Modal";
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { UserProfilePhotoCard } from "../UserProfilePhoto/Styles";
 import { TitleCard } from "../Title/Styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as Notifications from 'expo-notifications'
 
@@ -35,8 +36,9 @@ Notifications.setNotificationHandler({
     }),
 })
 
-export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, email, situation, idSituacao, data  }) => {
+export const AppointmentCard = ({ id, img, name, navi, age, query, urgency, schedule, email, situation, idSituacao, data }) => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [urgencyy, setUrgency] = useState(urgency)
 
     async function handleClose(screen, props) {
         setModalVisible(false)
@@ -63,13 +65,20 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
         })
     }
 
+    useEffect(() =>{
+        {
+           urgency === '1' ? setUrgency('Rotina') : urgency === '2' ? setUrgency('Exame') : setUrgency('Urgência')
+        }
+    },[])
+
+
 
     return (
         <CardContainer>
             <UserProfilePhotoCard src={img} />
             <CardContainerText>
                 <TitleCard>{name}</TitleCard>
-                <SubTitleCardAge>{age} anos  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                <SubTitleCardAge>{age} anos - <SubTitleCard>{urgencyy}</SubTitleCard></SubTitleCardAge>
                 {situation == 'Pendentes' ? (
                     <ScheduleContainer>
                         <ScheduleTime> <AntDesign name="clockcircle" size={14} color="#49B3BA" />  {schedule}</ScheduleTime>
@@ -109,7 +118,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                         visible={modalVisible}
                         onPressCancel={() => setModalVisible(false)}
                         onPressConfirm={() => handleClose("MedicalRecord",
-                            {userId: id ,userImg: img, userName: name, userAge: age, userEmail: email, consultaData: data })
+                            { userId: id, userImg: img, userName: name, userAge: age, userEmail: email, consultaData: data })
                         }
                         animation={'fade'}
                         transparent={true}
@@ -126,9 +135,10 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
     )
 }
 
-export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query, crm, specialty, schedule, email, situation, data, idSituacao }) => {
+export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, urgency,query, crm, specialty, schedule, email, situation, data, idSituacao }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalLocalVisible, setModalLocalVisible] = useState(false);
+    const [urgencyy, setUrgency] = useState(urgency)
 
     async function handleClose(screen, props) {
         setModalVisible(false)
@@ -156,6 +166,11 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
         })
     }
 
+    useEffect(() =>{
+        {
+           urgency === '1' ? setUrgency('Rotina') : urgency === '2' ? setUrgency('Exame') : setUrgency('Urgência')
+        }
+    },[])
 
     return (
         <CardMedicContainer onPress={() => { situation === 'Pendentes' ? setModalLocalVisible(true) : null }}>
@@ -163,7 +178,7 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
                 <UserProfilePhotoCard src={img} />
                 <CardContainerText>
                     <TitleCard>Dr.{name}</TitleCard>
-                    <SubTitleCardAge>CRM-{crm}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                    <SubTitleCardAge>CRM-{crm} - <SubTitleCard>{urgencyy}</SubTitleCard></SubTitleCardAge>
                     <ModalLocalAppointment
                         visible={modalLocalVisible}
                         onPressCancel={() => setModalLocalVisible(false)}
@@ -189,12 +204,15 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
                 </CardContainerText>
                 {situation == 'Pendentes' ? (
                     <>
+
                         <CardLinkText onPress={() => setModalVisible(true)}> Cancelar </CardLinkText>
                         <ModalAppointment
                             visible={modalVisible}
                             onPressCancel={() => setModalVisible(false)}
-                            onPressConfirm={() => {handleClose('Main')
-                            handleCallNotification()}}
+                            onPressConfirm={() => {
+                                handleClose('Main')
+                                handleCallNotification()
+                            }}
                             animation={'fade'}
                             transparent={true}
                             id={id}
@@ -205,6 +223,8 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query
                             situation={situation}
                             idSituacao={idSituacao}
                         />
+
+
                     </>
                 ) : (null)}
                 {situation == 'Realizados' ? (

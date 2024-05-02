@@ -44,6 +44,7 @@ export const CardLinkText = styled.Text`
     font-size: 12px;
     font-family: 'MontserratAlternates_500Medium';
     color: #C81D25;
+
 `
 export const RealizedCardLinkText = styled(CardLinkText)`
     color: #344F8F;
