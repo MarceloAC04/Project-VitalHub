@@ -18,11 +18,9 @@ import { ButtonSecondary } from "../SecondaryButton/SecondaryButton";
 import { UserProfilePhotoModal } from "../UserProfilePhoto/Styles";
 import { LabelText } from "../LabelText/Styles";
 import { Title } from "../Title/Styles";
-import { Modal, SafeAreaViewBase } from "react-native";
-import { useEffect, useState } from "react";
-import { userDecodeToken } from '../../Utils/Auth'
+import { Modal} from "react-native";
+import { useState } from "react";
 import api from "../../services/Service";
-import moment from "moment";
 
 
 export const ModalAppointment = ({ id, idSituacao, animation, transparent, visible, onPressCancel, onPressConfirm, img, name, age, email, situation, ...rest }) => {

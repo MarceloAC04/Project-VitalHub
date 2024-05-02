@@ -1,13 +1,13 @@
 import { CalendarSchedule } from "../../components/CalendarSchedule/CalendarSchedule";
+import { Container, ContainerScrollView } from "../../components/Container/Styles";
 import { ButtonSecondary } from "../../components/SecondaryButton/SecondaryButton";
 import { SelectInputPicker } from "../../components/SelectInput/SelectInput";
 import { ModalConfirmAppointment } from "../../components/Modal/Modal";
-import { Container, ContainerScrollView } from "../../components/Container/Styles";
-import { ButtonEnter } from "../../components/Button/Button";
 import { TitleSelectScreen } from "../../components/Title/Styles";
+import { ButtonEnter } from "../../components/Button/Button";
+import { userDecodeToken } from "../../Utils/Auth";
 import { useEffect, useState } from "react";
 import api from "../../services/Service";
-import { userDecodeToken } from "../../Utils/Auth";
 
 export const DateSelect = ({ navigation, route }) => {
     const [agendamento, setAgendamento] = useState(null)

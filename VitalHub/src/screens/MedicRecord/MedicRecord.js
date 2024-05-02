@@ -11,17 +11,68 @@ import { Title } from "../../components/Title/Styles";
 import { useEffect, useState } from "react";
 import { Line } from "./Styles";
 import api from '../../services/Service'
+import { userDecodeToken } from "../../Utils/Auth";
 
-export const MedicRecord = ({ navigation, route}) => {
+export const MedicRecord = ({ navigation, route }) => {
     const [openCamera, setOpenCamera] = useState(false)
     const [uriCameraCapture, setUriCameraCapture] = useState(null)
     const [descricaoExame, setDescricaoExame] = useState('')
 
+    //Id do Medico
+    const [userId, setUserid] = useState('')
+
+    //Consutla - Medico
+    const [diagnostico, setDiagnostico] = useState('')
+    const [descricao, setDescricao] = useState('')
+
+    //Receita
+    const [medicamento, setMedicamento] = useState('')
+    const { userImg, userName, userCrm, specialty, consultaId, consultaData } = route.params;
+
+    async function DadosDoMedico() {
+        console.log('Data:', consultaData)
+        try {
+            const token = await userDecodeToken();
+            if (token != null) {
+                setUserid(token.jti)
+            }
+            //Rota usada para Buscar os dados
+            const response = await api.get(`/Pacientes/BuscarPorData?data=${consultaData}&id=${token.jti}`);
+
+            //Defini "consults" como um objeto para acessar os dados
+            const consultas = response.data;
+
+            //Defini que o objeto BuscarId, is
+            const BuscarId = consultas.find(consulta => consulta.id === consultaId);
+
+            if (BuscarId) {
+
+                // Consulta encontrada, agora você pode acessar os dados dela
+                console.log(BuscarId)
+                console.log("Diagnóstico do paciente:", BuscarId.diagnostico);
+                console.log("Exames do paciente:", BuscarId.descricao);
+                console.log("Medicamento do Paciente:", BuscarId.receita.medicamento);
+                console.log(BuscarId.exames.descricao);
+
+
+                setDiagnostico(BuscarId.diagnostico)
+                setDescricao(BuscarId.descricao)
+                setMedicamento(BuscarId.receita.medicamento)
+                setDescricaoExame(BuscarId.exames[0].descricao)
+
+                // Faça o que precisar com os dados da consulta associada ao paciente clicado
+            } else {
+                console.log("Consulta para o paciente não encontrada.");
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     async function InsertExame() {
-        const idConsulta = route.params.Id
-        console.log(idConsulta)
+        console.log(consultaId)
         const formData = new FormData();
-        formData.append("ConsultaId", idConsulta )
+        formData.append("ConsultaId", consultaId)
         formData.append("Imagem", {
             uri: uriCameraCapture,
             name: `image.${uriCameraCapture.split('.').pop()}`,
@@ -31,7 +82,7 @@ export const MedicRecord = ({ navigation, route}) => {
 
         await api.post(`/Exame/Cadastrar`, formData, {
             headers: {
-                "Content-Type" : "multipart/form-data"
+                "Content-Type": "multipart/form-data"
             }
         }).then(response => {
             setDescricaoExame(descricaoExame + "\n" + response.data.descricao)
@@ -41,8 +92,9 @@ export const MedicRecord = ({ navigation, route}) => {
     }
 
     useEffect(() => {
-        console.log(uriCameraCapture);
-    },[])
+       DadosDoMedico()
+       
+    }, [])
 
     useEffect(() => {
         if (uriCameraCapture != null) {
@@ -59,23 +111,26 @@ export const MedicRecord = ({ navigation, route}) => {
 
                 <GenericTextArea
                     textLabel={'Descrição da Consulta'}
-                    placeholder={`O paciente possuí uma infecção no ouvido. Necessario repouso de 2 dias e acompanhamento médico constante.`}
+                    placeholder={` ${descricao}
+                    `}
+                    editable={false}
                 />
 
                 <GenericInput
                     textLabel={'Diagnóstico do paciente'}
-                    placeholder={'Infecção no ouvindo'}
+                    placeholder={diagnostico}
+                    editable={false}
                 />
 
                 <GenericTextArea
-                    textLabel={'Descrição da Consulta'}
-                    // editable={false}
-                    // value={descricaoExame}
-                    placeholder={`Medicamento: Advil \nDosagem: 50 mg \nFrequência: 3 vezes ao dia \nDuração: 3 dias`}
+                    textLabel={'Prescrição médica'}
+                    editable={false}
+                    placeholder={` ${medicamento}
+                    `}
                 />
 
                 <GenericPrescriptionInput
-                    textLabel={'Prescrição médica'}
+                    textLabel={'Exame'}
                     placeholder={`Nenhuma foto informada`}
                     img={uriCameraCapture}
                 />
@@ -89,13 +144,14 @@ export const MedicRecord = ({ navigation, route}) => {
                     visibleCamera={openCamera}
                     setUriCameraCapture={setUriCameraCapture}
                     setOpenCamera={setOpenCamera}
+                    getMediaLibrary={true}
                 />
 
                 <Line />
 
                 <GenericTextArea
-                value={descricaoExame}
-                placeholder={`Resultado do exame de sangue : \ntudo normal`}
+                    value={descricaoExame}
+                    placeholder={descricaoExame}
                 />
                 <ButtonSecondary
                     onPress={() => navigation.replace('Main')}

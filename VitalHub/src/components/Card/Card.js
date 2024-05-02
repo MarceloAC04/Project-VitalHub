@@ -107,7 +107,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
                         visible={modalVisible}
                         onPressCancel={() => setModalVisible(false)}
                         onPressConfirm={() => handleClose("MedicalRecord",
-                            {userId: id ,userImg: img, userName: name, userAge: age, userEmail: email})
+                            {Id: id ,userImg: img, userName: name, userAge: age, userEmail: email})
                         }
                         animation={'fade'}
                         transparent={true}
@@ -124,7 +124,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
     )
 }
 
-export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, name, age, navi, query, crm, specialty, schedule, email, situation }) => {
+export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, dataConsulta, name, age, navi, query, crm, specialty, schedule, email, situation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalLocalVisible, setModalLocalVisible] = useState(false);
 
@@ -206,7 +206,7 @@ export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, name, age,
                     </>
                 ) : (null)}
                 {situation == 'Realizados' ? (
-                    <RealizedCardLinkText onPress={() => navi.replace('MedicRecord', {Id: id, userName: name, userImg: img, userCrm: crm, userSpecialty: specialty})}>Ver Prontuário</RealizedCardLinkText>
+                    <RealizedCardLinkText onPress={() => navi.replace('MedicRecord', {consultaId: id, userName: name, userImg: img, userCrm: crm, userSpecialty: specialty, consultaData: dataConsulta})}>Ver Prontuário</RealizedCardLinkText>
                 ) : (<CardLinkText>           </CardLinkText>)}
             </>
         </CardMedicContainer >

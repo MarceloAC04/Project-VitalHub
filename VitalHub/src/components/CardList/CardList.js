@@ -40,7 +40,7 @@ export const CardMedicList = ({ status, navi, cardsData }) => {
                     navi={navi}
                     img={item.medicoClinica.medico.idNavigation.foto}
                     name={item.medicoClinica.medico.idNavigation.nome}
-                    age={item.age}
+                    dataConsulta={moment(item.dataConsulta).format('YYYY-MM-DD')}
                     query={item.descricao}
                     schedule={moment(item.dataConsulta).format('HH:mm')}
                     email={item.email}

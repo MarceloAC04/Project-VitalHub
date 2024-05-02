@@ -19,7 +19,7 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
 
     async function CapturePhoto() {
         if (cameraRef) {
-            const photo = await cameraRef.current.takePictureAsync();
+            const photo = await cameraRef.current.takePictureAsync({quality: 1});
             setPhoto(photo.uri)
 
             setOpenModalPhoto(true)
