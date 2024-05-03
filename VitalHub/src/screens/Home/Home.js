@@ -51,7 +51,6 @@ export const Home = ({ navigation }) => {
     useEffect(() => {
         if (calendarDate !== '') {
             ListAppointment()
-            console.log(calendarDate);
         }
     }, [calendarDate])
 

@@ -19,6 +19,12 @@ export const Register = ({ navigation }) => {
         try {
             if (senha !== confirmarSenha) {
                 alert("Senha errada!")
+                return;
+            } else if (email === '' || name === '') {
+                alert("Insira email ou nome válido")
+                return;
+            } else if (senha.length() < 4) {
+                alert("Senha fraca")
             }
             const formData = new FormData();
             formData.append("Rg", "")

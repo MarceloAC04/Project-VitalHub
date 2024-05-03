@@ -71,11 +71,11 @@ export const GenericEditTextArea = ({ textLabel, placeholder, onChangeText}) => 
     )
 }
 
-export const GenericEditInput = ({ textLabel, placeholder, onChangeText }) => {
+export const GenericEditInput = ({ textLabel, value, placeholder, onChangeText }) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInputEdition placeholder={placeholder} onChangeText={onChangeText} />
+            <GenericProfileInputEdition value={value} placeholder={placeholder} onChangeText={onChangeText} />
         </GenericProfileInputContainer>
     )
 }

@@ -46,15 +46,6 @@ export const MedicRecord = ({ navigation, route }) => {
             const BuscarId = consultas.find(consulta => consulta.id === consultaId);
 
             if (BuscarId) {
-
-                // Consulta encontrada, agora você pode acessar os dados dela
-                console.log(BuscarId)
-                console.log("Diagnóstico do paciente:", BuscarId.diagnostico);
-                console.log("Exames do paciente:", BuscarId.descricao);
-                console.log("Medicamento do Paciente:", BuscarId.receita.medicamento);
-                console.log(BuscarId.exames.descricao);
-
-
                 setDiagnostico(BuscarId.diagnostico)
                 setDescricao(BuscarId.descricao)
                 setMedicamento(BuscarId.receita.medicamento)

@@ -1,5 +1,7 @@
-import { GenericEditInput, GenericInput, 
-        GenericProfileAddressInput, GenericProfileEditAddressInput } from "../../components/GenericProfileInput/GenericProfileInput";
+import {
+    GenericEditInput, GenericInput,
+    GenericProfileAddressInput, GenericProfileEditAddressInput
+} from "../../components/GenericProfileInput/GenericProfileInput";
 import { GenericProfileInputContainerRow } from "../../components/GenericProfileInput/Styles";
 import { Container, ContainerScrollView } from "../../components/Container/Styles";
 import { UserProfilePhoto } from "../../components/UserProfilePhoto/Styles";
@@ -20,8 +22,7 @@ import { Alert } from "react-native";
 export const UserProfile = ({ navigation }) => {
     const [openCamera, setOpenCamera] = useState(false)
     const [uriCameraCapture, setUriCameraCapture] = useState(null)
-   
-    
+
     const [userId, setUserId] = useState('') // Deixando salvo aqui para caso eu use
     const [isEditing, setIsEditing] = useState(false)
 
@@ -40,6 +41,8 @@ export const UserProfile = ({ navigation }) => {
 
     //Medico
     const [userCrm, setUserCrm] = useState('')
+
+    const [validate, setValidate] = useState(null)
 
     //Função para puxar os dados
     async function profileLoad() {
@@ -91,27 +94,46 @@ export const UserProfile = ({ navigation }) => {
         }
     }
 
+    async function validation(data) {
+        data.forEach(e => {
+            if (e === "") {
+                alert("Preencha os campos vazios!")
+                setValidate(false)
+                return;
+            } else {
+                setValidate(true)
+            }
+        });
+    }
+
     async function updateProfile() {
-        console.log(userId, userCidade)
+        const data = [];
         try {
             if (userRole === 'Medico') {
-                await api.put(`/Medicos?idUsuario=${userId}`, {
-                    cep: userCep,
-                    logradouro: userLugardouro,
-                    cidade: userCidade,
-                    crm: userCrm
-                })
+                data.push(userCep, userLugardouro, userCidade, userCrm)
+                validation(data)
+                if (validate) {
+                    await api.put(`/Medicos?idUsuario=${userId}`, {
+                        cep: userCep,
+                        logradouro: userLugardouro,
+                        cidade: userCidade,
+                        crm: userCrm
+                    })
+                }
             }
             else {
-                await api.put(`/Pacientes?idUsuario=${userId}`, {
-                    dataNascimento: userNiver,
-                    cpf: userCpf,
-                    cep: userCep,
-                    logradouro: userLugardouro,
-                    cidade: userCidade
-                })
+                data.push(userNiver, userLugardouro, userCidade, userCpf, userCep)
+                validation(data)
+                if (validate) {
+                    await api.put(`/Pacientes?idUsuario=${userId}`, {
+                        dataNascimento: userNiver,
+                        cpf: userCpf,
+                        cep: userCep,
+                        logradouro: userLugardouro,
+                        cidade: userCidade
+                    })
+                }
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -126,13 +148,13 @@ export const UserProfile = ({ navigation }) => {
         formData.append("Arquivo", {
             uri: uriCameraCapture,
             name: `image.${uriCameraCapture.split(".")[1]}`,
-            type:  `image/${uriCameraCapture.split(".")[1]}`
+            type: `image/${uriCameraCapture.split(".")[1]}`
         })
         await api.put(`/Usuario/AlterarFotoPerfil?id=${userId}`, formData, {
             headers: {
-                "Content-Type" : "multipart/form-data"
+                "Content-Type": "multipart/form-data"
             }
-        }).then( async response => {
+        }).then(async response => {
             setUserPhoto(uriCameraCapture)
         }).catch(error => {
             console.log(error);
@@ -140,11 +162,10 @@ export const UserProfile = ({ navigation }) => {
     }
 
     useEffect(() => {
-        console.log(uriCameraCapture);
         if (uriCameraCapture) {
             UpdateProfilePhoto()
         }
-    },[uriCameraCapture])
+    }, [uriCameraCapture])
 
 
     return (
@@ -210,6 +231,7 @@ export const UserProfile = ({ navigation }) => {
                                 <GenericEditInput
                                     textLabel={'Data de Nascimento: '}
                                     placeholder={userNiver}
+                                    value={userNiver}
                                     onChangeText={(txt) => setUserNiver(txt)}
                                 />
                             ) : (<></>)
@@ -220,12 +242,14 @@ export const UserProfile = ({ navigation }) => {
                                 <GenericEditInput
                                     textLabel={'CRM:'}
                                     placeholder={userCrm}
+                                    value={userCrm}
                                     onChangeText={(txt) => setUserCrm(txt)}
                                 />
                             ) : (
                                 <GenericEditInput
                                     textLabel={'CPF:'}
                                     placeholder={userCpf}
+                                    value={userCpf}
                                     onChangeText={(txt) => setUserCpf(txt)}
                                 />
                             )
@@ -234,6 +258,7 @@ export const UserProfile = ({ navigation }) => {
                         <GenericEditInput
                             textLabel={'Logradouro: '}
                             placeholder={userLugardouro}
+                            value={userLugardouro}
                             onChangeText={(txt) => setUserLugardouro(txt)}
                         />
 
@@ -241,17 +266,18 @@ export const UserProfile = ({ navigation }) => {
                             <GenericProfileEditAddressInput
                                 textLabel={'Cep: '}
                                 placeholder={userCep}
+                                value={userCep}
                                 onChangeText={(txt) => setUserCep(txt)}
                             />
                             <GenericProfileEditAddressInput
                                 textLabel={'Cidade: '}
                                 placeholder={userCidade}
+                                value={userCidade}
                                 onChangeText={(txt) => setUserCidade(txt)}
                             />
                         </GenericProfileInputContainerRow>
                     </>
                 )}
-
 
                 <ButtonEnter
                     placeholder={'salvar'}
@@ -260,6 +286,7 @@ export const UserProfile = ({ navigation }) => {
                         setIsEditing(false)
                     }}
                 />
+
 
                 <ButtonEnter
                     placeholder={'editar'}

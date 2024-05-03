@@ -25,6 +25,20 @@ export const MedicalRecord = ({ navigation, route }) => {
     //Receita
     const [medicamento, setMedicamento] = useState('')
 
+    const [validate, setValidate] = useState(null)
+
+    async function validation(data) {
+        data.forEach(e => {
+            if (e === "") {
+                alert("Preencha os campos vazios!")
+                setValidate(false)
+                return;
+            } else {
+                setValidate(true)
+            }
+        });
+    }
+
     async function BuscarDiagnostico() {
         try {
             console.log(Id);
@@ -40,7 +54,6 @@ export const MedicalRecord = ({ navigation, route }) => {
                 console.log("Diagnóstico do paciente:", consultas.diagnostico);
                 console.log("Exames do paciente:", consultas.descricao);
                 console.log("Medicamento do Paciente:", consultas.receita.medicamento);
-                console.log("Observações do Medico:", consultas.receita.observacoes);
 
                 setDiagnostico(consultas.diagnostico)
                 setDescricao(consultas.descricao)
@@ -56,13 +69,15 @@ export const MedicalRecord = ({ navigation, route }) => {
     }
 
     async function AtualizarDados() {
+        const data = [];
         try {
-
-            await api.put(`/Consultas/Prontuario`, { consultaId: Id, medicamento: medicamento, descricao: descricao, diagnostico: diagnostico });
-
-            console.log("Consulta Atualizada com sucesso com sucesso.", `diagnostico: ${diagnostico}, medicamento: ${medicamento}, descricao: ${descricao}  `);
-
-
+            data.push(descricao, medicamento, diagnostico)
+            validation(data)
+            if (validate) {
+                await api.put(`/Consultas/Prontuario`, { consultaId: Id, medicamento: medicamento, descricao: descricao, diagnostico: diagnostico });
+    
+                console.log("Consulta Atualizada com sucesso com sucesso.", `diagnostico: ${diagnostico}, medicamento: ${medicamento}, descricao: ${descricao}  `);
+            }
         } catch (error) {
             console.log("Erro ao Atualizar consulta:", error);
         }
