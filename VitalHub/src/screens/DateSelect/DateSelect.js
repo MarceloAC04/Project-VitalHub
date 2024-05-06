@@ -40,15 +40,22 @@ export const DateSelect = ({ navigation, route }) => {
 
     useEffect(() => {
         profileLoad()
-    },[])
+    }, [])
 
     async function handleContinue() {
-        setAgendamento({
-            ...route.params.agendamento,
-            dataConsulta: `${selectDay} ${selectDateTime}`
-        });
+        if (selectDay === '') {
+            alert("Selecione o dia da consulta!")
+        } else if (selectDateTime === '') {
+            alert("Selecione o horário da consulta!")
+        } else {
+            setAgendamento({
+                ...route.params.agendamento,
+                dataConsulta: `${selectDay} ${selectDateTime}`
+            });
 
-        setModalVisible(true);
+            setModalVisible(true);
+
+        }
     }
     return (
         <ContainerScrollView>

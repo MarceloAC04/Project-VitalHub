@@ -20,3 +20,8 @@ export const TitleCard = styled(Title)`
 export const TitleSelectScreen = styled(Title)`
     margin-top: 35px;
 `
+export const TitleNotFound = styled(Title)`
+    color: #33303e;
+    font-size: 16px;
+    margin-top: 35px;
+`

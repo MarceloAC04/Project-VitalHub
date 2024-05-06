@@ -7,10 +7,10 @@ import { Calendar } from "../../components/Calendar/Calendar";
 import { Header } from "../../components/Header/Header";
 import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
-import * as Notifications from 'expo-notifications'
 import api from "../../services/Service";
 import { userDecodeToken } from '../../Utils/Auth'
 import moment from "moment";
+import { TitleNotFound } from "../../components/Title/Styles";
 
 export const Home = ({ navigation }) => {
     const [statusLista, setStatusLista] = useState("Pendentes");
@@ -35,7 +35,7 @@ export const Home = ({ navigation }) => {
         // Instancia a chamada da apis
         var url = '';
         (role === "Medico" ? url = 'Medicos' : url = 'Pacientes')
-        await api.get(`/${url}/BuscarPorData?data=${calendarDate}&id=${userId}`)
+        await api.get(`/${url}/BuscarPorData?${calendarDate}&id=${userId}`)
             .then(response => {
                 setAppointmentList(response.data)
             }).catch(error => {
@@ -55,77 +55,51 @@ export const Home = ({ navigation }) => {
     }, [calendarDate])
 
     return (
-        <>
+        <Container>
+            <StatusBar />
+            <Header
+                navi={() => navigation.navigate('UserProfile')}
+            />
+            <Calendar
+                setCalendarDate={setCalendarDate}
+            />
+
+            <StatusButtonContainer>
+                <FilterStatusButton
+                    textButton={"Agendadas"}
+                    clickButton={statusLista === "Pendentes"}
+                    onPress={() => setStatusLista("Pendentes")}
+                />
+
+                <FilterStatusButton
+                    textButton={"Realizadas"}
+                    clickButton={statusLista === "Realizados"}
+                    onPress={() => setStatusLista("Realizados")}
+                />
+                <FilterStatusButton
+                    textButton={"Canceladas"}
+                    clickButton={statusLista === "Cancelados"}
+                    onPress={() => setStatusLista("Cancelados")}
+                />
+            </StatusButtonContainer>
             {role === "Medico" ? (
-                <Container>
-                    <StatusBar />
-                    <Header
-                        navi={() => navigation.navigate('UserProfile')}
-                    />
-                    <Calendar
-                        setCalendarDate={setCalendarDate}
-                    />
-
-                    <StatusButtonContainer>
-                        <FilterStatusButton
-                            textButton={"Agendadas"}
-                            clickButton={statusLista === "Pendentes"}
-                            onPress={() => setStatusLista("Pendentes")}
-                        />
-
-                        <FilterStatusButton
-                            textButton={"Realizadas"}
-                            clickButton={statusLista === "Realizados"}
-                            onPress={() => setStatusLista("Realizados")}
-                        />
-                        <FilterStatusButton
-                            textButton={"Canceladas"}
-                            clickButton={statusLista === "Cancelados"}
-                            onPress={() => setStatusLista("Cancelados")}
-                        />
-                    </StatusButtonContainer>
-
-                    <CardList
-                        status={statusLista}
-                        cardsData={appointmentList}
-                        navi={navigation}
-                    />
-                </Container>
+                <>
+                    {appointmentList.length === 0 ? (<TitleNotFound>Nenhuma consulta encontrada!</TitleNotFound>) :
+                        (<CardList
+                            status={statusLista}
+                            cardsData={appointmentList}
+                            navi={navigation}
+                        />)}
+                </>
             ) : (
-                <Container>
-                    <StatusBar />
-                    <Header
-                        navi={() => navigation.navigate('UserProfile')}
-                    />
-                    <Calendar
-                        setCalendarDate={setCalendarDate}
-                    />
-
-                    <StatusButtonContainer>
-                        <FilterStatusButton
-                            textButton={"Agendadas"}
-                            clickButton={statusLista === "Pendentes"}
-                            onPress={() => setStatusLista("Pendentes")}
-                        />
-
-                        <FilterStatusButton
-                            textButton={"Realizadas"}
-                            clickButton={statusLista === "Realizados"}
-                            onPress={() => setStatusLista("Realizados")}
-                        />
-                        <FilterStatusButton
-                            textButton={"Canceladas"}
-                            clickButton={statusLista === "Cancelados"}
-                            onPress={() => setStatusLista("Cancelados")}
-                        />
-                    </StatusButtonContainer>
-
+                <>
+                {appointmentList.length === 0 ? (<TitleNotFound>Nenhuma consulta encontrada!</TitleNotFound>) 
+                : (
                     <CardMedicList
                         status={statusLista}
                         cardsData={appointmentList}
                         navi={navigation}
-                    />
-
+                    />) }
                     <ScheduleAppointmentButton
                         navigation={navigation}
                         setModalVisible={setModalVisible}
@@ -133,8 +107,9 @@ export const Home = ({ navigation }) => {
                         onPressModal={() => setModalVisible(true)}
                         onPressCancel={() => setModalVisible(false)}
                     />
-
-                </Container>)}
-        </>
+                  
+                </>
+                )}
+        </Container>
     )
 }
