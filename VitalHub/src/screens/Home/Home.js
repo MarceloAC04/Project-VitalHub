@@ -4,13 +4,13 @@ import { StatusButtonContainer } from "../../components/StatusButton/Styles";
 import { CardList, CardMedicList } from "../../components/CardList/CardList";
 import { Container } from "../../components/Container/Styles"
 import { Calendar } from "../../components/Calendar/Calendar";
+import { TitleNotFound } from "../../components/Title/Styles";
 import { Header } from "../../components/Header/Header";
+import { userDecodeToken } from '../../Utils/Auth';
 import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import api from "../../services/Service";
-import { userDecodeToken } from '../../Utils/Auth'
 import moment from "moment";
-import { TitleNotFound } from "../../components/Title/Styles";
 
 export const Home = ({ navigation }) => {
     const [statusLista, setStatusLista] = useState("Pendentes");
@@ -35,7 +35,7 @@ export const Home = ({ navigation }) => {
         // Instancia a chamada da apis
         var url = '';
         (role === "Medico" ? url = 'Medicos' : url = 'Pacientes')
-        await api.get(`/${url}/BuscarPorData?${calendarDate}&id=${userId}`)
+        await api.get(`/${url}/BuscarPorData?data=${calendarDate}&id=${userId}`)
             .then(response => {
                 setAppointmentList(response.data)
             }).catch(error => {
@@ -46,7 +46,7 @@ export const Home = ({ navigation }) => {
     useEffect(() => {
         roleLoad()
         ListAppointment()
-    }, [])
+    }, [statusLista])
 
     useEffect(() => {
         if (calendarDate !== '') {

@@ -1,14 +1,14 @@
-import { ButtonCapture, ButtonExit, ButtonFlip, ButtonLatest, ButtonModalPhotoView, LastPhoto, ModalPhoto, ModalPhotoContainer, ViewButton, ViewFlip } from "./Styles"
+import { ButtonCapture, ButtonExit, ButtonFlip, ButtonLatest, ButtonModalPhotoView, LastPhoto, ModalPhoto, ModalPhotoContainer, ViewButton, ViewFlip } from "./Styles";
 import { FontAwesome, Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { ButtonSecondary } from '../SecondaryButton/SecondaryButton';
 import { ButtonModalAppointment } from '../Button/Button';
-import { ContainerIcons } from '../Container/Styles'
+import { ContainerIcons } from '../Container/Styles';
 import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera, CameraType } from 'expo-camera'
 import { useEffect, useState } from 'react';
+import { Alert, Modal } from 'react-native';
 import { useRef } from "react";
-import { Alert, Modal } from 'react-native'
 
 export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, getMediaLibrary = false, ...rest }) => {
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.back)

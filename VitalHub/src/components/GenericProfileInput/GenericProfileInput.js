@@ -31,6 +31,7 @@ export const GenericProfileAddressInput = ({ textLabel, placeholder }) => {
         </GenericProfileInputContainerAddress>
     )
 }
+
 export const GenericProfileEditAddressInput = ({ textLabel, placeholder, onChangeText }) => {
     return (
         <GenericProfileInputContainerAddress>

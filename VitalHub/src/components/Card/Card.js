@@ -15,9 +15,9 @@ import {
     CardMedicSelectContainer,
     RealizedCardLinkText
 } from "./Style";
-import { SubTitleCard, SubTitleCardAge, SubTitleCardScore, SubTitleClinicCard, SubTitleMedicCard } from "../SubTitle/Styles";
+import { SubTitleCard, SubTitleCardAge, SubTitleClinicCard, SubTitleMedicCard } from "../SubTitle/Styles";
 import { ModalAppointment, ModalLocalAppointment } from "../Modal/Modal";
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign, Fontisto } from '@expo/vector-icons';
 import { UserProfilePhotoCard } from "../UserProfilePhoto/Styles";
 import { TitleCard } from "../Title/Styles";
 import { useState } from "react";
@@ -69,7 +69,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
             <UserProfilePhotoCard src={img} />
             <CardContainerText>
                 <TitleCard>{name}</TitleCard>
-                <SubTitleCardAge>{age} anos  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                <SubTitleCardAge>{age} anos <Fontisto name="ellipse" size={7}  color="#D9D9D9" />  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
                 {situation == 'Pendentes' ? (
                     <ScheduleContainer>
                         <ScheduleTime> <AntDesign name="clockcircle" size={14} color="#49B3BA" />  {schedule}</ScheduleTime>
@@ -161,7 +161,7 @@ export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, dataConsul
                 <UserProfilePhotoCard src={img} />
                 <CardContainerText>
                     <TitleCard>Dr.{name}</TitleCard>
-                    <SubTitleCardAge>CRM-{crm}  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                    <SubTitleCardAge>CRM-{crm}  <Fontisto name="ellipse" size={7}  color="#D9D9D9" />  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
                     <ModalLocalAppointment
                         visible={modalLocalVisible}
                         onPressCancel={() => setModalLocalVisible(false)}

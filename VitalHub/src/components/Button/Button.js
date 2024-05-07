@@ -1,6 +1,6 @@
 import { ActivityIndicator } from "react-native";
 import { Button, ButtonCancelRouteMap, ButtonMedicRecord, ButtonRouteMap, ButtonTitle, ButtonTitleGoogle, GoogleButton, GreyButton, ModalAppointmentButton, ModalConfirmAppointmentButton } from "./Styles"
-import { MaterialCommunityIcons, AntDesign, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign, FontAwesome5} from '@expo/vector-icons';
 import { Loading } from "../Loading/Styles";
 import { useState } from "react";
 
@@ -86,6 +86,7 @@ export const RouteMapButton = ({ onPress }) => {
         </ButtonRouteMap>
     )
 }
+
 export const RouteCancelMapButton = ({ onPress }) => {
     return (
         <ButtonCancelRouteMap onPress={onPress}>

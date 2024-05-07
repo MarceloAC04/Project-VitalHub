@@ -3,7 +3,7 @@ import { UserProfilePhotoHeader } from "../../components/UserProfilePhoto/Styles
 import { SubTitle } from "../../components/SubTitle/Styles";
 import { TitleHeader } from "../../components/Title/Styles";
 import { FontAwesome } from '@expo/vector-icons';
-import { userDecodeToken } from '../../Utils/Auth'
+import { userDecodeToken } from '../../Utils/Auth';
 import { useEffect, useState } from "react";
 import api from "../../services/Service";
 

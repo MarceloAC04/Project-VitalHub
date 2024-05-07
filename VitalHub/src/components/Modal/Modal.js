@@ -98,7 +98,6 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
 }
 
 export const ModalScheduleAppointment = ({ navigation, setModalVisible, animation, transparent, visible, onPressConfirm, onPressCancel, ...rest }) => {
-    const [statusAppoinment, setStatusAppoinment] = useState("");
     const [statusButton, setStatusButton] = useState("")
 
     const [appointment, setAppoinment] = useState(null);
@@ -138,7 +137,7 @@ export const ModalScheduleAppointment = ({ navigation, setModalVisible, animatio
                                     textButton={'Exame'}
                                     clickButton={statusButton === "Exame"}
                                     onPress={() => {
-                                        setStatusButton("Exame"); setStatusAppoinment({
+                                        setStatusButton("Exame"); setAppoinment({
                                             ...appointment,
 
                                             prioridadeId: "37DB74DE-9AD6-44D0-973E-C717DF50AE4B",
@@ -151,7 +150,7 @@ export const ModalScheduleAppointment = ({ navigation, setModalVisible, animatio
                                     textButton={'Urgência'}
                                     clickButton={statusButton === "Urgencia"}
                                     onPress={() => {
-                                        setStatusButton("Urgencia"); setStatusAppoinment({
+                                        setStatusButton("Urgencia"); setAppoinment({
                                             ...appointment,
 
                                             prioridadeId: "2200AAC1-DBB5-4777-BD2F-7FDD8D1D55E8",
@@ -210,7 +209,6 @@ export const ModalConfirmAppointment = ({ animation, transparent, visible, appoi
                                 <ModalConfirmAppointmentContainerLabel>
                                     <LabelText>Médico(a) da consulta</LabelText>
                                     <SubTitleModalConfirmLabel>Dr. {appointment.medicoLabel}</SubTitleModalConfirmLabel>
-                                    <SubTitleModalConfirmLabel>{appointment.medicoSpecialityLabel}</SubTitleModalConfirmLabel>
                                 </ModalConfirmAppointmentContainerLabel>
 
                                 <ModalConfirmAppointmentContainerLabel>

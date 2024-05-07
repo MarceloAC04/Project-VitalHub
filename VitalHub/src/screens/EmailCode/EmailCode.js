@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from "react";
 import { EmailCodeInput, EmailCodeInputContainer } from "../../components/EmailCodeInput/Styles";
 import { ButtonSecondary } from "../../components/SecondaryButton/SecondaryButton";
 import { Container, ContainerIcons } from "../../components/Container/Styles";
 import { ButtonEnter } from "../../components/Button/Button";
 import { SubTitle } from "../../components/SubTitle/Styles";
+import { LinkAccount } from "../../components/Links/Styles";
 import { Title } from "../../components/Title/Styles";
 import { Logo } from "../../components/Logo/Styles";
+import { useEffect, useRef, useState } from "react";
 import { AntDesign } from '@expo/vector-icons';
-import { LinkAccount } from "../../components/Links/Styles";
 import api from "../../services/Service";
 
 export const EmailCode = ({navigation, route}) => {
