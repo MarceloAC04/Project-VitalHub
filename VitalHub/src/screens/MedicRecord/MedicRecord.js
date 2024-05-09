@@ -49,7 +49,7 @@ export const MedicRecord = ({ navigation, route }) => {
                 setDiagnostico(BuscarId.diagnostico)
                 setDescricao(BuscarId.descricao)
                 setMedicamento(BuscarId.receita.medicamento)
-                setDescricaoExame(BuscarId.exames[0].descricao)
+                // setDescricaoExame(BuscarId.exames[0].descricao)
 
                 // Faça o que precisar com os dados da consulta associada ao paciente clicado
             } else {
@@ -128,7 +128,7 @@ export const MedicRecord = ({ navigation, route }) => {
 
                 <GenericProfileInputContainerRow>
                     <MedicRecordButton onPress={() => setOpenCamera(true)} placeholder={'Enviar'} />
-                    <CardLinkText onPress={() => setPhoto(null)}> Cancelar </CardLinkText>
+                    <CardLinkText onPress={() => setDescricao('')}> Cancelar </CardLinkText>
                 </GenericProfileInputContainerRow>
 
                 <AppCamera

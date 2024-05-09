@@ -5,13 +5,13 @@ import { ButtonModalAppointment } from '../Button/Button';
 import { ContainerIcons } from '../Container/Styles';
 import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
-import { Camera, CameraType } from 'expo-camera'
+import { Camera, CameraView } from 'expo-camera'
 import { useEffect, useState } from 'react';
 import { Alert, Modal } from 'react-native';
 import { useRef } from "react";
 
 export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, getMediaLibrary = false, ...rest }) => {
-    const [cameraType, setCameraType] = useState(Camera.Constants.Type.back)
+    const [cameraType, setCameraType] = useState('back');
     const [lastestPhoto, setLatestPhoto] = useState(null); // salva a ultima foto da galeria
     const [openModalPhoto, setOpenModalPhoto] = useState(false)
     const cameraRef = useRef(null)
@@ -114,12 +114,12 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
                 </ModalPhotoContainer>
             ) : (
                 <ViewFlip>
-                    <Camera
+                    <CameraView
                         ref={cameraRef}
-                        type={cameraType}
+                        facing={cameraType}
                         style={{ flex: 1, width: '100%', height: '80%' }}
                     >
-                    </Camera>
+                    </CameraView>
                     <ViewButton>
                         <ButtonLatest onPress={() => SelectImageGallery()}>
                             {lastestPhoto != null ? (
@@ -131,7 +131,7 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
                             }
 
                         </ButtonLatest>
-                        <ButtonFlip onPress={() => setCameraType(cameraType == CameraType.front ? CameraType.back : CameraType.front)}>
+                        <ButtonFlip onPress={() => setCameraType(current => current === 'back' ? 'front' : 'back')}>
                             <MaterialCommunityIcons name="camera-flip" size={23} color="#fff" />
                         </ButtonFlip>
 

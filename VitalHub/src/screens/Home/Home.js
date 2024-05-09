@@ -2,7 +2,7 @@ import { ScheduleAppointmentButton } from "../../components/ScheduleAppointmentB
 import { FilterStatusButton } from "../../components/StatusButton/StatusButton";
 import { StatusButtonContainer } from "../../components/StatusButton/Styles";
 import { CardList, CardMedicList } from "../../components/CardList/CardList";
-import { Container } from "../../components/Container/Styles"
+import { Container } from "../../components/Container/Styles";
 import { Calendar } from "../../components/Calendar/Calendar";
 import { TitleNotFound } from "../../components/Title/Styles";
 import { Header } from "../../components/Header/Header";

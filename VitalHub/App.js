@@ -15,6 +15,7 @@ import { Register } from './src/screens/Register/Register';
 import { Login } from './src/screens/Login/Login';
 import { Reset } from './src/screens/Reset/Reset';
 import { StatusBar } from 'expo-status-bar';
+import 'react-native-reanimated'
 
 //Instancia do stack navigator
 const Stack = createNativeStackNavigator();
