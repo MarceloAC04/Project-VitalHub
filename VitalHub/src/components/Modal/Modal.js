@@ -18,10 +18,9 @@ import { ButtonSecondary } from "../SecondaryButton/SecondaryButton";
 import { UserProfilePhotoModal } from "../UserProfilePhoto/Styles";
 import { LabelText } from "../LabelText/Styles";
 import { Title } from "../Title/Styles";
-import { Modal } from "react-native";
-import { useEffect, useState } from "react";
-import { userDecodeToken } from '../../Utils/Auth'
-import api from "../../services/Service"; 
+import { Modal} from "react-native";
+import { useState } from "react";
+import api from "../../services/Service";
 
 
 export const ModalAppointment = ({ id, idSituacao, animation, transparent, visible, onPressCancel, onPressConfirm, img, name, age, email, situation, ...rest }) => {
@@ -101,8 +100,15 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
     )
 }
 
-export const ModalScheduleAppointment = ({ animation, transparent, visible, onPressConfirm, onPressCancel, ...rest }) => {
-    const [statusAppoinment, setStatusAppoinment] = useState("");
+export const ModalScheduleAppointment = ({ navigation, setModalVisible, animation, transparent, visible, onPressConfirm, onPressCancel, ...rest }) => {
+    const [statusButton, setStatusButton] = useState("")
+
+    const [appointment, setAppoinment] = useState(null);
+
+    async function handleContinue() {
+        await setModalVisible(false)
+        navigation.replace("ClinicSelect", { agendamento: appointment })
+    }
     return (
         <Modal {...rest}
             animationType={animation}
@@ -119,20 +125,41 @@ export const ModalScheduleAppointment = ({ animation, transparent, visible, onPr
                             <AppointmentLevelButtonContainer>
                                 <AppointmentLevelButton
                                     textButton={'Rotina'}
-                                    clickButton={statusAppoinment === "Rotina"}
-                                    onPress={() => setStatusAppoinment("Rotina")}
+                                    clickButton={statusButton === "Rotina"}
+                                    onPress={() => {
+                                        setStatusButton("Rotina"); setAppoinment({
+                                            ...appointment,
+
+                                            prioridadeId: "A6E99737-491C-4D11-8A02-4A5E4CF5B3B8",
+                                            prioridadeLabel: "Rotina"
+                                        })
+                                    }}
                                 />
 
                                 <AppointmentLevelButton
                                     textButton={'Exame'}
-                                    clickButton={statusAppoinment === "Exame"}
-                                    onPress={() => setStatusAppoinment("Exame")}
+                                    clickButton={statusButton === "Exame"}
+                                    onPress={() => {
+                                        setStatusButton("Exame"); setAppoinment({
+                                            ...appointment,
+
+                                            prioridadeId: "E7E997E1-0F62-45BA-B7A7-A25BE5D59D3D",
+                                            prioridadeLabel: "Exame"
+                                        })
+                                    }}
                                 />
 
                                 <AppointmentLevelButton
                                     textButton={'Urgência'}
-                                    clickButton={statusAppoinment === "Urgencia"}
-                                    onPress={() => setStatusAppoinment("Urgencia")}
+                                    clickButton={statusButton === "Urgencia"}
+                                    onPress={() => {
+                                        setStatusButton("Urgencia"); setAppoinment({
+                                            ...appointment,
+
+                                            prioridadeId: "1CC84D9C-D6AA-4D70-811E-900D33658F7F",
+                                            prioridadeLabel: "Urgência"
+                                        })
+                                    }}
                                 />
                             </AppointmentLevelButtonContainer>
                         </ScheduleAppointmentContainer>
@@ -141,12 +168,17 @@ export const ModalScheduleAppointment = ({ animation, transparent, visible, onPr
                             <LabelText>informe a localização desejada</LabelText>
                             <ScheduleAppointmentInput
                                 placeholder={'Informe a localização'}
+                                value={appointment ? appointment.localizacao : null}
+                                onChangeText={(txt) => setAppoinment({
+                                    ...appointment,
+                                    localizacao: txt
+                                })}
                             />
                         </ScheduleAppointmentContainer>
                     </ModalScheduleAppointmentFormContainer>
 
                     <ButtonModalAppointment
-                        onPress={onPressConfirm}
+                        onPress={() => handleContinue()}
                         placeholder={'confirmar'}
                     />
 
@@ -160,48 +192,42 @@ export const ModalScheduleAppointment = ({ animation, transparent, visible, onPr
     )
 }
 
-export const ModalConfirmAppointment = ({ animation, transparent, visible, date, appointmentTime, onPressCancel, onPressConfirm }) => {
+export const ModalConfirmAppointment = ({ animation, transparent, visible, appointment, onPressCancel, onPressConfirm, ...rest }) => {
     return (
         <Modal
+            {...rest}
             animationType={animation}
             transparent={transparent}
             visible={visible}>
             <ModalView>
                 <ModalConfirmAppointmentContainer>
-                    <Title>Agendar consulta</Title>
-                    <SubTitleModalConfirm>Consulte os dados selecionados para a sua consulta</SubTitleModalConfirm>
+                    {appointment == null ? (null) : (
+                        <>
+                            <Title>Agendar consulta</Title><SubTitleModalConfirm>Consulte os dados selecionados para a sua consulta</SubTitleModalConfirm><ModalConfirmAppointmentContent>
+                                <ModalConfirmAppointmentContainerLabel>
+                                    <LabelText>Data da consulta</LabelText>
+                                    <SubTitleModalConfirmLabel>{appointment.dataConsulta}</SubTitleModalConfirmLabel>
+                                </ModalConfirmAppointmentContainerLabel>
 
-                    <ModalConfirmAppointmentContent>
-                        <ModalConfirmAppointmentContainerLabel>
-                            <LabelText>Data da consulta</LabelText>
-                            <SubTitleModalConfirmLabel>{date} {appointmentTime}</SubTitleModalConfirmLabel>
-                        </ModalConfirmAppointmentContainerLabel>
+                                <ModalConfirmAppointmentContainerLabel>
+                                    <LabelText>Médico(a) da consulta</LabelText>
+                                    <SubTitleModalConfirmLabel>Dr. {appointment.medicoLabel}</SubTitleModalConfirmLabel>
+                                </ModalConfirmAppointmentContainerLabel>
 
-                        <ModalConfirmAppointmentContainerLabel>
-                            <LabelText>Médico(a) da consulta</LabelText>
-                            <SubTitleModalConfirmLabel>Dra Alessandra</SubTitleModalConfirmLabel>
-                            <SubTitleModalConfirmLabel>Demartologa, Esteticista</SubTitleModalConfirmLabel>
-                        </ModalConfirmAppointmentContainerLabel>
+                                <ModalConfirmAppointmentContainerLabel>
+                                    <LabelText>Local da consulta</LabelText>
+                                    <SubTitleModalConfirmLabel>{appointment.localizacao}, SP</SubTitleModalConfirmLabel>
+                                </ModalConfirmAppointmentContainerLabel>
 
-                        <ModalConfirmAppointmentContainerLabel>
-                            <LabelText>Local da consulta</LabelText>
-                            <SubTitleModalConfirmLabel>São Paulo, SP</SubTitleModalConfirmLabel>
-                        </ModalConfirmAppointmentContainerLabel>
-
-                        <ModalConfirmAppointmentContainerLabel>
-                            <LabelText>Tipo da consulta</LabelText>
-                            <SubTitleModalConfirmLabel>Rotina</SubTitleModalConfirmLabel>
-                        </ModalConfirmAppointmentContainerLabel>
-                    </ModalConfirmAppointmentContent>
-
-                    <ButtonModalConfirmAppointment
-                        onPress={onPressConfirm}
-                        placeholder={'confirmar'}
-                    />
-
-                    <ButtonSecondary
-                        onPress={onPressCancel}
-                    />
+                                <ModalConfirmAppointmentContainerLabel>
+                                    <LabelText>Tipo da consulta</LabelText>
+                                    <SubTitleModalConfirmLabel>{appointment.prioridadeLabel}</SubTitleModalConfirmLabel>
+                                </ModalConfirmAppointmentContainerLabel>
+                            </ModalConfirmAppointmentContent><ButtonModalConfirmAppointment
+                                onPress={onPressConfirm}
+                                placeholder={'confirmar'} /><ButtonSecondary
+                                onPress={onPressCancel} />
+                        </>)}
                 </ModalConfirmAppointmentContainer>
             </ModalView>
         </Modal>
@@ -217,8 +243,8 @@ export const ModalLocalAppointment = ({ animation, transparent, onPressConfirm, 
             <ModalMedicalRecordView>
                 <ModalMedicalRecordContainer>
                     <UserProfilePhotoModal src={img} />
-                    <Title>{name} </Title>
-                    <SubTitle>{specialty} <SubTitle>{crm}</SubTitle></SubTitle>
+                    <Title>Dr. {name} </Title>
+                    <SubTitle>{specialty} - <SubTitle>CRM-{crm}</SubTitle></SubTitle>
                     <ButtonEnter
                         onPress={onPressConfirm}
                         placeholder={'Ver local da consulta'}

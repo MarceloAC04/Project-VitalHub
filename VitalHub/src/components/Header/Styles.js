@@ -28,6 +28,10 @@ export const HeaderUserProfile = styled.TouchableOpacity`
 
 export const HeaderUserProfileText = styled(HeaderUserProfile)`
     gap: 3px;
+    /* Adicionei esse width */
+    width: 100%;
     flex-direction: column;
     align-items: flex-start;
+    //overflow: hidden;
+    
 `

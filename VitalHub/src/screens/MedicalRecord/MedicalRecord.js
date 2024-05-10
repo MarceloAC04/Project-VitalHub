@@ -7,14 +7,13 @@ import { SubTitle } from "../../components/SubTitle/Styles";
 import { Title } from "../../components/Title/Styles";
 import { useEffect, useState } from "react";
 import api from "../../services/Service";
-import { userDecodeToken } from '../../Utils/Auth'
 
 
 export const MedicalRecord = ({ navigation, route }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     //Dados do paciente (UserId é o ID da Consulta)
-    const { userImg, userName, userAge, userEmail, userId, consultaData } = route.params;
+    const { userImg, userName, userAge, userEmail, Id, consultaData } = route.params;
 
     //Id do Medico
     const [userid, setUserid] = useState('')
@@ -25,50 +24,41 @@ export const MedicalRecord = ({ navigation, route }) => {
 
     //Receita
     const [medicamento, setMedicamento] = useState('')
-    // const [observacao, setObservacao] = useState('')
 
-    async function AtualizarDados() {
-        try {
+    const [validate, setValidate] = useState(null)
 
-            await api.put(`/Consultas/Prontuario`, { consultaId: userId, medicamento: medicamento, descricao:descricao, diagnostico: diagnostico });
-
-            console.log("Consulta Atualizada com sucesso com sucesso.", `diagnostico: ${diagnostico}, medicamento: ${medicamento}, descricao: ${descricao}  `);
-
-
-        } catch (error) {
-            console.log("Erro ao Atualizar consulta:", error);
-        }
+    async function validation(data) {
+        data.forEach(e => {
+            if (e === "") {
+                alert("Preencha os campos vazios!")
+                setValidate(false)
+                return;
+            } else {
+                setValidate(true)
+            }
+        });
     }
 
     async function BuscarDiagnostico() {
         console.log(consultaData)
         try {
-            const token = await userDecodeToken();
-            if (token != null) {
-                setUserid(token.jti)
-            }
-            console.log(token.jti)
-            console.log(userId)
+            console.log(Id);
             //Rota usada para Buscar os dados
-            const response = await api.get(`/Medicos/BuscarPorData?data=${consultaData}&id=${token.jti}`);
+             const response = await api.get(`/Medicos/BuscarPorData?data=${consultaData}&id=${Id}`);
 
             //Defini "consults" como um objeto para acessar os dados
             const consultas = response.data;
 
-            //Defini que o objeto BuscarId, is
-            const BuscarId = consultas.find(consulta => consulta.id === userId);
-
-            if (BuscarId) {
+            if (consultas) {
 
                 // Consulta encontrada, agora você pode acessar os dados dela
-                console.log(BuscarId)
-                console.log("Diagnóstico do paciente:", BuscarId.diagnostico);
-                console.log("Exames do paciente:", BuscarId.descricao);
-                console.log("Medicamento do Paciente:", BuscarId.receita.medicamento);
-                
-                setDiagnostico(BuscarId.diagnostico)
-                setDescricao(BuscarId.descricao)
-                setMedicamento(BuscarId.receita.medicamento)
+                console.log("Diagnóstico do paciente:", consultas.diagnostico);
+                console.log("Exames do paciente:", consultas.descricao);
+                console.log("Medicamento do Paciente:", consultas.receita.medicamento);
+
+                setDiagnostico(consultas.diagnostico)
+                setDescricao(consultas.descricao)
+                setMedicamento(consultas.receita.medicamento)
 
                 // Faça o que precisar com os dados da consulta associada ao paciente clicado
             } else {
@@ -77,8 +67,21 @@ export const MedicalRecord = ({ navigation, route }) => {
         } catch (error) {
             console.log(error)
         }
+    }
 
-
+    async function AtualizarDados() {
+        const data = [];
+        try {
+            data.push(descricao, medicamento, diagnostico)
+            validation(data)
+            if (validate) {
+                await api.put(`/Consultas/Prontuario`, { consultaId: Id, medicamento: medicamento, descricao: descricao, diagnostico: diagnostico });
+    
+                console.log("Consulta Atualizada com sucesso com sucesso.", `diagnostico: ${diagnostico}, medicamento: ${medicamento}, descricao: ${descricao}  `);
+            }
+        } catch (error) {
+            console.log("Erro ao Atualizar consulta:", error);
+        }
     }
 
     useEffect(() => {
@@ -96,21 +99,23 @@ export const MedicalRecord = ({ navigation, route }) => {
                     !isEditing ? (
                         <>
                             <GenericTextArea
-                                textLabel={'Descrição da Consulta'}
-                                placeholder={descricao}
                                 editable={false}
+                                textLabel={'Descrição da Consulta'}
+                                placeholder={` ${descricao}
+                                `}
                             />
 
                             <GenericInput
                                 textLabel={'Diagnóstico do paciente'}
-                                placeholder={diagnostico}
                                 editable={false}
+                                placeholder={diagnostico}
                             />
 
                             <GenericTextArea
                                 textLabel={'Prescrição médica'}
-                                placeholder={`Medicamento: ${medicamento}`}
                                 editable={false}
+                                placeholder={`Medicamento: ${medicamento}
+                                `}
                             />
                         </>
 
@@ -119,19 +124,18 @@ export const MedicalRecord = ({ navigation, route }) => {
                             <GenericEditTextArea
                                 textLabel={'Descrição da Consulta'}
                                 onChangeText={(text) => setDescricao(text)}
-                                defaultValue={descricao}
+                                placeholder={'Descrição'}
                             />
 
                             <GenericEditInput
                                 textLabel={'Diagnóstico do paciente'}
                                 onChangeText={(text) => setDiagnostico(text)}
-                                defaultValue={diagnostico}
-
+                                placeholder={'Infecção no ouvindo'}
                             />
                             <GenericEditTextArea
                                 textLabel={'Prescrição Médica'}
                                 onChangeText={(text) => setMedicamento(text)}
-                                defaultValue={medicamento}
+                                placeholder={'Prescrição Médica'}
                             />
                         </>
                     )
@@ -139,7 +143,9 @@ export const MedicalRecord = ({ navigation, route }) => {
 
                 {/* Marchetti - Mudei OnPress */}
                 <ButtonEnter
-                    onPress={() => isEditing ? [setIsEditing(false), AtualizarDados() ]: null}
+                    onPress={() => {
+                        isEditing ? (setIsEditing(false), AtualizarDados()) : null
+                    }}
                     placeholder={'Salvar'}
                 />
 

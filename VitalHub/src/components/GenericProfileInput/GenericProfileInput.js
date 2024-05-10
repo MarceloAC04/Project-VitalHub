@@ -23,15 +23,21 @@ export const GenericInput = ({ textLabel, placeholder, editable }) => {
     )
 }
 
-export const GenericProfileAddressInput = ({ textLabel, placeholder,onChangeText, defaultValue }) => {
+export const GenericProfileAddressInput = ({ textLabel, placeholder,onChangeText, defaultValue,editable }) => {
     return (
         <GenericProfileInputContainerAddress>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInputAddress placeholder={placeholder} onChangeText={onChangeText} defaultValue={defaultValue}/>
+            <GenericProfileInputAddress 
+                placeholder={placeholder} 
+                onChangeText={onChangeText} 
+                defaultValue={defaultValue}
+                editable={editable}
+                />
         </GenericProfileInputContainerAddress>
     )
 }
-export const GenericProfileEditAddressInput = ({ textLabel, placeholder, onChangeText,defaultValue }) => {
+
+export const GenericProfileEditAddressInput = ({ textLabel, placeholder, onChangeText, defaultValue  }) => {
     return (
         <GenericProfileInputContainerAddress>
             <LabelText>{textLabel}</LabelText>
@@ -40,17 +46,17 @@ export const GenericProfileEditAddressInput = ({ textLabel, placeholder, onChang
     )
 }
 
-export const GenericTextArea = ({ textLabel, placeholder, editable, onChangeText, value }) => {
+export const GenericTextArea = ({ textLabel, placeholder, value, editable, onChangeText}) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
             <GenericProfileTextArea
                 placeholder={placeholder}
                 multiline
+                editable={editable}
                 value={value}
                 numberOfLines={5}
                 maxLength={200}
-                editable={editable}
                 onChangeText={onChangeText}
             />
         </GenericProfileInputContainer>
@@ -73,11 +79,16 @@ export const GenericEditTextArea = ({ textLabel, placeholder, onChangeText, defa
     )
 }
 
-export const GenericEditInput = ({ textLabel, placeholder, onChangeText,defaultValue}) => {
+export const GenericEditInput = ({ textLabel, value, placeholder, onChangeText, defaultValue }) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInputEdition placeholder={placeholder} onChangeText={onChangeText} defaultValue={defaultValue} />
+            <GenericProfileInputEdition 
+                value={value} 
+                placeholder={placeholder} 
+                onChangeText={onChangeText} 
+                defaultValue={defaultValue} 
+            />
         </GenericProfileInputContainer>
     )
 }

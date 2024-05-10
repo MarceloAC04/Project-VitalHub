@@ -33,7 +33,7 @@ LocaleConfig.locales['pt-br'] = {
 
 LocaleConfig.defaultLocale = 'pt-br'
 
-export const CalendarSchedule = ({ selected = '', selectedDateDay = null }) => {
+export const CalendarSchedule = ({ selected = '', selectDay = null }) => {
   return (
     <ScheduleCalendar
       hideArrows={true}
@@ -46,7 +46,7 @@ export const CalendarSchedule = ({ selected = '', selectedDateDay = null }) => {
             if (state === 'disabled') {
               return null;
             }
-              selectedDateDay(date.dateString)
+              selectDay(date.dateString)
           }
           }>
             <ContainerDateDay isSelected={date.dateString === selected}>

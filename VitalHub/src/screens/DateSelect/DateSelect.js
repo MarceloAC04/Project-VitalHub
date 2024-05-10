@@ -1,16 +1,98 @@
 import { CalendarSchedule } from "../../components/CalendarSchedule/CalendarSchedule";
+import { Container, ContainerScrollView } from "../../components/Container/Styles";
 import { ButtonSecondary } from "../../components/SecondaryButton/SecondaryButton";
 import { SelectInputPicker } from "../../components/SelectInput/SelectInput";
 import { ModalConfirmAppointment } from "../../components/Modal/Modal";
-import { Container, ContainerScrollView } from "../../components/Container/Styles";
-import { ButtonEnter } from "../../components/Button/Button";
 import { TitleSelectScreen } from "../../components/Title/Styles";
-import { useState } from "react";
+import { ButtonEnter } from "../../components/Button/Button";
+import * as Notifications from 'expo-notifications';
+import { userDecodeToken } from "../../Utils/Auth";
+import { useEffect, useState } from "react";
+import api from "../../services/Service";
 
-export const DateSelect = ({ navigation }) => {
-    const [select, setSelect] = useState('')
-    const [selectDate, setSelectDate] = useState('')
+Notifications.requestPermissionsAsync();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+})
+
+export const DateSelect = ({ navigation, route }) => {
+    const [agendamento, setAgendamento] = useState(null)
+    const [selectDay, setSelectDay] = useState('')
+    const [selectDateTime, setSelectDateTime] = useState('')
     const [modalVisible, setModalVisible] = useState(false);
+
+    const [userId, setUserId] = useState('')
+    async function profileLoad() {
+        const token = await userDecodeToken();
+
+        if (token != null) {
+            setUserId(token.jti);
+        }
+    }
+
+    const handleCallNotification = async () => {
+
+        const {status} = await Notifications.getPermissionsAsync();
+    
+        //verifica se o usuário concedeu permissão para notificações
+        if (status !== "granted") {
+          alert("Você não deixou as notificações ativas.")
+          return;
+        }
+    
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "Consulta agendada!",
+            body: "Sua consulta marcada com sucesso!",
+            sound: 'default',
+          },
+          trigger: null
+        })
+      }
+
+    async function ConfirmAppointment() {
+        await api.post(`/Consultas/Cadastrar`, {
+            ...agendamento,
+            descricao: route.params.agendamento.prioridadeLabel,
+            pacienteId: userId,
+            situacaoId: "4F2D403F-8928-4135-A306-724CF9FB4BFA"
+        }).then(async response => {
+            console.log(response.data);
+            setModalVisible(false)
+            handleCallNotification()
+            navigation.replace("Main")
+        }).catch(error => {
+            console.log(agendamento);
+            console.log(error);
+        })
+    }
+
+    useEffect(() => {
+        console.log(agendamento);
+        profileLoad()
+    }, [])
+
+    async function handleContinue() {
+        if (selectDay === '') {
+            alert("Selecione o dia da consulta!")
+        } else if (selectDateTime === '') {
+            alert("Selecione o horário da consulta!")
+        } else {
+            setAgendamento({
+                ...route.params.agendamento,
+                dataConsulta: `${selectDay} ${selectDateTime}`
+            });
+
+            setModalVisible(true);
+
+        }
+    }
     return (
         <ContainerScrollView>
 
@@ -18,31 +100,27 @@ export const DateSelect = ({ navigation }) => {
                 <TitleSelectScreen>Selecionar data</TitleSelectScreen>
 
                 <CalendarSchedule
-                    selected={select}
-                    selectedDateDay={setSelect}
+                    selected={selectDay}
+                    selectDay={setSelectDay}
                 />
 
                 <SelectInputPicker
                     textLabel={'Selecione um horário disponível'}
                     textInput={'Selecionar horário'}
-                    selectedTime={setSelectDate}
+                    setSelectDateTime={setSelectDateTime}
                 />
 
                 <ButtonEnter
-                    onPress={() => setModalVisible(true)}
+                    onPress={() => handleContinue()}
                     placeholder={'confirmar'}
                 />
 
                 <ModalConfirmAppointment
                     visible={modalVisible}
                     animation={'fade'}
-                    onPressConfirm={() => {
-                        setModalVisible(false)
-                        navigation.replace("Main")
-                    }}
+                    onPressConfirm={() => ConfirmAppointment()}
                     onPressCancel={() => setModalVisible(false)}
-                    date={select}
-                    appointmentTime={selectDate}
+                    appointment={agendamento}
                 />
 
                 <ButtonSecondary

@@ -84,4 +84,14 @@ export const CardMedicSelectContainer = styled(CardClinicContainer)`
     align-self: center;
     gap: 10px;
     padding: 12px 20px 12px 12px;
+    
+`
+
+export const CardClinicContainerContent = styled.View`
+    width: 100%;
+    height: 90%;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    /* border: 1px solid green; */
 `

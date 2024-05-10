@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
                 var connectionString = "";
 
 
-                var containerName = "blockcontainerg5dm";
+                var containerName = "blockcontainerg_5dm";
 
 
                 string fotoUrl = await AzureBlobStorageHelper.UpLoadImageBlobAsync(form.Arquivo!, connectionString!, containerName!);

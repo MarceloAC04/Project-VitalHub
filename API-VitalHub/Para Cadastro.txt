@@ -1,0 +1,14 @@
+Para facilitar o cadastro de consulta
+4F2D403F-8928-4135-A306-724CF9FB4BFA = Pendente
+2B1C8842-EE7A-451B-B005-FD5ABE2A1151 = Realizados
+
+{
+  "situacaoId": "4F2D403F-8928-4135-A306-724CF9FB4BFA",
+  "pacienteId": "35D4133E-6D3F-4E2D-BDAC-E34DA2396AE3",
+  "medicoClinicaId": "4BA8E25E-A9C2-4272-96D6-8BE056AB960E",
+  "receitaId": "1089947D-B603-4ADD-953D-0D80F90C770D",
+  "prioridadeId": "1CC84D9C-D6AA-4D70-811E-900D33658F7F",
+  "dataConsulta": "2024-05-06T11:31:12.299Z",
+  "descricao": "Teste 3 Name",
+  "diagnostico": "Testador 3 Name"
+}

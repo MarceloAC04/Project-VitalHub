@@ -5,13 +5,14 @@ import { ButtonModalAppointment } from '../Button/Button';
 import { ContainerIcons } from '../Container/Styles'
 import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
-import { Camera, CameraType } from 'expo-camera'
+import { Camera, CameraType, CameraView, useCameraPermissions } from 'expo-camera'
 import { useEffect, useState } from 'react';
 import { useRef } from "react";
 import { Alert, Modal } from 'react-native'
 
 export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, getMediaLibrary = false, ...rest }) => {
-    const [cameraType, setCameraType] = useState(Camera.Constants.Type.back)
+    const [cameraType, setCameraType] = useState('back')
+    const [permission, requestPermission] = useCameraPermissions();
     const [lastestPhoto, setLatestPhoto] = useState(null); // salva a ultima foto da galeria
     const [openModalPhoto, setOpenModalPhoto] = useState(false)
     const cameraRef = useRef(null)
@@ -32,11 +33,10 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
         setOpenModalPhoto(false)
     }
 
-    async function closeCamera()
-    {
+    async function closeCamera() {
         await setOpenCamera(false)
     }
-    
+
 
     async function SavePhoto() {
         if (photo) {
@@ -84,6 +84,10 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
         }
     }
 
+    function toggleCameraFacing() {
+        setFacing(current => (current === 'back' ? 'front' : 'back'));
+    }
+
     useEffect(() => {
         if (getMediaLibrary) {
             GetLastPhoto();
@@ -114,12 +118,12 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
                 </ModalPhotoContainer>
             ) : (
                 <ViewFlip>
-                    <Camera
+                    <CameraView
                         ref={cameraRef}
-                        type={cameraType}
+                        facing={cameraType}
                         style={{ flex: 1, width: '100%', height: '80%' }}
                     >
-                    </Camera>
+                    </CameraView>
                     <ViewButton>
                         <ButtonLatest onPress={() => SelectImageGallery()}>
                             {lastestPhoto != null ? (
@@ -131,7 +135,7 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
                             }
 
                         </ButtonLatest>
-                        <ButtonFlip onPress={() => setCameraType(cameraType == CameraType.front ? CameraType.back : CameraType.front)}>
+                        <ButtonFlip onPress={() => setCameraType(current => current === 'back' ? 'front' : 'back')}>
                             <MaterialCommunityIcons name="camera-flip" size={23} color="#fff" />
                         </ButtonFlip>
 

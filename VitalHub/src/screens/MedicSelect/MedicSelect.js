@@ -5,35 +5,14 @@ import { ButtonEnter } from "../../components/Button/Button";
 import {TitleSelectScreen } from "../../components/Title/Styles";
 import { useEffect, useState } from "react";
 import api from '../../services/Service'
-
-const medicCards = [
-    {
-        id: 1,
-        img: require('../../assets/foto-de-perfil-medico-2.png'),
-        medicName: 'Dra Alessandra',
-        speciality: 'Demartologa, Esteticista'
-    },
-    {
-        id: 2,
-        img: require('../../assets/foto-de-perfil-medico-3.png'),
-        medicName: 'Dr Kumushiro',
-        speciality: 'Cirurgião, Cardiologista'
-    },
-    {
-        id: 3,
-        img: require('../../assets/foto-de-perfil-medico-4.png'),
-        medicName: 'Dr Rodrigo Santos',
-        speciality: 'Clínico, Pediatra'
-    },
-]
-
-
-export const MedicSelect = ({ navigation }) => {
+ 
+export const MedicSelect = ({ navigation, route }) => {
     const [medicList, setMedicList] = useState([]);
+    const [selectMedic, setSelectMedic] = useState(null);
 
     async function ListarMedicos() {
         // Instancia a chamada da api
-      await api.get('/Medicos')
+      await api.get(`/Medicos/BuscarPorIdClinica?id=${route.params.agendamento.clinicaId}`)
        .then(response => {
         setMedicList(response.data)
        }).catch( error => {
@@ -41,7 +20,18 @@ export const MedicSelect = ({ navigation }) => {
        })
     }
 
+    function handleContinue() {
+        navigation.replace("DateSelect", {
+            agendamento: {
+
+            ...route.params.agendamento, 
+            ...selectMedic
+            }
+        })
+    }
+
     useEffect(() => {
+        console.log(route)
         ListarMedicos()
     }, [])
     return (
@@ -50,11 +40,12 @@ export const MedicSelect = ({ navigation }) => {
 
             <MedicSelectCardList
                 cardsData={medicList}
+                setSelectMedic={setSelectMedic}
             />
 
             <ButtonEnter
                 placeholder={'confirmar'}
-                onPress={() => navigation.replace("DateSelect")}
+                onPress={() => handleContinue()}
             />
 
             <ButtonSecondary

@@ -1,5 +1,7 @@
-import { GenericEditInput, GenericInput,
-        GenericProfileAddressInput, GenericProfileEditAddressInput } from "../../components/GenericProfileInput/GenericProfileInput";
+import {
+    GenericEditInput, GenericInput,
+    GenericProfileAddressInput, GenericProfileEditAddressInput
+} from "../../components/GenericProfileInput/GenericProfileInput";
 import { GenericProfileInputContainerRow } from "../../components/GenericProfileInput/Styles";
 import { Container, ContainerScrollView } from "../../components/Container/Styles";
 import { UserProfilePhoto } from "../../components/UserProfilePhoto/Styles";
@@ -22,7 +24,6 @@ export const UserProfile = ({ navigation }) => {
     const [openCamera, setOpenCamera] = useState(false)
     const [uriCameraCapture, setUriCameraCapture] = useState(null)
 
-
     const [userId, setUserId] = useState('') // Deixando salvo aqui para caso eu use
     const [isEditing, setIsEditing] = useState(false)
 
@@ -41,6 +42,8 @@ export const UserProfile = ({ navigation }) => {
 
     //Medico
     const [userCrm, setUserCrm] = useState('')
+
+    const [validate, setValidate] = useState(null)
 
     //Função para puxar os dados
     async function profileLoad() {
@@ -92,46 +95,46 @@ export const UserProfile = ({ navigation }) => {
         }
     }
 
-    async function updateProfile() {
+    async function validation(data) {
+        data.forEach(e => {
+            if (e === "") {
+                alert("Preencha os campos vazios!")
+                setValidate(false)
+                return;
+            } else {
+                setValidate(true)
+            }
+        });
+    }
 
-        console.log(userId, userCidade, userCep, userLugardouro, userCrm, userRole)
+    async function updateProfile() {
+        const data = [];
         try {
             if (userRole === 'Medico') {
-
-                const token = await AsyncStorage.getItem('token');
-                console.log(token);
-
-                const axiosInstance = axios.create({
-                    baseURL: 'http://172.16.39.87:4466/api',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        
-                    },
-                });
-
-                //Mudei o caminho tava assim = /Medicos/AtualizarPerfil?id=${userId}
-                await axiosInstance.put(`/Medicos`, {
-                    crm: userCrm,
-                    cep: userCep,
-                    logradouro: userLugardouro,
-                    cidade: userCidade
-
-                })
-
-                console.log("Perfil de Medico Atualizado com sucesso");
+                data.push(userCep, userLugardouro, userCidade, userCrm)
+                validation(data)
+                if (validate) {
+                    await api.put(`/Medicos?idUsuario=${userId}`, {
+                        cep: userCep,
+                        logradouro: userLugardouro,
+                        cidade: userCidade,
+                        crm: userCrm
+                    })
+                }
             }
             else {
-                //Mudei o caminho tava Assim = /Pacientes/AtualizarPerfil?id=${userId}
-                await api.put(`/Pacientes?idUsuario=${userId}`, {
-                    dataNascimento: userNiver,
-                    cpf: userCpf,
-                    cep: userCep,
-                    logradouro: userLugardouro,
-                    cidade: userCidade
-                })
-                console.log("Perfil de Paciente Atualizado com sucesso");
+                data.push(userNiver, userLugardouro, userCidade, userCpf, userCep)
+                validation(data)
+                if (validate) {
+                    await api.put(`/Pacientes?idUsuario=${userId}`, {
+                        dataNascimento: userNiver,
+                        cpf: userCpf,
+                        cep: userCep,
+                        logradouro: userLugardouro,
+                        cidade: userCidade
+                    })
+                }
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -160,7 +163,6 @@ export const UserProfile = ({ navigation }) => {
     }
 
     useEffect(() => {
-        console.log(uriCameraCapture);
         if (uriCameraCapture) {
             UpdateProfilePhoto()
         }
@@ -231,12 +233,13 @@ export const UserProfile = ({ navigation }) => {
                     </>
                 ) : (
                     <>
-                        {/* Marchetti - Troquei todos os Placeholders aqui por um defaultValue. Caso eu deixace o input estaria impossível de escrever*/}
+                        {/* Marchetti - Troquei todos os Placeholders aqui por um defaultValue. Caso eu deixasse o input estaria impossível de escrever*/}
                         {
                             userRole === "Paciente" ? (
                                 <GenericEditInput
                                     textLabel={'Data de Nascimento: '}
-                                    defaultValue={userNiver}
+                                    placeholder={userNiver}
+                                    value={userNiver}
                                     onChangeText={(txt) => setUserNiver(txt)}
                                 />
                             ) : (<></>)
@@ -246,13 +249,13 @@ export const UserProfile = ({ navigation }) => {
                             userRole === 'Medico' ? (
                                 <GenericEditInput
                                     textLabel={'CRM:'}
-                                    defaultValue={userCrm}
+                                    value={userCrm}
                                     onChangeText={(txt) => setUserCrm(txt)}
                                 />
                             ) : (
                                 <GenericEditInput
                                     textLabel={'CPF:'}
-                                    defaultValue={userCpf}
+                                    value={userCpf}
                                     onChangeText={(txt) => setUserCpf(txt)}
                                 />
                             )
@@ -279,7 +282,6 @@ export const UserProfile = ({ navigation }) => {
                     </>
                 )}
 
-                {/* Marchetti - mudei onPress() */}
                 <ButtonEnter
                     placeholder={'salvar'}
                     onPress={() => {
@@ -288,12 +290,11 @@ export const UserProfile = ({ navigation }) => {
                     }}
                 />
 
-                {!isEditing ? (
-                    <ButtonEnter
-                        onPress={() => setIsEditing(true)}
-                        placeholder={'Editar'}
-                    />
-                ) : null}
+
+                <ButtonEnter
+                    placeholder={'editar'}
+                    onPress={() => setIsEditing(true)}
+                />
 
                 <ButtonGrey
                     onPress={() => {

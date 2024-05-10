@@ -7,6 +7,7 @@ import {
 } from "../ScheduleCard/Styles";
 import {
     CardClinicContainer,
+    CardClinicContainerContent,
     CardClinicContent,
     CardContainer,
     CardContainerLinkText,
@@ -38,7 +39,6 @@ Notifications.setNotificationHandler({
 
 export const AppointmentCard = ({ id, img, name, navi, age, query, urgency, schedule, email, situation, idSituacao, data }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [urgencyy, setUrgency] = useState(urgency)
 
     async function handleClose(screen, props) {
         setModalVisible(false)
@@ -65,20 +65,18 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, urgency, sche
         })
     }
 
-    useEffect(() =>{
-        {
-           urgency === '1' ? setUrgency('Rotina') : urgency === '2' ? setUrgency('Exame') : setUrgency('Urgência')
-        }
-    },[])
-
-
-
+    //O nome da pessoa sempre será dividio em duas partes caso o Usuario coloque um nome muito longo
+    function truncateName(fullName) {
+        const parts = fullName.split(' '); // Divide o nome em partes usando o espaço como separador
+        const truncatedName = parts.slice(0, 2).join(' '); // Pega apenas as duas primeiras partes e as junta novamente
+        return truncatedName;
+    }
     return (
         <CardContainer>
             <UserProfilePhotoCard src={img} />
             <CardContainerText>
-                <TitleCard>{name}</TitleCard>
-                <SubTitleCardAge>{age} anos - <SubTitleCard>{urgencyy}</SubTitleCard></SubTitleCardAge>
+                <TitleCard>{truncateName(name)}</TitleCard>
+                <SubTitleCardAge>{age} anos - <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
                 {situation == 'Pendentes' ? (
                     <ScheduleContainer>
                         <ScheduleTime> <AntDesign name="clockcircle" size={14} color="#49B3BA" />  {schedule}</ScheduleTime>
@@ -135,15 +133,22 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, urgency, sche
     )
 }
 
-export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, urgency,query, crm, specialty, schedule, email, situation, data, idSituacao }) => {
+export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, query, crm, specialty, schedule, email, situation, dataConsulta, idSituacao }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalLocalVisible, setModalLocalVisible] = useState(false);
-    const [urgencyy, setUrgency] = useState(urgency)
+
 
     async function handleClose(screen, props) {
         setModalVisible(false)
         setModalLocalVisible(false)
         navi.navigate(screen, props)
+    }
+
+    //O nome da pessoa sempre será dividio em duas partes caso o Usuario coloque um nome muito longo
+    function truncateName(fullName) {
+        const parts = fullName.split(' '); // Divide o nome em partes usando o espaço como separador
+        const truncatedName = parts.slice(0, 2).join(' '); // Pega apenas as duas primeiras partes e as junta novamente
+        return truncatedName;
     }
 
     const handleCallNotification = async () => {
@@ -166,19 +171,15 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, urgen
         })
     }
 
-    useEffect(() =>{
-        {
-           urgency === '1' ? setUrgency('Rotina') : urgency === '2' ? setUrgency('Exame') : setUrgency('Urgência')
-        }
-    },[])
+
 
     return (
         <CardMedicContainer onPress={() => { situation === 'Pendentes' ? setModalLocalVisible(true) : null }}>
             <>
                 <UserProfilePhotoCard src={img} />
                 <CardContainerText>
-                    <TitleCard>Dr.{name}</TitleCard>
-                    <SubTitleCardAge>CRM-{crm} - <SubTitleCard>{urgencyy}</SubTitleCard></SubTitleCardAge>
+                    <TitleCard>Dr.{truncateName(name)}</TitleCard>
+                    <SubTitleCardAge>CRM-{crm} - <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
                     <ModalLocalAppointment
                         visible={modalLocalVisible}
                         onPressCancel={() => setModalLocalVisible(false)}
@@ -191,6 +192,7 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, urgen
                         idClinic={idClinic}
                         crm={crm}
                         specialty={specialty}
+                        
                     />
                     {situation == 'Pendentes' ? (
                         <ScheduleContainer>
@@ -228,7 +230,7 @@ export const AppointmentMedicCard = ({ id, img, idClinic, name, age, navi, urgen
                     </>
                 ) : (null)}
                 {situation == 'Realizados' ? (
-                    <RealizedCardLinkText onPress={() => navi.replace('MedicRecord', { consultaId: id, userImg: img, userName: name, userCrm: crm, specialty: specialty, consultaData: data })}>Ver Prontuário</RealizedCardLinkText>
+                    <RealizedCardLinkText onPress={() => navi.replace('MedicRecord', { consultaId: id, userImg: img, userName: name, userCrm: crm, specialty: specialty, consultaData: dataConsulta })}>Ver Prontuário</RealizedCardLinkText>
                 ) : (<CardLinkText>           </CardLinkText>)}
             </>
         </CardMedicContainer >
@@ -239,29 +241,40 @@ export const ClinicSelectCard = ({ id, clinicName, onPress, isSelect = false, sc
     return (
         <CardClinicContainer isSelect={isSelect} onPress={onPress}>
             <>
-                <CardClinicContent>
-                    <TitleCard>{clinicName}</TitleCard>
-                    {/* <SubTitleCardScore><AntDesign name="star" size={16} color="#F9A620" />{score}</SubTitleCardScore> */}
-                </CardClinicContent>
+                {/* Marchetti -- Adcionei 'CardClinicContainerContent' um container para ajustar o CSS do Card  */}
+                <CardClinicContainerContent>
+                    <CardClinicContent>
+                        <TitleCard>{clinicName}</TitleCard>
+                        {/* <SubTitleCardScore><AntDesign name="star" size={16} color="#F9A620" />{score}</SubTitleCardScore> */}
+                    </CardClinicContent>
 
-                <CardClinicContent>
-                    <SubTitleClinicCard>{city}</SubTitleClinicCard>
-                    <ScheduleClinicContainer>
-                        <ScheduleTime><MaterialCommunityIcons name="calendar-outline" size={16} color="#49B3BA" /> Seg - Sex</ScheduleTime>
-                    </ScheduleClinicContainer>
-                </CardClinicContent>
+                    <CardClinicContent>
+                        <SubTitleClinicCard>{city}</SubTitleClinicCard>
+                        <ScheduleClinicContainer>
+                            <ScheduleTime><MaterialCommunityIcons name="calendar-outline" size={14} color="#49B3BA" /> Seg - Sex</ScheduleTime>
+                        </ScheduleClinicContainer>
+                    </CardClinicContent>
+                </CardClinicContainerContent>
             </>
         </CardClinicContainer>
     )
 }
 
 export const MedicSelectCard = ({ id, img, medicName, onPress, isSelect = false, speciality }) => {
+
+    function truncateName(fullName) {
+        const parts = fullName.split(' '); // Divide o nome em partes usando o espaço como separador
+        const truncatedName = parts.slice(0, 2).join(' '); // Pega apenas as duas primeiras partes e as junta novamente
+        return truncatedName;
+    }
+
+
     return (
         <CardMedicSelectContainer isSelect={isSelect} onPress={onPress}>
             <>
                 <UserProfilePhotoCard src={img} />
                 <CardContainerText>
-                    <TitleCard>{medicName}</TitleCard>
+                    <TitleCard>{truncateName(medicName)}</TitleCard>
                     <SubTitleMedicCard>{speciality}</SubTitleMedicCard>
                 </CardContainerText>
             </>

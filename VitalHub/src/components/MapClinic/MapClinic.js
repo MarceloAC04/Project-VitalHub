@@ -1,12 +1,12 @@
 import { getCurrentPositionAsync, requestForegroundPermissionsAsync } from "expo-location";
 import { MapClinic, MapFindingLocationText } from "../../components/MapClinic/Styles";
+import {RouteCancelMapButton, RouteMapButton } from '../Button/Button';
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { ActivityIndicator, StyleSheet } from "react-native";
 import { useEffect, useRef, useState } from "react";
-import { mapskey } from '../../services/mapsApiKeys'
+import { mapskey } from '../../services/mapsApiKeys';
 import { SubTitle } from "../SubTitle/Styles";
-import {RouteCancelMapButton, RouteMapButton } from '../Button/Button'
 
 
 export const MapClinicLocation = ({lat, long}) => {

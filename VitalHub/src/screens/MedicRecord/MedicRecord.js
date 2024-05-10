@@ -10,9 +10,8 @@ import { CardLinkText } from "../../components/Card/Style";
 import { Title } from "../../components/Title/Styles";
 import { useEffect, useState,useRef } from "react";
 import { Line } from "./Styles";
-import { Alert } from "react-native";
-import { userDecodeToken } from '../../Utils/Auth'
-import api from "../../services/Service";
+import api from '../../services/Service'
+import { userDecodeToken } from "../../Utils/Auth";
 
 export const MedicRecord = ({ navigation, route }) => {
     const [openCamera, setOpenCamera] = useState(false)
@@ -83,10 +82,9 @@ export const MedicRecord = ({ navigation, route }) => {
     }
 
     async function InsertExame() {
-        const idConsulta = route.params.Id
-        console.log(idConsulta)
+        console.log(consultaId)
         const formData = new FormData();
-        formData.append("ConsultaId", idConsulta )
+        formData.append("ConsultaId", consultaId)
         formData.append("Imagem", {
             uri: uriCameraCapture,
             name: `image.${uriCameraCapture.split('.').pop()}`,
@@ -96,7 +94,7 @@ export const MedicRecord = ({ navigation, route }) => {
 
         await api.post(`/Exame/Cadastrar`, formData, {
             headers: {
-                "Content-Type" : "multipart/form-data"
+                "Content-Type": "multipart/form-data"
             }
         }).then(response => {
             setDescricaoExame(descricaoExame + "\n" + response.data.descricao)
@@ -106,8 +104,9 @@ export const MedicRecord = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        console.log(uriCameraCapture);
-    },[])
+       DadosDoMedico()
+       
+    }, [])
 
     useEffect(() => {
         if (uriCameraCapture != null) {
@@ -147,24 +146,26 @@ export const MedicRecord = ({ navigation, route }) => {
 
                 <GenericTextArea
                     textLabel={'Descrição da Consulta'}
-                    placeholder={ descricao}
+                    placeholder={` ${descricao}
+                    `}
                     editable={false}
                 />
 
                 <GenericInput
                     textLabel={'Diagnóstico do paciente'}
-                    placeholder={diagnostico }
+                    placeholder={diagnostico}
                     editable={false}
                 />
 
                 <GenericTextArea
-                    textLabel={'Descrição da Consulta'}
-                    placeholder={`Medicamento: ${medicamento}`}
+                    textLabel={'Prescrição médica'}
                     editable={false}
+                    placeholder={` ${medicamento}
+                    `}
                 />
 
                 <GenericPrescriptionInput
-                    textLabel={'Prescrição médica'}
+                    textLabel={'Exame'}
                     placeholder={`Nenhuma foto informada`}
                     img={uriCameraCapture}
                 />
@@ -178,13 +179,14 @@ export const MedicRecord = ({ navigation, route }) => {
                     visibleCamera={openCamera}
                     setUriCameraCapture={setUriCameraCapture}
                     setOpenCamera={setOpenCamera}
+                    getMediaLibrary={true}
                 />
 
                 <Line />
 
                 <GenericTextArea
-                value={descricaoExame}
-                placeholder={`Resultado do exame de sangue : \ntudo normal`}
+                    value={descricaoExame}
+                    placeholder={descricaoExame}
                 />
                 <ButtonSecondary
                     onPress={() => navigation.replace('Main')}

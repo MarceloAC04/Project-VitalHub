@@ -4,12 +4,12 @@ import { StatusButtonContainer } from "../../components/StatusButton/Styles";
 import { CardList, CardMedicList } from "../../components/CardList/CardList";
 import { Container } from "../../components/Container/Styles"
 import { Calendar } from "../../components/Calendar/Calendar";
+import { TitleNotFound } from "../../components/Title/Styles";
 import { Header } from "../../components/Header/Header";
+import { userDecodeToken } from '../../Utils/Auth';
 import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
-import * as Notifications from 'expo-notifications'
 import api from "../../services/Service";
-import { userDecodeToken } from '../../Utils/Auth'
 import moment from "moment";
 
 export const Home = ({ navigation }) => {
@@ -33,10 +33,9 @@ export const Home = ({ navigation }) => {
     }
 
     async function ListAppointment() {
-        //Define a URL do caminho do Swegger
+        // Instancia a chamada da apis
         var url = '';
-        // Instancia a chamada da api
-        (role === 'Medico' ? url = 'Medicos' : url = 'Pacientes')
+        (role === "Medico" ? url = 'Medicos' : url = 'Pacientes')
         await api.get(`/${url}/BuscarPorData?data=${calendarDate}&id=${userId}`)
             .then(response => {
                 setAppointmentList(response.data)
@@ -49,98 +48,70 @@ export const Home = ({ navigation }) => {
     useEffect(() => {
         roleLoad()
         ListAppointment()
-    }, [])
+    }, [statusLista])
 
     useEffect(() => {
         if (calendarDate !== '') {
             ListAppointment()
-            console.log(calendarDate);
         }
     }, [calendarDate])
 
     return (
-        <>
+        <Container>
+            <StatusBar />
+            <Header
+                navi={() => navigation.navigate('UserProfile')}
+            />
+            <Calendar
+                setCalendarDate={setCalendarDate}
+            />
+
+            <StatusButtonContainer>
+                <FilterStatusButton
+                    textButton={"Agendadas"}
+                    clickButton={statusLista === "Pendentes"}
+                    onPress={() => setStatusLista("Pendentes")}
+                />
+
+                <FilterStatusButton
+                    textButton={"Realizadas"}
+                    clickButton={statusLista === "Realizados"}
+                    onPress={() => setStatusLista("Realizados")}
+                />
+                <FilterStatusButton
+                    textButton={"Canceladas"}
+                    clickButton={statusLista === "Cancelados"}
+                    onPress={() => setStatusLista("Cancelados")}
+                />
+            </StatusButtonContainer>
             {role === "Medico" ? (
-                <Container>
-                    <StatusBar />
-                    <Header
-                        navi={() => navigation.navigate('UserProfile')}
-                    />
-                    <Calendar
-                        setCalendarDate={setCalendarDate}
-                    />
-
-                    <StatusButtonContainer>
-                        <FilterStatusButton
-                            textButton={"Agendadas"}
-                            clickButton={statusLista === "Pendentes"}
-                            onPress={() => setStatusLista("Pendentes")}
-                        />
-
-                        <FilterStatusButton
-                            textButton={"Realizadas"}
-                            clickButton={statusLista === "Realizados"}
-                            onPress={() => setStatusLista("Realizados")}
-                        />
-                        <FilterStatusButton
-                            textButton={"Canceladas"}
-                            clickButton={statusLista === "Cancelados"}
-                            onPress={() => setStatusLista("Cancelados")}
-                        />
-                    </StatusButtonContainer>
-
-                    <CardList
-                        status={statusLista}
-                        cardsData={appointmentList}
-                        navi={navigation}
-                    />
-                </Container>
+                <>
+                    {appointmentList.length === 0 ? (<TitleNotFound>Nenhuma consulta encontrada!</TitleNotFound>) :
+                        (<CardList
+                            status={statusLista}
+                            cardsData={appointmentList}
+                            navi={navigation}
+                        />)}
+                </>
             ) : (
-                <Container>
-                    <StatusBar />
-                    <Header
-                        navi={() => navigation.navigate('UserProfile')}
-                    />
-                    <Calendar
-                        setCalendarDate={setCalendarDate}
-                    />
-
-                    <StatusButtonContainer>
-                        <FilterStatusButton
-                            textButton={"Agendadas"}
-                            clickButton={statusLista === "Pendentes"}
-                            onPress={() => setStatusLista("Pendentes")}
-                        />
-
-                        <FilterStatusButton
-                            textButton={"Realizadas"}
-                            clickButton={statusLista === "Realizados"}
-                            onPress={() => setStatusLista("Realizados")}
-                        />
-                        <FilterStatusButton
-                            textButton={"Canceladas"}
-                            clickButton={statusLista === "Cancelados"}
-                            onPress={() => setStatusLista("Cancelados")}
-                        />
-                    </StatusButtonContainer>
-
+                <>
+                {appointmentList.length === 0 ? (<TitleNotFound>Nenhuma consulta encontrada!</TitleNotFound>) 
+                : (
                     <CardMedicList
                         status={statusLista}
                         cardsData={appointmentList}
                         navi={navigation}
-                    />
-
+                    />) }
                     <ScheduleAppointmentButton
-                        onPressConfirmAppointment={() => {
-                            setModalVisible(false)
-                            navigation.navigate("ClinicSelect")
-                        }}
+                        navigation={navigation}
+                        setModalVisible={setModalVisible}
                         visible={modalVisible}
                         onPressModal={() => setModalVisible(true)}
                         onPressCancel={() => setModalVisible(false)}
                     />
-
-                </Container>)}
-        </>
+                  
+                </>
+                )}
+        </Container>
     )
 }

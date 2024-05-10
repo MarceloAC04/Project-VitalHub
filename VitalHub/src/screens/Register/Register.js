@@ -6,7 +6,6 @@ import { Title } from "../../components/Title/Styles";
 import { Input } from "../../components/Input/Styles";
 import { Logo } from "../../components/Logo/Styles";
 import api from "../../services/Service";
-import { Alert } from "react-native";
 import { useState } from "react";
 
 export const Register = ({ navigation }) => {
@@ -19,6 +18,12 @@ export const Register = ({ navigation }) => {
         try {
             if (senha !== confirmarSenha) {
                 alert("Senha errada!")
+                return;
+            } else if (email === '' || name === '') {
+                alert("Insira email ou nome válido")
+                return;
+            } else if (senha.length() < 4) {
+                alert("Senha fraca")
             }
             const formData = new FormData();
             formData.append("Rg", "")
@@ -63,6 +68,7 @@ export const Register = ({ navigation }) => {
 
             <Input placeholder={'Insira seu Nome'}
                 value={name}
+                userName
                 onChangeText={(txt) => setName(txt)}
             />
 
