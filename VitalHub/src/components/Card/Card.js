@@ -20,7 +20,7 @@ import { ModalAppointment, ModalLocalAppointment } from "../Modal/Modal";
 import { MaterialCommunityIcons, AntDesign, Fontisto } from '@expo/vector-icons';
 import { UserProfilePhotoCard } from "../UserProfilePhoto/Styles";
 import { TitleCard } from "../Title/Styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as Notifications from 'expo-notifications'
 
@@ -37,6 +37,7 @@ Notifications.setNotificationHandler({
 
 export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, email, situation, idSituacao }) => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [status, setStatus] = useState('');
 
     async function handleClose(screen, props) {
         setModalVisible(false)
@@ -62,6 +63,10 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
           trigger: null
         })
       }
+
+      useEffect(() => {
+        {query === 0 ? setStatus("Rotina") : query === 1 ? setStatus("Exame") : setStatus("Urgência")}
+      },[])
     
 
     return (
@@ -69,7 +74,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
             <UserProfilePhotoCard src={img} />
             <CardContainerText>
                 <TitleCard>{name}</TitleCard>
-                <SubTitleCardAge>{age} anos <Fontisto name="ellipse" size={7}  color="#D9D9D9" />  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                <SubTitleCardAge>{age} anos <Fontisto name="ellipse" size={7}  color="#D9D9D9" />  <SubTitleCard>{status}</SubTitleCard></SubTitleCardAge>
                 {situation == 'Pendentes' ? (
                     <ScheduleContainer>
                         <ScheduleTime> <AntDesign name="clockcircle" size={14} color="#49B3BA" />  {schedule}</ScheduleTime>
@@ -127,6 +132,7 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
 export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, dataConsulta, name, age, navi, query, crm, specialty, schedule, email, situation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalLocalVisible, setModalLocalVisible] = useState(false);
+    const [status, setStatus] = useState('');
 
     async function handleClose(screen, props) {
         setModalVisible(false)
@@ -153,6 +159,11 @@ export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, dataConsul
           trigger: null
         })
       }
+      
+      useEffect(() => {
+        {query === 0 ? setStatus("Rotina") : query === 1 ? setStatus("Exame") : setStatus("Urgência")}
+      },[])
+    
 
     
     return (
@@ -161,7 +172,7 @@ export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, dataConsul
                 <UserProfilePhotoCard src={img} />
                 <CardContainerText>
                     <TitleCard>Dr.{name}</TitleCard>
-                    <SubTitleCardAge>CRM-{crm}  <Fontisto name="ellipse" size={7}  color="#D9D9D9" />  <SubTitleCard>{query}</SubTitleCard></SubTitleCardAge>
+                    <SubTitleCardAge>CRM-{crm}  <Fontisto name="ellipse" size={7}  color="#D9D9D9" />  <SubTitleCard>{status}</SubTitleCard></SubTitleCardAge>
                     <ModalLocalAppointment
                         visible={modalLocalVisible}
                         onPressCancel={() => setModalLocalVisible(false)}

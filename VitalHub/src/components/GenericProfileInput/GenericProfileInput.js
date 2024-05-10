@@ -57,13 +57,14 @@ export const GenericTextArea = ({ textLabel, placeholder, value, editable }) => 
     )
 }
 
-export const GenericEditTextArea = ({ textLabel, placeholder, onChangeText}) => {
+export const GenericEditTextArea = ({ textLabel, value, placeholder, onChangeText}) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
             <GenericProfileTextAreaEdition
                 placeholder={placeholder}
                 onChangeText={onChangeText}
+                value={value}
                 multiline
                 numberOfLines={5}
                 maxLength={200}

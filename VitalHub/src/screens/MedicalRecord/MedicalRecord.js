@@ -24,6 +24,7 @@ export const MedicalRecord = ({ navigation, route }) => {
 
     //Receita
     const [medicamento, setMedicamento] = useState('')
+    const [descricaoExame, setDescricaoExame] = useState('')
 
     const [validate, setValidate] = useState(null)
 
@@ -58,6 +59,7 @@ export const MedicalRecord = ({ navigation, route }) => {
                 setDiagnostico(consultas.diagnostico)
                 setDescricao(consultas.descricao)
                 setMedicamento(consultas.receita.medicamento)
+                setDescricaoExame(consultas.exames[0].descricao)
 
                 // Faça o que precisar com os dados da consulta associada ao paciente clicado
             } else {
@@ -75,7 +77,7 @@ export const MedicalRecord = ({ navigation, route }) => {
             validation(data)
             if (validate) {
                 await api.put(`/Consultas/Prontuario`, { consultaId: Id, medicamento: medicamento, descricao: descricao, diagnostico: diagnostico });
-    
+
                 console.log("Consulta Atualizada com sucesso com sucesso.", `diagnostico: ${diagnostico}, medicamento: ${medicamento}, descricao: ${descricao}  `);
             }
         } catch (error) {
@@ -116,29 +118,39 @@ export const MedicalRecord = ({ navigation, route }) => {
                                 placeholder={`Medicamento: ${medicamento}
                                 `}
                             />
+
+                            <GenericTextArea
+                                textLabel={"Exame"}
+                                value={descricaoExame}
+                                placeholder={descricaoExame}
+                            />
                         </>
 
                     ) : (
                         <>
                             <GenericEditTextArea
                                 textLabel={'Descrição da Consulta'}
+                                value={descricao}
                                 onChangeText={(text) => setDescricao(text)}
-                                placeholder={'Descrição'}
+                                placeholder={descricao}
                             />
 
                             <GenericEditInput
                                 textLabel={'Diagnóstico do paciente'}
+                                value={diagnostico}
                                 onChangeText={(text) => setDiagnostico(text)}
-                                placeholder={'Infecção no ouvindo'}
+                                placeholder={diagnostico}
                             />
                             <GenericEditTextArea
+                                value={medicamento}
                                 textLabel={'Prescrição Médica'}
                                 onChangeText={(text) => setMedicamento(text)}
-                                placeholder={'Prescrição Médica'}
+                                placeholder={medicamento}
                             />
                         </>
                     )
                 }
+
 
                 <ButtonEnter
                     onPress={() => {

@@ -76,7 +76,7 @@ export const MapClinicLocation = ({lat, long}) => {
                             title='Clinica'
                             pinColor='red'
                         />
-                        {
+                        {/* {
                             routeClinic ? (
                                 <>
                                     <Marker
@@ -114,7 +114,7 @@ export const MapClinicLocation = ({lat, long}) => {
                                     }}
                                 />
                             )
-                        }
+                        } */}
                     </MapView>
                 ) : (
                     <MapFindingLocationText>

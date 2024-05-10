@@ -59,7 +59,7 @@ export const DateSelect = ({ navigation, route }) => {
     async function ConfirmAppointment() {
         await api.post(`/Consultas/Cadastrar`, {
             ...agendamento,
-            descricao: route.params.agendamento.prioridadeLabel,
+            descricao: '',
             pacienteId: userId,
             situacaoId: "7737D6FE-8331-4FB5-AAF4-C671A8A72384"
         }).then(async response => {

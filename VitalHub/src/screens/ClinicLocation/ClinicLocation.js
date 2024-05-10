@@ -35,7 +35,7 @@ export const ClinicLocation = ({ navigation, route }) => {
              />
 
                 <Title>{clincLocation.nomeFantasia}</Title>
-                <SubTitle>São Paulo, SP</SubTitle>
+                <SubTitle>{clincLocation.endereco?.cidade}, SP</SubTitle>
 
                 <GenericInput
                     textLabel={'Endereço'}
