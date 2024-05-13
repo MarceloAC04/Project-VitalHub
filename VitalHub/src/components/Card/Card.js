@@ -23,6 +23,7 @@ import { TitleCard } from "../Title/Styles";
 import { useEffect, useState } from "react";
 
 import * as Notifications from 'expo-notifications'
+import moment from "moment";
 
 Notifications.requestPermissionsAsync();
 
@@ -35,7 +36,7 @@ Notifications.setNotificationHandler({
   }),
 })
 
-export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, email, situation, idSituacao }) => {
+export const AppointmentCard = ({ id, img, name, navi, dataConsulta, age, query, schedule, email, situation, idSituacao }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [status, setStatus] = useState('');
 
@@ -63,6 +64,27 @@ export const AppointmentCard = ({ id, img, name, navi, age, query, schedule, ema
           trigger: null
         })
       }
+
+      async function UpdateAppoinntment() {
+        try {
+
+            setStatus(idSituacao)
+            console.log(id);
+            // Verifica se o status é "Pendente" para permitir o cancelamento
+            if (idSituacao === '7737d6fe-8331-4fb5-aaf4-c671a8a72384' && dataConsulta < moment().format('YYYY-MM-DD') ) {
+                // Chama a rota da API para atualizar o status da consulta para "Cancelar"
+                await api.put(`Consultas/Status?idConsulta=${id}&status=Realizados`);
+                console.log("Consulta atualizada com sucesso.");
+
+            } else {
+                console.log("Não é possível cancelar uma consulta que não está pendente.");
+            }
+        } catch (error) {
+            console.log("Erro ao cancelar consulta:", error);
+        }
+
+
+    }
 
       useEffect(() => {
         {query === 0 ? setStatus("Rotina") : query === 1 ? setStatus("Exame") : setStatus("Urgência")}

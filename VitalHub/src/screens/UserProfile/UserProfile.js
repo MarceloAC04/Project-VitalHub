@@ -189,6 +189,7 @@ export const UserProfile = ({ navigation }) => {
                             userRole === "Paciente" ? (
                                 <GenericInput
                                     textLabel={'Data de Nascimento: '}
+                                    editable={false}
                                     placeholder={userNiver}
                                 />
                             ) : (<></>)
@@ -198,11 +199,13 @@ export const UserProfile = ({ navigation }) => {
                             userRole === 'Medico' ? (
                                 <GenericInput
                                     textLabel={'CRM:'}
+                                    editable={false}
                                     placeholder={userCrm}
                                 />
                             ) : (
                                 <GenericInput
                                     textLabel={'CPF:'}
+                                    editable={false}
                                     placeholder={userCpf}
                                 />
                             )
@@ -210,16 +213,19 @@ export const UserProfile = ({ navigation }) => {
 
                         <GenericInput
                             textLabel={'Logradouro: '}
+                            editable={false}
                             placeholder={userLugardouro}
                         />
 
                         <GenericProfileInputContainerRow>
                             <GenericProfileAddressInput
                                 textLabel={'Cep: '}
+                                editable={false}
                                 placeholder={userCep}
                             />
                             <GenericProfileAddressInput
                                 textLabel={'Cidade: '}
+                                editable={false}
                                 placeholder={userCidade}
                             />
                         </GenericProfileInputContainerRow>

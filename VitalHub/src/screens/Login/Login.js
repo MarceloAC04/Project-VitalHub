@@ -1,18 +1,22 @@
 import { ContentAccount, TextAccount } from "../../components/ContentAccount/Styles";
 import { ButtonEnter, ButtonGoogle } from "../../components/Button/Button";
 import { LinkAccount, LinkMedium } from "../../components/Links/Styles";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Container } from "../../components/Container/Styles";
 import { Title } from "../../components/Title/Styles";
 import { Input } from "../../components/Input/Styles";
 import { Logo } from "../../components/Logo/Styles";
-import { useState } from "react";
 import api from "../../services/Service"
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { LogBox } from 'react-native';
+import { useState } from "react";
+
 
 export const Login = ({ navigation }) => {
     const [email, setEmail] = useState('heitor80@gmail.com')
     const [senha, setSenha] = useState('2345')
-
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+    LogBox.ignoreAllLogs();//Ignore all log notifications
+    
     async function Login() {
 
         try {

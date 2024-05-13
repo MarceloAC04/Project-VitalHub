@@ -14,20 +14,20 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LabelText } from "../LabelText/Styles";
 
-export const GenericInput = ({ textLabel, placeholder }) => {
+export const GenericInput = ({ textLabel, placeholder, editable  }) => {
     return (
         <GenericProfileInputContainer>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInput placeholder={placeholder} />
+            <GenericProfileInput editable={editable} placeholder={placeholder} />
         </GenericProfileInputContainer>
     )
 }
 
-export const GenericProfileAddressInput = ({ textLabel, placeholder }) => {
+export const GenericProfileAddressInput = ({ textLabel, placeholder, editable  }) => {
     return (
         <GenericProfileInputContainerAddress>
             <LabelText>{textLabel}</LabelText>
-            <GenericProfileInputAddress placeholder={placeholder}/>
+            <GenericProfileInputAddress editable={editable} placeholder={placeholder}/>
         </GenericProfileInputContainerAddress>
     )
 }

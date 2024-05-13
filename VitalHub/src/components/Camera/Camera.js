@@ -67,8 +67,9 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
                 false]], first: 1
         })
         if (assets.length > 0) {
-            setLatestPhoto(assets[0].uri)
+            const infoAssets = await MediaLibrary.getAssetInfoAsync(assets[0].id)
         }
+        setLatestPhoto(infoAssets)
     }
 
     async function SelectImageGallery() {

@@ -13,8 +13,8 @@ export const MapClinicLocation = ({lat, long}) => {
     const mapsReference = useRef(null);
     const [initialPosition, setInitialPosition] = useState(null);
     const finalPosition = {
-        latitude: long,
-        longitude: lat
+        latitude: lat,
+        longitude: long
     };
 
     const [routeClinic, setRouteClinic] = useState(false)

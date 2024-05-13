@@ -22,7 +22,7 @@ export const Register = ({ navigation }) => {
             } else if (email === '' || name === '') {
                 alert("Insira email ou nome válido")
                 return;
-            } else if (senha.length() < 4) {
+            } else if (senha.length < 4) {
                 alert("Senha fraca")
             }
             const formData = new FormData();
