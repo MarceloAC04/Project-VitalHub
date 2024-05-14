@@ -32,7 +32,6 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
         try {
 
             setStatus(idSituacao)
-            console.log(id);
             // Verifica se o status é "Pendente" para permitir o cancelamento
             if (idSituacao === '7737d6fe-8331-4fb5-aaf4-c671a8a72384') {
                 // Chama a rota da API para atualizar o status da consulta para "Cancelar"
@@ -45,11 +44,8 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
         } catch (error) {
             console.log("Erro ao cancelar consulta:", error);
         }
-
-
     }
 
-    //useEffect chamando a função
 
     return (
         <Modal {...rest}

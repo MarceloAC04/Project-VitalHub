@@ -15,7 +15,8 @@ import { Register } from './src/screens/Register/Register';
 import { Login } from './src/screens/Login/Login';
 import { Reset } from './src/screens/Reset/Reset';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated'
+import { LogBox } from 'react-native';
+import 'react-native-reanimated';
 
 //Instancia do stack navigator
 const Stack = createNativeStackNavigator();
@@ -37,6 +38,9 @@ export default function App() {
     Quicksand_500Medium,
     Quicksand_600SemiBold
   });
+
+  LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+    LogBox.ignoreAllLogs();//Ignore all log notifications
 
   if (!fontsLoaded && !fontsError) {
     return null;

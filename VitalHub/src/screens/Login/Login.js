@@ -6,7 +6,7 @@ import { Container } from "../../components/Container/Styles";
 import { Title } from "../../components/Title/Styles";
 import { Input } from "../../components/Input/Styles";
 import { Logo } from "../../components/Logo/Styles";
-import api from "../../services/Service"
+import api from "../../services/Service";
 import { LogBox } from 'react-native';
 import { useState } from "react";
 

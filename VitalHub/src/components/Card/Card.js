@@ -24,16 +24,17 @@ import { useEffect, useState } from "react";
 
 import * as Notifications from 'expo-notifications'
 import moment from "moment";
+import api from "../../services/Service";
 
 Notifications.requestPermissionsAsync();
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
+    handleNotification: async () => ({
+        shouldShowAlert: true,
 
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+    }),
 })
 
 export const AppointmentCard = ({ id, img, name, navi, dataConsulta, age, query, schedule, email, situation, idSituacao }) => {
@@ -47,56 +48,51 @@ export const AppointmentCard = ({ id, img, name, navi, dataConsulta, age, query,
 
     const handleCallNotification = async () => {
 
-        const {status} = await Notifications.getPermissionsAsync();
-    
+        const { status } = await Notifications.getPermissionsAsync();
+
         //verifica se o usuário concedeu permissão para notificações
         if (status !== "granted") {
-          alert("Você não deixou as notificações ativas.")
-          return;
+            alert("Você não deixou as notificações ativas.")
+            return;
         }
-    
+
         await Notifications.scheduleNotificationAsync({
-          content: {
-            title: "Consulta cancelada!",
-            body: "Sua consulta marcada foi cancelada",
-            sound: 'default',
-          },
-          trigger: null
+            content: {
+                title: "Consulta cancelada!",
+                body: "Sua consulta marcada foi cancelada",
+                sound: 'default',
+            },
+            trigger: null
         })
-      }
+    }
 
-      async function UpdateAppoinntment() {
+    async function UpdateAppoinntment() {
         try {
-
-            setStatus(idSituacao)
-            console.log(id);
-            // Verifica se o status é "Pendente" para permitir o cancelamento
-            if (idSituacao === '7737d6fe-8331-4fb5-aaf4-c671a8a72384' && dataConsulta < moment().format('YYYY-MM-DD') ) {
-                // Chama a rota da API para atualizar o status da consulta para "Cancelar"
+            if (idSituacao === '7737d6fe-8331-4fb5-aaf4-c671a8a72384' && dataConsulta < moment().format('YYYY-MM-DD')) {
                 await api.put(`Consultas/Status?idConsulta=${id}&status=Realizados`);
                 console.log("Consulta atualizada com sucesso.");
 
-            } else {
-                console.log("Não é possível cancelar uma consulta que não está pendente.");
             }
         } catch (error) {
             console.log("Erro ao cancelar consulta:", error);
         }
-
-
     }
 
-      useEffect(() => {
-        {query === 0 ? setStatus("Rotina") : query === 1 ? setStatus("Exame") : setStatus("Urgência")}
-      },[])
-    
+    useEffect(() => {
+        { query === 0 ? setStatus("Rotina") : query === 1 ? setStatus("Exame") : setStatus("Urgência") }
+    }, [])
+
+    useEffect(() => {
+        UpdateAppoinntment()
+    }, [])
+
 
     return (
         <CardContainer>
             <UserProfilePhotoCard src={img} />
             <CardContainerText>
                 <TitleCard>{name}</TitleCard>
-                <SubTitleCardAge>{age} anos <Fontisto name="ellipse" size={7}  color="#D9D9D9" />  <SubTitleCard>{status}</SubTitleCard></SubTitleCardAge>
+                <SubTitleCardAge>{age} anos <Fontisto name="ellipse" size={7} color="#D9D9D9" />  <SubTitleCard>{status}</SubTitleCard></SubTitleCardAge>
                 {situation == 'Pendentes' ? (
                     <ScheduleContainer>
                         <ScheduleTime> <AntDesign name="clockcircle" size={14} color="#49B3BA" />  {schedule}</ScheduleTime>
@@ -113,8 +109,10 @@ export const AppointmentCard = ({ id, img, name, navi, dataConsulta, age, query,
                     <ModalAppointment
                         visible={modalVisible}
                         onPressCancel={() => setModalVisible(false)}
-                        onPressConfirm={() => { handleClose('Main') 
-                        handleCallNotification()}}
+                        onPressConfirm={() => {
+                            handleClose('Main')
+                            handleCallNotification()
+                        }}
                         animation={'fade'}
                         transparent={true}
                         id={id}
@@ -134,7 +132,7 @@ export const AppointmentCard = ({ id, img, name, navi, dataConsulta, age, query,
                         visible={modalVisible}
                         onPressCancel={() => setModalVisible(false)}
                         onPressConfirm={() => handleClose("MedicalRecord",
-                            {Id: id ,userImg: img, userName: name, userAge: age, userEmail: email})
+                            { Id: id, userImg: img, userName: name, userAge: age, userEmail: email })
                         }
                         animation={'fade'}
                         transparent={true}
@@ -164,37 +162,50 @@ export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, dataConsul
 
     const handleCallNotification = async () => {
 
-        const {status} = await Notifications.getPermissionsAsync();
-    
+        const { status } = await Notifications.getPermissionsAsync();
+
         //verifica se o usuário concedeu permissão para notificações
         if (status !== "granted") {
-          alert("Você não deixou as notificações ativas.")
-          return;
+            alert("Você não deixou as notificações ativas.")
+            return;
         }
-    
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: "Consulta cancelada!",
-            body: "Sua consulta marcada foi cancelada",
-            sound: 'default'
-          },
-          trigger: null
-        })
-      }
-      
-      useEffect(() => {
-        {query === 0 ? setStatus("Rotina") : query === 1 ? setStatus("Exame") : setStatus("Urgência")}
-      },[])
-    
 
-    
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: "Consulta cancelada!",
+                body: "Sua consulta marcada foi cancelada",
+                sound: 'default'
+            },
+            trigger: null
+        })
+    }
+
+    async function UpdateAppoinntment() {
+        try {
+            if (idSituacao === '7737d6fe-8331-4fb5-aaf4-c671a8a72384' && dataConsulta < moment().format('YYYY-MM-DD')) {
+                await api.put(`Consultas/Status?idConsulta=${id}&status=Realizados`);
+                console.log("Consulta atualizada com sucesso.");
+            }
+        } catch (error) {
+            console.log("Erro ao atualizar consulta:", error);
+        }
+    }
+
+    useEffect(() => {
+        { query === 0 ? setStatus("Rotina") : query === 1 ? setStatus("Exame") : setStatus("Urgência") }
+    }, [])
+
+    useEffect(() => {
+        UpdateAppoinntment()
+    }, [])
+
     return (
         <CardMedicContainer onPress={() => { situation === 'Pendentes' ? setModalLocalVisible(true) : null }}>
             <>
                 <UserProfilePhotoCard src={img} />
                 <CardContainerText>
                     <TitleCard>Dr.{name}</TitleCard>
-                    <SubTitleCardAge>CRM-{crm}  <Fontisto name="ellipse" size={7}  color="#D9D9D9" />  <SubTitleCard>{status}</SubTitleCard></SubTitleCardAge>
+                    <SubTitleCardAge>CRM-{crm}  <Fontisto name="ellipse" size={7} color="#D9D9D9" />  <SubTitleCard>{status}</SubTitleCard></SubTitleCardAge>
                     <ModalLocalAppointment
                         visible={modalLocalVisible}
                         onPressCancel={() => setModalLocalVisible(false)}
@@ -224,8 +235,10 @@ export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, dataConsul
                         <ModalAppointment
                             visible={modalVisible}
                             onPressCancel={() => setModalVisible(false)}
-                            onPressConfirm={() => {handleClose('Main')
-                            handleCallNotification()}}
+                            onPressConfirm={() => {
+                                handleClose('Main')
+                                handleCallNotification()
+                            }}
                             animation={'fade'}
                             transparent={true}
                             id={id}
@@ -239,7 +252,7 @@ export const AppointmentMedicCard = ({ id, idSituacao, img, idClinic, dataConsul
                     </>
                 ) : (null)}
                 {situation == 'Realizados' ? (
-                    <RealizedCardLinkText onPress={() => navi.replace('MedicRecord', {consultaId: id, userName: name, userImg: img, userCrm: crm, userSpecialty: specialty, consultaData: dataConsulta})}>Ver Prontuário</RealizedCardLinkText>
+                    <RealizedCardLinkText onPress={() => navi.replace('MedicRecord', { consultaId: id, userName: name, userImg: img, userCrm: crm, userSpecialty: specialty, consultaData: dataConsulta })}>Ver Prontuário</RealizedCardLinkText>
                 ) : (<CardLinkText>           </CardLinkText>)}
             </>
         </CardMedicContainer >

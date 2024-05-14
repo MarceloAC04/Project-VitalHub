@@ -1,9 +1,9 @@
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import { LabelText } from "../LabelText/Styles";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
-import moment from "moment";
 import { useEffect, useState } from "react";
+import moment from "moment";
 
 
 export const SelectInputPicker = ({ textInput, textLabel, setSelectDateTime}) => {

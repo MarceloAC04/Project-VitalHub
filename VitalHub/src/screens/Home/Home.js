@@ -10,6 +10,7 @@ import { userDecodeToken } from '../../Utils/Auth';
 import { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import api from "../../services/Service";
+import { LogBox } from 'react-native';
 import moment from "moment";
 
 export const Home = ({ navigation }) => {
@@ -21,6 +22,8 @@ export const Home = ({ navigation }) => {
     const [calendarDate, setCalendarDate] = useState('')
 
     const [appointmentList, setAppointmentList] = useState([])
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+    LogBox.ignoreAllLogs();//Ignore all log notifications
 
     async function roleLoad() {
         const token = await userDecodeToken();
