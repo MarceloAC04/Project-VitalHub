@@ -21,6 +21,7 @@ import { Title } from "../Title/Styles";
 import { Modal} from "react-native";
 import { useState } from "react";
 import api from "../../services/Service";
+import { TextAlert } from "../AlertText/AlertText";
 
 
 export const ModalAppointment = ({ id, idSituacao, animation, transparent, visible, onPressCancel, onPressConfirm, img, name, age, email, situation, ...rest }) => {
@@ -94,13 +95,20 @@ export const ModalAppointment = ({ id, idSituacao, animation, transparent, visib
 }
 
 export const ModalScheduleAppointment = ({ navigation, setModalVisible, animation, transparent, visible, onPressConfirm, onPressCancel, ...rest }) => {
-    const [statusButton, setStatusButton] = useState("")
+    const [statusButton, setStatusButton] = useState("");
+    const [aviso, setAviso] = useState('');
+    const [alerta, setAlerta] = useState(false);
 
     const [appointment, setAppoinment] = useState(null);
 
     async function handleContinue() {
-        await setModalVisible(false)
-        navigation.replace("ClinicSelect", { agendamento: appointment })
+        if (appointment.localizacao !=null) {
+            await setModalVisible(false)
+            navigation.replace("ClinicSelect", { agendamento: appointment })
+        } else {
+            setAlerta(true)
+            setAviso('*Selecione o local da clinica!')
+        }
     }
     return (
         <Modal {...rest}
@@ -170,6 +178,7 @@ export const ModalScheduleAppointment = ({ navigation, setModalVisible, animatio
                         </ScheduleAppointmentContainer>
                     </ModalScheduleAppointmentFormContainer>
 
+                    {alerta ? <TextAlert alerta={aviso}/> :  null}
                     <ButtonModalAppointment
                         onPress={() => handleContinue()}
                         placeholder={'confirmar'}

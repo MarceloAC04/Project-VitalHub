@@ -4,6 +4,7 @@ import { ButtonSecondary } from "../../components/SecondaryButton/SecondaryButto
 import { SelectInputPicker } from "../../components/SelectInput/SelectInput";
 import { ModalConfirmAppointment } from "../../components/Modal/Modal";
 import { TitleSelectScreen } from "../../components/Title/Styles";
+import { TextAlert } from "../../components/AlertText/AlertText";
 import { ButtonEnter } from "../../components/Button/Button";
 import * as Notifications from 'expo-notifications';
 import { userDecodeToken } from "../../Utils/Auth";
@@ -13,12 +14,12 @@ import api from "../../services/Service";
 Notifications.requestPermissionsAsync();
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
+    handleNotification: async () => ({
+        shouldShowAlert: true,
 
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+    }),
 })
 
 export const DateSelect = ({ navigation, route }) => {
@@ -26,6 +27,8 @@ export const DateSelect = ({ navigation, route }) => {
     const [selectDay, setSelectDay] = useState('')
     const [selectDateTime, setSelectDateTime] = useState('')
     const [modalVisible, setModalVisible] = useState(false);
+    const [aviso, setAviso] = useState('');
+    const [alerta, setAlerta] = useState(false)
 
     const [userId, setUserId] = useState('')
     async function profileLoad() {
@@ -38,23 +41,23 @@ export const DateSelect = ({ navigation, route }) => {
 
     const handleCallNotification = async () => {
 
-        const {status} = await Notifications.getPermissionsAsync();
-    
+        const { status } = await Notifications.getPermissionsAsync();
+
         //verifica se o usuário concedeu permissão para notificações
         if (status !== "granted") {
-          alert("Você não deixou as notificações ativas.")
-          return;
+            alert("Você não deixou as notificações ativas.")
+            return;
         }
-    
+
         await Notifications.scheduleNotificationAsync({
-          content: {
-            title: "Consulta agendada!",
-            body: "Sua consulta marcada com sucesso!",
-            sound: 'default',
-          },
-          trigger: null
+            content: {
+                title: "Consulta agendada!",
+                body: "Sua consulta marcada com sucesso!",
+                sound: 'default',
+            },
+            trigger: null
         })
-      }
+    }
 
     async function ConfirmAppointment() {
         await api.post(`/Consultas/Cadastrar`, {
@@ -79,10 +82,9 @@ export const DateSelect = ({ navigation, route }) => {
     }, [])
 
     async function handleContinue() {
-        if (selectDay === '') {
-            alert("Selecione o dia da consulta!")
-        } else if (selectDateTime === '') {
-            alert("Selecione o horário da consulta!")
+        if (selectDay === '' || selectDateTime === '') {
+            setAlerta(true)
+            setAviso("*Selecione o dia ou horário da consulta!")
         } else {
             setAgendamento({
                 ...route.params.agendamento,
@@ -110,6 +112,7 @@ export const DateSelect = ({ navigation, route }) => {
                     setSelectDateTime={setSelectDateTime}
                 />
 
+                {alerta ? <TextAlert alerta={aviso} /> : null}
                 <ButtonEnter
                     onPress={() => handleContinue()}
                     placeholder={'confirmar'}

@@ -12,16 +12,17 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SubTitle } from "../../components/SubTitle/Styles";
 import { Title } from "../../components/Title/Styles";
 import { ButtonCamera, ContentImage } from "./Styles";
-import * as MediaLibrary from 'expo-media-library';
 import { userDecodeToken } from "../../Utils/Auth"
 import { useEffect, useState } from "react";
 import api from "../../services/Service";
 import moment from "moment";
-import { Alert } from "react-native";
+import { TextAlert } from "../../components/AlertText/AlertText";
 
 export const UserProfile = ({ navigation }) => {
     const [openCamera, setOpenCamera] = useState(false)
     const [uriCameraCapture, setUriCameraCapture] = useState(null)
+    const [aviso, setAviso] = useState('');
+    const [alerta, setAlerta] = useState(false)
 
     const [userId, setUserId] = useState('') // Deixando salvo aqui para caso eu use
     const [isEditing, setIsEditing] = useState(false)
@@ -97,7 +98,8 @@ export const UserProfile = ({ navigation }) => {
     async function validation(data) {
         data.forEach(e => {
             if (e === "") {
-                alert("Preencha os campos vazios!")
+                setAlerta(true)
+                setAviso("*Preencha os campos vazios!")
                 setValidate(false)
                 return;
             } else {
@@ -285,6 +287,7 @@ export const UserProfile = ({ navigation }) => {
                     </>
                 )}
 
+                {alerta ? <TextAlert alerta={aviso}/> :  null}
                 <ButtonEnter
                     placeholder={'salvar'}
                     onPress={() => {

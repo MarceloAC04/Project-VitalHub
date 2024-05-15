@@ -2,6 +2,7 @@ import { ButtonSecondary } from "../../components/SecondaryButton/SecondaryButto
 import { ClinicCardList } from "../../components/CardList/CardList";
 import { Container } from "../../components/Container/Styles";
 import { ButtonEnter } from "../../components/Button/Button";
+import { TextAlert } from "../../components/AlertText/AlertText";
 import { TitleSelectScreen } from "../../components/Title/Styles";
 import { useEffect, useState } from "react";
 import api from "../../services/Service";
@@ -9,28 +10,36 @@ import api from "../../services/Service";
 export const ClinicSelect = ({ navigation, route }) => {
     const [selectClinic, setSelectClinic] = useState(null)
     const [clinicaListar, setClinicaListar] = useState([])
+    const [aviso, setAviso] = useState('');
+    const [alerta, setAlerta] = useState(false)
 
     function handleContinue() {
-        navigation.replace("MedicSelect", {
-            agendamento: {
+        if (selectClinic != null) {
+            navigation.replace("MedicSelect", {
+                agendamento: {
 
-            ...route.params.agendamento, 
-            ...selectClinic
-            }
-        })
+                    ...route.params.agendamento,
+                    ...selectClinic
+                }
+            })
+
+        } else {
+            setAlerta(true)
+            setAviso('*Nenhuma clinica selecionada!')
+        }
     }
 
-    async function ListarClinicas(){
-       await api.get(`/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`)
-            .then(response =>{
+    async function ListarClinicas() {
+        await api.get(`/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`)
+            .then(response => {
                 setClinicaListar(response.data)
-            }).catch(error =>{
+            }).catch(error => {
                 console.log(error)
             })
 
     }
 
-    useEffect(() =>{
+    useEffect(() => {
         ListarClinicas()
     }, [])
 
@@ -44,6 +53,7 @@ export const ClinicSelect = ({ navigation, route }) => {
                 setSelectClinic={setSelectClinic}
             />
 
+            {alerta ? <TextAlert alerta={aviso} /> : null}
             <ButtonEnter
                 onPress={() => handleContinue()}
                 placeholder={'confirmar'}

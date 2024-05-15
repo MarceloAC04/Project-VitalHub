@@ -1,5 +1,6 @@
 import { GenericEditInput, GenericEditTextArea, GenericInput, GenericTextArea } from "../../components/GenericProfileInput/GenericProfileInput";
 import { Container, ContainerScrollView } from "../../components/Container/Styles";
+import { TextAlert } from "../../components/AlertText/AlertText";
 import { ButtonSecondary } from "../../components/SecondaryButton/SecondaryButton";
 import { UserProfilePhoto } from "../../components/UserProfilePhoto/Styles";
 import { ButtonEnter } from "../../components/Button/Button";
@@ -11,6 +12,8 @@ import api from "../../services/Service";
 
 export const MedicalRecord = ({ navigation, route }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const [aviso, setAviso] = useState('');
+    const [alerta, setAlerta] = useState(false)
 
     //Dados do paciente (UserId é o ID da Consulta)
     const { userImg, userName, userAge, userEmail, Id } = route.params;
@@ -31,7 +34,8 @@ export const MedicalRecord = ({ navigation, route }) => {
     async function validation(data) {
         data.forEach(e => {
             if (e === "") {
-                alert("Preencha os campos vazios!")
+                setAlerta(true)
+                setAviso("*Preencha os campos vazios!")
                 setValidate(false)
                 return;
             } else {
@@ -151,7 +155,7 @@ export const MedicalRecord = ({ navigation, route }) => {
                     )
                 }
 
-
+                {alerta ? <TextAlert alerta={aviso} /> : null}
                 <ButtonEnter
                     onPress={() => {
                         isEditing ? (setIsEditing(false), AtualizarDados()) : null

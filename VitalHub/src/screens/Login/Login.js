@@ -2,6 +2,7 @@ import { ContentAccount, TextAccount } from "../../components/ContentAccount/Sty
 import { ButtonEnter, ButtonGoogle } from "../../components/Button/Button";
 import { LinkAccount, LinkMedium } from "../../components/Links/Styles";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TextAlert } from "../../components/AlertText/AlertText";
 import { Container } from "../../components/Container/Styles";
 import { Title } from "../../components/Title/Styles";
 import { Input } from "../../components/Input/Styles";
@@ -14,6 +15,8 @@ import { useState } from "react";
 export const Login = ({ navigation }) => {
     const [email, setEmail] = useState('heitor80@gmail.com')
     const [senha, setSenha] = useState('2345')
+    const [aviso, setAviso] = useState('');
+    const [alerta, setAlerta] = useState(false)
     LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
     LogBox.ignoreAllLogs();//Ignore all log notifications
     
@@ -38,6 +41,8 @@ export const Login = ({ navigation }) => {
 
         } catch (error) {
             console.warn(error)
+            setAlerta(true)
+            setAviso('*Email ou senha inválidos!')
         }
 
     }
@@ -60,6 +65,7 @@ export const Login = ({ navigation }) => {
 
             <LinkMedium onPress={() => navigation.replace("Reset")}>Esqueceu sua senha?</LinkMedium>
 
+            {alerta ? <TextAlert alerta={aviso} /> : null}
             <ButtonEnter
                 onPress={() => Login()}
                 placeholder={'Entrar'}

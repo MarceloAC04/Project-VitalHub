@@ -7,23 +7,29 @@ import { Input } from "../../components/Input/Styles";
 import { Logo } from "../../components/Logo/Styles";
 import api from "../../services/Service";
 import { useState } from "react";
+import { TextAlert } from "../../components/AlertText/AlertText";
 
 export const Register = ({ navigation }) => {
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [senha, setSenha] = useState('')
     const [confirmarSenha, setConfirmarSenha] = useState('')
+    const [aviso, setAviso] = useState('');
+    const [alerta, setAlerta] = useState(false)
 
     async function RegisterUser() {
         try {
             if (senha !== confirmarSenha) {
-                alert("Senha errada!")
+                setAlerta(true)
+                setAviso("*Senha errada!")
                 return;
             } else if (email === '' || name === '') {
-                alert("Insira email ou nome válido")
+                setAlerta(true)
+                setAviso("*Insira email ou nome válido!")
                 return;
             } else if (senha.length < 4) {
-                alert("Senha fraca")
+                setAlerta(true)
+                setAviso("*Senha fraca!")
             }
             const formData = new FormData();
             formData.append("Rg", "")
@@ -89,6 +95,7 @@ export const Register = ({ navigation }) => {
                 onChangeText={(txt) => setConfirmarSenha(txt)}
             />
 
+            {alerta ? <TextAlert alerta={aviso}/> : null}
             <ButtonEnter
                 placeholder={'cadastrar'}
                 onPress={() => RegisterUser()}

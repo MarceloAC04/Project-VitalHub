@@ -1,4 +1,5 @@
 import { Container, ContainerIcons } from "../../components/Container/Styles";
+import { TextAlert } from "../../components/AlertText/AlertText";
 import { ButtonEnter } from "../../components/Button/Button";
 import { SubTitle } from "../../components/SubTitle/Styles";
 import { Input } from "../../components/Input/Styles";
@@ -9,9 +10,11 @@ import { useState } from "react";
 import api from "../../services/Service";
 
 
-export const ResetPassword = ({navigation, route}) => {
+export const ResetPassword = ({ navigation, route }) => {
     const [pass, setPass] = useState('')
     const [confirmPass, setConfirmPass] = useState('')
+    const [aviso, setAviso] = useState('');
+    const [alerta, setAlerta] = useState(false)
     const email = route.params.recoveEmail;
 
     async function UpdatePassword() {
@@ -23,6 +26,10 @@ export const ResetPassword = ({navigation, route}) => {
             }).catch(error => {
                 console.log(error);
             })
+        }
+        else {
+            setAlerta(true)
+            setAviso("*Senhas não coincidem!")
         }
     }
     return (
@@ -36,18 +43,19 @@ export const ResetPassword = ({navigation, route}) => {
 
             <SubTitle>Insira e confirme a sua nova senha</SubTitle>
 
-            <Input placeholder={'Nova Senha'} 
+            <Input placeholder={'Nova Senha'}
                 secureTextEntry
                 value={pass}
                 onChangeText={(txt) => setPass(txt)}
             />
 
-            <Input placeholder={'Confirme nova senha'} 
-              secureTextEntry
-              value={confirmPass}
-              onChangeText={(txt) => setConfirmPass(txt)}
+            <Input placeholder={'Confirme nova senha'}
+                secureTextEntry
+                value={confirmPass}
+                onChangeText={(txt) => setConfirmPass(txt)}
             />
 
+            {alerta ? <TextAlert alerta={aviso} /> : null}
             <ButtonEnter
                 onPress={() => UpdatePassword()}
                 placeholder={'confirmar nova senha'}
