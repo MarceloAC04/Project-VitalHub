@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
+
 export const Title = styled.Text`
     font-size: 20px;
     color: #33303e;
     font-family: 'MontserratAlternates_600SemiBold';
     margin-bottom: 5px;
+    /* Adcionei o text-align desse jeito para dar uma leve estilizda  */
+    text-align: ${props => `${props.textAlign}`};
 `
 
 export const TitleHeader = styled(Title)`

@@ -48,6 +48,10 @@ export const Home = ({ navigation }) => {
     useEffect(() => {
         roleLoad()
         ListAppointment()
+    }, [])
+
+    useEffect(() => {
+        ListAppointment()
     }, [statusLista])
 
     useEffect(() => {

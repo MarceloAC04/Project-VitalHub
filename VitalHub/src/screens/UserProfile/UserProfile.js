@@ -180,7 +180,7 @@ export const UserProfile = ({ navigation }) => {
                     </ButtonCamera>
                 </ContentImage>
 
-                <Title>{userName}</Title>
+                <Title textAlign={'center'}>{userName}</Title>
 
                 <SubTitle>{userEmail}</SubTitle>
 

@@ -243,7 +243,7 @@ export const ModalLocalAppointment = ({ animation, transparent, onPressConfirm, 
             <ModalMedicalRecordView>
                 <ModalMedicalRecordContainer>
                     <UserProfilePhotoModal src={img} />
-                    <Title>Dr. {name} </Title>
+                    <Title textAlign={'center'}>Dr. {name} </Title>
                     <SubTitle>{specialty} - <SubTitle>CRM-{crm}</SubTitle></SubTitle>
                     <ButtonEnter
                         onPress={onPressConfirm}
