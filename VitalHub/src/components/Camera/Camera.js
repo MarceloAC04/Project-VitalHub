@@ -68,8 +68,8 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
         })
         if (assets.length > 0) {
             const infoAssets = await MediaLibrary.getAssetInfoAsync(assets[0].id)
+            setLatestPhoto(infoAssets)
         }
-        setLatestPhoto(infoAssets)
     }
 
     async function SelectImageGallery() {
@@ -90,6 +90,10 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
             GetLastPhoto();
         }
     }, [visibleCamera])
+
+    useEffect(() => {
+        console.log(lastestPhoto);
+    }, [])
     return (
         <Modal
             {...rest}
@@ -116,7 +120,7 @@ export const AppCamera = ({ visibleCamera, setOpenCamera, setUriCameraCapture, g
             ) : (
                 <ViewFlip>
                     <CameraView
-                        ref={cameraRef}
+                    ref={cameraRef}
                         facing={cameraType}
                         style={{ flex: 1, width: '100%', height: '80%' }}
                     >

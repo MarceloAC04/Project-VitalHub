@@ -13,17 +13,15 @@ import { useState } from "react";
 
 
 export const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('heitor80@gmail.com')
-    const [senha, setSenha] = useState('2345')
+    const [email, setEmail] = useState('')
+    const [senha, setSenha] = useState('')
     const [aviso, setAviso] = useState('');
     const [alerta, setAlerta] = useState(false)
     LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
     LogBox.ignoreAllLogs();//Ignore all log notifications
     
     async function Login() {
-
         try {
-
             //Chamar a api de login
             const response = await api.post('/Login', {
                 email: email,

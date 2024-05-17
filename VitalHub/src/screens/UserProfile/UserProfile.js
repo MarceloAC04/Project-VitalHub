@@ -160,6 +160,7 @@ export const UserProfile = ({ navigation }) => {
             setUserPhoto(uriCameraCapture)
         }).catch(error => {
             console.log(error);
+            console.log(uriCameraCapture);
         })
     }
 

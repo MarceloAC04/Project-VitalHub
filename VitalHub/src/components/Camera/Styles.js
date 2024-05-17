@@ -21,6 +21,8 @@ export const LastPhoto = styled.Image`
 `
 
 export const ButtonLatest = styled.TouchableOpacity`
+    width: 40px;
+    height: 40px;
     padding: 10px;
 `
 
